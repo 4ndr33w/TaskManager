@@ -14,11 +14,11 @@ namespace TaskManager.Models
     public class Project : ModelBase
     {
         [ForeignKey("AdminId")]
-        public Guid AdminId { get; set; }
+        public Guid? AdminId { get; set; }
+        public User Admin { get; set; }
         public ProjectStatus ProjectStatus { get; set; } = ProjectStatus.InProgress;
-        public User? Admin { get; set; }
-        public List<User>? Users { get; set; } = new List<User>();
-        public List<Desk>? Desks { get; set; } = new List<Desk>();
+        public List<User>? Users { get; set; }
+        public List<Desk>? Desks { get; set; }
 
         public Project() { }
         public Project(ProjectDto project) : base(project)

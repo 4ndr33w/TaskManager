@@ -17,13 +17,13 @@ namespace TaskManager.Models
 
         [ForeignKey("AdminId")]
         public Guid AdminId { get; set; }
-        public User Admin { get; set; }
+        public User? Admin { get; set; }
 
         [ForeignKey("ProjectId")]
         public Guid ProjectId { get; set; }
-        public Project Project { get; set; }
-        public List<TaskDto>? Tasks { get; set; }
-        public string Color { get; set; }
+        public Project? Project { get; set; }
+        public List<TaskModel>? Tasks { get; set; }
+        public string? Color { get; set; }
 
         public Desk() { }
 

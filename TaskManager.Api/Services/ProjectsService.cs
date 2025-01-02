@@ -83,7 +83,6 @@ namespace TaskManager.Api.Services
 
         public async Task<bool> UpdateAsync(ProjectDto projectDto)
         {
-         
             try
             {
                 Project existingProject = await _npgDbContext.Projects.FirstOrDefaultAsync(p => p.Id == projectDto.Id);
@@ -91,16 +90,11 @@ namespace TaskManager.Api.Services
                 bool isProjectAdminNull = (projectDto.AdminId == null || projectDto.AdminId == default);
                 bool isProjectAdminIsChanged = projectDto.AdminId != existingProject.AdminId;
 
-                    existingProject.Name = projectDto.Name == null ? existingProject.Name : projectDto.Name;
+                existingProject.Name = projectDto.Name == null ? existingProject.Name : projectDto.Name;
                 existingProject.Description = projectDto.Description == null ? existingProject.Description : projectDto.Description;
                 existingProject.Image = projectDto.Image == null ? existingProject.Image : projectDto.Image;
                 existingProject.ProjectStatus = projectDto.ProjectStatus == null ? existingProject.ProjectStatus : projectDto.ProjectStatus;
                 existingProject.Updated = DateTime.UtcNow;
-
-                //if (!isProjectAdminNull && isProjectAdminIsChanged)
-                //{
-                //    existingProject.AdminId = projectDto.AdminId;
-                //}
 
                 _npgDbContext.Projects.Update(existingProject);
                 await _npgDbContext.SaveChangesAsync();

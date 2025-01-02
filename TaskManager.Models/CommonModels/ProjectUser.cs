@@ -9,13 +9,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TaskManager.Models.CommonModels
 {
-    //[PrimaryKey("ProjectId, UserId")]
+    [PrimaryKey("Id")]
     public class ProjectUser
     {
+        public Guid Id { get; set; }
+
         [ForeignKey("ProjectId")]
         public Guid ProjectId { get; set; }
         [ForeignKey("UserId")]
         public Guid UserId { get; set; }
+
+        public Project Project { get; set; }
+        public User User { get; set; }
 
         public ProjectUser() { }
 

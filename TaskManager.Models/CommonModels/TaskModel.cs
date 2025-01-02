@@ -26,8 +26,8 @@ namespace TaskManager.Models
         [ForeignKey("ExecutorId")]
         public Guid? ExecutorId { get; set; }
         public User? Executor { get; set; }
-        public Priority Priority { get; set; }
-        public string Color { get; set; }
+        public Priority Priority { get; set; } = Priority.IfYouHaveFreeTime;
+        public string? Color { get; set; }
 
         public TaskModel() { }
         public TaskModel(TaskDto task) : base(task)

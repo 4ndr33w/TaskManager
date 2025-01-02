@@ -6,9 +6,9 @@ namespace TaskManager.Models.Dtos
    public class ProjectDto : ModelBase
     {
         public ProjectStatus ProjectStatus { get; set; } = ProjectStatus.InProgress;
-        public Guid AdminId { get; set; }
-        public List<Guid> UsersIds { get; set; } = new List<Guid>();
-        public List<Guid> DesksIds { get; set; } = new List<Guid>();
+        public Guid? AdminId { get; set; }
+        public List<Guid>? UsersIds { get; set; } = new List<Guid>();
+        public List<Guid>? DesksIds { get; set; } = new List<Guid>();
 
         public ProjectDto() { }
         public ProjectDto(ProjectDto projectModel) : base(projectModel)
