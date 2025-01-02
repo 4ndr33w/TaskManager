@@ -15,6 +15,63 @@ namespace TaskManager.Api.Migrations
                 name: "TaskManager");
 
             migrationBuilder.CreateTable(
+              name: "UsersTable",
+              schema: "TaskManager",
+              columns: table => new
+              {
+                  Id = table.Column<Guid>(type: "uuid", nullable: false),
+                  LastName = table.Column<string>(type: "text", nullable: true),
+                  Email = table.Column<string>(type: "text", nullable: false),
+                  Password = table.Column<string>(type: "text", nullable: false),
+                  Phone = table.Column<string>(type: "text", nullable: true),
+                  LastLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                  UserStatus = table.Column<int>(type: "integer", nullable: false),
+                  //ProjectId = table.Column<Guid>(type: "uuid", nullable: true),
+                  Name = table.Column<string>(type: "text", nullable: true),
+                  Description = table.Column<string>(type: "text", nullable: true),
+                  Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                  Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                  Image = table.Column<byte[]>(type: "bytea", nullable: true)
+              },
+              constraints: table =>
+              {
+                  table.PrimaryKey("PK_UsersTable", x => x.Id);
+                  //table.ForeignKey(
+                  //    name: "FK_UsersTable_ProjectsTable_ProjectId",
+                  //    column: x => x.ProjectId,
+                  //    principalSchema: "TaskManager",
+                  //    principalTable: "ProjectsTable",
+                  //    principalColumn: "Id");
+              });
+
+            migrationBuilder.CreateTable(
+              name: "ProjectsTable",
+              schema: "TaskManager",
+              columns: table => new
+              {
+                  Id = table.Column<Guid>(type: "uuid", nullable: false),
+                  AdminId = table.Column<Guid>(type: "uuid", nullable: false),
+                  ProjectStatus = table.Column<int>(type: "integer", nullable: false),
+                  Name = table.Column<string>(type: "text", nullable: true),
+                  Description = table.Column<string>(type: "text", nullable: true),
+                  Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                  Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                  Image = table.Column<byte[]>(type: "bytea", nullable: true)
+              },
+              constraints: table =>
+              {
+                  table.PrimaryKey("PK_ProjectsTable", x => x.Id);
+
+                  table.ForeignKey(
+                  name: "FK_ProjectsTable_UsersTable_AdminId",
+                  column: x => x.AdminId,
+                  principalSchema: "TaskManager",
+                  principalTable: "UsersTable",
+                  principalColumn: "Id",
+                  onDelete: ReferentialAction.Cascade);
+              });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectUser",
                 schema: "TaskManager",
                 columns: table => new
@@ -77,61 +134,9 @@ namespace TaskManager.Api.Migrations
                     principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProjectsTable",
-                schema: "TaskManager",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AdminId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProjectStatus = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Image = table.Column<byte[]>(type: "bytea", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProjectsTable", x => x.Id);
+          
 
-                    table.ForeignKey(
-                    name: "FK_ProjectsTable_UsersTable_AdminId",
-                    column: x => x.AdminId,
-                    principalSchema: "TaskManager",
-                    principalTable: "UsersTable",
-                    principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UsersTable",
-                schema: "TaskManager",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    Phone = table.Column<string>(type: "text", nullable: true),
-                    LastLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UserStatus = table.Column<int>(type: "integer", nullable: false),
-                    //ProjectId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Image = table.Column<byte[]>(type: "bytea", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UsersTable", x => x.Id);
-                    //table.ForeignKey(
-                    //    name: "FK_UsersTable_ProjectsTable_ProjectId",
-                    //    column: x => x.ProjectId,
-                    //    principalSchema: "TaskManager",
-                    //    principalTable: "ProjectsTable",
-                    //    principalColumn: "Id");
-                });
+          
 
             //migrationBuilder.CreateTable(
             //    name: "TaskDto",
@@ -273,11 +278,13 @@ namespace TaskManager.Api.Migrations
                 table: "TasksTable",
                 column: "ExecutorId");
 
+            //--------------------------
             migrationBuilder.CreateIndex(
-                name: "IX_UsersTable_ProjectId",
+                name: "IX_UsersTable_Id",
                 schema: "TaskManager",
                 table: "UsersTable",
-                column: "ProjectId");
+                column: "Id");
+            //---------------------------
 
             migrationBuilder.AddForeignKey(
                 name: "FK_DesksTable_ProjectsTable_ProjectId",
@@ -299,35 +306,55 @@ namespace TaskManager.Api.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_ProjectsTable_UsersTable_AdminId",
-                schema: "TaskManager",
-                table: "ProjectsTable",
-                column: "AdminId",
-                principalSchema: "TaskManager",
-                principalTable: "UsersTable",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_ProjectsTable_UsersTable_AdminId",
+            //    schema: "TaskManager",
+            //    table: "ProjectsTable",
+            //    column: "AdminId",
+            //    principalSchema: "TaskManager",
+            //    principalTable: "UsersTable",
+            //    principalColumn: "Id",
+            //    onDelete: ReferentialAction.Cascade);
+
+            //migrationBuilder.AddForeignKey(
+            //   name: "FK_TasksTable_DesksTable_DeskId",
+            //   schema: "TaskManager",
+            //   table: "TasksTable",
+            //   column: "DeskId",
+            //   principalSchema: "TaskManager",
+            //   principalTable: "DesksTable",
+            //   principalColumn: "Id",
+            //   onDelete: ReferentialAction.Cascade);
+
+            //migrationBuilder.AddForeignKey(
+            //   name: "FK_TasksTable_UsersTable_CreatorId",
+            //   schema: "TaskManager",
+            //   table: "TasksTable",
+            //   column: "DeskId",
+            //   principalSchema: "TaskManager",
+            //   principalTable: "UsersTable",
+            //   principalColumn: "Id",
+            //   onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-               name: "FK_TasksTable_DesksTable_DeskId",
-               schema: "TaskManager",
-               table: "TasksTable",
-               column: "DeskId",
-               principalSchema: "TaskManager",
-               principalTable: "DesksTable",
-               principalColumn: "Id",
-               onDelete: ReferentialAction.Cascade);
+              name: "FK_ProjectUser_UsersTable_UserId",
+              schema: "TaskManager",
+              table: "ProjectUser",
+              column: "UserId",
+              principalSchema: "TaskManager",
+              principalTable: "UsersTable",
+              principalColumn: "Id",
+              onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-               name: "FK_TasksTable_UsersTable_CreatorId",
-               schema: "TaskManager",
-               table: "TasksTable",
-               column: "DeskId",
-               principalSchema: "TaskManager",
-               principalTable: "UsersTable",
-               principalColumn: "Id",
-               onDelete: ReferentialAction.Cascade);
+             name: "FK_ProjectUser_ProjectsTable_ProjectId",
+             schema: "TaskManager",
+             table: "ProjectUser",
+             column: "ProjectId",
+             principalSchema: "TaskManager",
+             principalTable: "ProjectsTable",
+             principalColumn: "Id",
+             onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -342,9 +369,9 @@ namespace TaskManager.Api.Migrations
                 name: "ProjectUser",
                 schema: "TaskManager");
 
-            migrationBuilder.DropTable(
-                name: "TaskDto",
-                schema: "TaskManager");
+            //migrationBuilder.DropTable(
+            //    name: "TaskDto",
+            //    schema: "TaskManager");
 
             migrationBuilder.DropTable(
                 name: "TasksTable",
