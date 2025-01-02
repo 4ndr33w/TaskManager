@@ -34,5 +34,11 @@ namespace TaskManager.Api.Services.Authentication
             }
             return lifeTime;
         }
+
+        public static string GetEncodingType(IConfiguration config)
+        {
+            string encoding = config.GetSection("AuthenticationOptions")["EncodingType"];
+            return encoding;
+        }
     }
 }

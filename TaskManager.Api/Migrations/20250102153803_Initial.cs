@@ -26,7 +26,6 @@ namespace TaskManager.Api.Migrations
                   Phone = table.Column<string>(type: "text", nullable: true),
                   LastLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                   UserStatus = table.Column<int>(type: "integer", nullable: false),
-                  //ProjectId = table.Column<Guid>(type: "uuid", nullable: true),
                   Name = table.Column<string>(type: "text", nullable: true),
                   Description = table.Column<string>(type: "text", nullable: true),
                   Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -36,12 +35,6 @@ namespace TaskManager.Api.Migrations
               constraints: table =>
               {
                   table.PrimaryKey("PK_UsersTable", x => x.Id);
-                  //table.ForeignKey(
-                  //    name: "FK_UsersTable_ProjectsTable_ProjectId",
-                  //    column: x => x.ProjectId,
-                  //    principalSchema: "TaskManager",
-                  //    principalTable: "ProjectsTable",
-                  //    principalColumn: "Id");
               });
 
             migrationBuilder.CreateTable(
@@ -137,56 +130,6 @@ namespace TaskManager.Api.Migrations
                     principalColumn: "Id");
                 });
 
-          
-
-          
-
-            //migrationBuilder.CreateTable(
-            //    name: "TaskDto",
-            //    schema: "TaskManager",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<Guid>(type: "uuid", nullable: false),
-            //        StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-            //        EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-            //        File = table.Column<byte[]>(type: "bytea", nullable: true),
-            //        Column = table.Column<string>(type: "text", nullable: true),
-            //        DeskId = table.Column<Guid>(type: "uuid", nullable: false),
-            //        CreatorId = table.Column<Guid>(type: "uuid", nullable: false),
-            //        ExecutorId = table.Column<Guid>(type: "uuid", nullable: true),
-            //        Priority = table.Column<int>(type: "integer", nullable: false),
-            //        Color = table.Column<string>(type: "text", nullable: false),
-            //        //UserId = table.Column<Guid>(type: "uuid", nullable: true),
-            //        Name = table.Column<string>(type: "text", nullable: true),
-            //        Description = table.Column<string>(type: "text", nullable: true),
-            //        Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-            //        Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-            //        Image = table.Column<byte[]>(type: "bytea", nullable: true)
-            //    },
-            //    constraints: table =>
-            //    {
-            //        table.PrimaryKey("PK_TaskDto", x => x.Id);
-            //        table.ForeignKey(
-            //            name: "FK_TaskDto_DesksTable_DeskId",
-            //            column: x => x.DeskId,
-            //            principalSchema: "TaskManager",
-            //            principalTable: "DesksTable",
-            //            principalColumn: "Id",
-            //            onDelete: ReferentialAction.Cascade);
-            //        table.ForeignKey(
-            //            name: "FK_TaskDto_UsersTable_CreatorId",
-            //            column: x => x.CreatorId,
-            //            principalSchema: "TaskManager",
-            //            principalTable: "UsersTable",
-            //            principalColumn: "Id");
-            //        table.ForeignKey(
-            //           name: "FK_TaskDto_UsersTable_ExecutorId",
-            //           column: x => x.ExecutorId,
-            //           principalSchema: "TaskManager",
-            //           principalTable: "UsersTable",
-            //           principalColumn: "Id");
-            //    });
-
             migrationBuilder.CreateTable(
                 name: "TasksTable",
                 schema: "TaskManager",
@@ -251,18 +194,6 @@ namespace TaskManager.Api.Migrations
                 table: "ProjectsTable",
                 column: "AdminId");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_TaskDto_DeskId",
-            //    schema: "TaskManager",
-            //    table: "TaskDto",
-            //    column: "DeskId");
-
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_TaskDto_UserId",
-            //    schema: "TaskManager",
-            //    table: "TaskDto",
-            //    column: "UserId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_TasksTable_CreatorId",
                 schema: "TaskManager",
@@ -281,83 +212,11 @@ namespace TaskManager.Api.Migrations
                 table: "TasksTable",
                 column: "ExecutorId");
 
-            //--------------------------
             migrationBuilder.CreateIndex(
                 name: "IX_UsersTable_Id",
                 schema: "TaskManager",
                 table: "UsersTable",
                 column: "Id");
-            //---------------------------
-
-            //migrationBuilder.AddForeignKey(
-            //    name: "FK_DesksTable_ProjectsTable_ProjectId",
-            //    schema: "TaskManager",
-            //    table: "DesksTable",
-            //    column: "ProjectId",
-            //    principalSchema: "TaskManager",
-            //    principalTable: "ProjectsTable",
-            //    principalColumn: "Id",
-            //    onDelete: ReferentialAction.Cascade);
-
-            //migrationBuilder.AddForeignKey(
-            //    name: "FK_DesksTable_UsersTable_AdminId",
-            //    schema: "TaskManager",
-            //    table: "DesksTable",
-            //    column: "AdminId",
-            //    principalSchema: "TaskManager",
-            //    principalTable: "UsersTable",
-            //    principalColumn: "Id",
-            //    onDelete: ReferentialAction.Cascade);
-
-            //migrationBuilder.AddForeignKey(
-            //    name: "FK_ProjectsTable_UsersTable_AdminId",
-            //    schema: "TaskManager",
-            //    table: "ProjectsTable",
-            //    column: "AdminId",
-            //    principalSchema: "TaskManager",
-            //    principalTable: "UsersTable",
-            //    principalColumn: "Id",
-            //    onDelete: ReferentialAction.Cascade);
-
-            //migrationBuilder.AddForeignKey(
-            //   name: "FK_TasksTable_DesksTable_DeskId",
-            //   schema: "TaskManager",
-            //   table: "TasksTable",
-            //   column: "DeskId",
-            //   principalSchema: "TaskManager",
-            //   principalTable: "DesksTable",
-            //   principalColumn: "Id",
-            //   onDelete: ReferentialAction.Cascade);
-
-            //migrationBuilder.AddForeignKey(
-            //   name: "FK_TasksTable_UsersTable_CreatorId",
-            //   schema: "TaskManager",
-            //   table: "TasksTable",
-            //   column: "DeskId",
-            //   principalSchema: "TaskManager",
-            //   principalTable: "UsersTable",
-            //   principalColumn: "Id",
-            //   onDelete: ReferentialAction.Cascade);
-
-            //migrationBuilder.AddForeignKey(
-            //  name: "FK_ProjectUser_UsersTable_UserId",
-            //  schema: "TaskManager",
-            //  table: "ProjectUser",
-            //  column: "UserId",
-            //  principalSchema: "TaskManager",
-            //  principalTable: "UsersTable",
-            //  principalColumn: "Id",
-            //  onDelete: ReferentialAction.Cascade);
-
-            //migrationBuilder.AddForeignKey(
-            // name: "FK_ProjectUser_ProjectsTable_ProjectId",
-            // schema: "TaskManager",
-            // table: "ProjectUser",
-            // column: "ProjectId",
-            // principalSchema: "TaskManager",
-            // principalTable: "ProjectsTable",
-            // principalColumn: "Id",
-            // onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -371,10 +230,6 @@ namespace TaskManager.Api.Migrations
             migrationBuilder.DropTable(
                 name: "ProjectUser",
                 schema: "TaskManager");
-
-            //migrationBuilder.DropTable(
-            //    name: "TaskDto",
-            //    schema: "TaskManager");
 
             migrationBuilder.DropTable(
                 name: "TasksTable",

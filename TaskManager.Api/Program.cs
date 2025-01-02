@@ -17,6 +17,7 @@ namespace TaskManager.Api
                 options.UseNpgsql(connectionString);
             });
 
+            #region AddAuthenticationService
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddJwtBearer(options =>
                {
@@ -35,6 +36,7 @@ namespace TaskManager.Api
                        ValidateIssuerSigningKey = true
                    };
                });
+            #endregion
 
             // Add services to the container.
 
@@ -45,8 +47,14 @@ namespace TaskManager.Api
 
             builder.Services.AddTransient<DbContexts.NpgDbContext>();
 
-            builder.Services.AddTransient<Services.AccountService>();
+            #region AddApiServices
+
             builder.Services.AddTransient<Services.SecurityOptions.SecurityService>();
+            builder.Services.AddTransient<Services.AccountService>();
+            builder.Services.AddTransient<Services.UsersService>();
+            builder.Services.AddTransient<Services.ProjectsService>();
+
+            #endregion
 
             var app = builder.Build();
 

@@ -26,8 +26,8 @@ namespace TaskManager.Models.Abstractions
             Name = modelBase.Name;
             Description = modelBase.Description;
             Created = modelBase.Created;
-            //Updated = DateTime.UtcNow;
-            Image = modelBase.Image == null ? new byte[256] : modelBase.Image; //  modelBase._image;
+            Updated = DateTime.UtcNow;
+            Image = modelBase.Image;
         }
     }
 }

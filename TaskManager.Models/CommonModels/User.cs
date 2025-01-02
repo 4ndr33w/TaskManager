@@ -19,8 +19,8 @@ namespace TaskManager.Models
         public DateTime LastLoginDate { get; set; } = DateTime.UtcNow;
         public UserStatus UserStatus { get; set; } = UserStatus.User;
 
-        public List<Project>? Projects { get; set; }
-        public List<Desk>? Desks { get; set; }
+        public List<ProjectDto>? Projects { get; set; }
+        public List<DeskDto>? Desks { get; set; }
         public List<TaskDto>? Tasks { get; set; }
         public User() { }
 
@@ -30,7 +30,7 @@ namespace TaskManager.Models
             Email = user.Email;
             Password = user.Password;
             Phone = user.Phone;
-            LastLoginDate = user.LastLoginDate;
+            LastLoginDate = DateTime.UtcNow;
             UserStatus = user.UserStatus;
         }
 
