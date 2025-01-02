@@ -120,7 +120,7 @@ namespace TaskManager.Api.Services
             }
         }
 
-        public async Task<User> GetAsync(string login)
+        public async Task<UserDto> GetAsync(string login)
         {
             try
             {
@@ -132,12 +132,11 @@ namespace TaskManager.Api.Services
 
                 IEnumerable<TaskDto> tasksCollection = new List<TaskDto>();
 
-                var desksCollection = new List<DeskDto>();
+                var desksCollection = new List<Desk>();
                 foreach (var project in user.Projects)
                 {
                     var currentProjectDesks = await _npgDbContext.Desks
                         .Where(d => (d.ProjectId == project.Id && d.AdminId != user.Id && d.IsPrivate != true))
-                        .Select(d => d.ToDto())
                         .ToListAsync();
                     desksCollection.AddRange(currentProjectDesks);
                 }
@@ -152,11 +151,11 @@ namespace TaskManager.Api.Services
 
                 foreach (var desk in user.Desks)
                 {
-                    var currentDeskTasks = await _npgDbContext.Tasks.Where(t => t.DeskId == desk.Id).Select(t => t.ToDto()).ToListAsync();
+                    var currentDeskTasks = await _npgDbContext.Tasks.Where(t => t.DeskId == desk.Id).ToListAsync();
                     user.Tasks.AddRange(currentDeskTasks);
                 }
 
-                return user;
+                return user.ToDto();
             }
             catch (Exception)
             {

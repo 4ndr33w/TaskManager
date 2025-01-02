@@ -100,11 +100,11 @@ namespace TaskManager.Api.Services
         {
             var result = await _npgDbContext.Users.Select(u => u.Email).FirstOrDefaultAsync(e => e == login);
 
-            if (result == string.Empty || result == null)
+            if (result == null || result == string.Empty)
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
     }
 }

@@ -6,6 +6,7 @@ using TaskManager.Api.Services.SecurityOptions;
 using TaskManager.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using TaskManager.Models.Dtos;
+using TaskManager.Models;
 
 namespace TaskManager.Api.Controllers
 {
@@ -83,6 +84,31 @@ namespace TaskManager.Api.Controllers
                 return Ok(userDto);
             }
             return NotFound();
+        }
+
+        [HttpPatch("/update/mail")]
+        public async Task<IActionResult> ChangeUserEmail([FromBody] string newEmail)
+        {
+            if (newEmail != null || newEmail != string.Empty)
+            {
+                var login = HttpContext.User.Identity.Name;
+
+                var result = await _usersService.ChangeEmailAsync(login, newEmail);
+                return Ok(result);
+            }
+           return NoContent();
+        }
+        [HttpPatch("/update/pass")]
+        public async Task<IActionResult> ChangeUserPassword([FromBody] string newPassword)
+        {
+            if (newPassword != null || newPassword != string.Empty)
+            {
+                var login = HttpContext.User.Identity.Name;
+
+                var result = await _usersService.ChangePasswordAsync(login, newPassword);
+                return Ok(result);
+            }
+            return BadRequest();
         }
     }
 }
