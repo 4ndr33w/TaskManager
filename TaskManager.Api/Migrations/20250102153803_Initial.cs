@@ -88,13 +88,16 @@ namespace TaskManager.Api.Migrations
                       column: x => x.ProjectId,
                       principalSchema: "TaskManager",
                       principalTable: "ProjectsTable",
-                      principalColumn: "Id");
+                      principalColumn: "Id"
+                      ,
+              onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                      name: "FK_ProjectUser_UsersTable_UserId",
                      column: x => x.UserId,
                      principalSchema: "TaskManager",
                      principalTable: "UsersTable",
-                     principalColumn: "Id");
+                     principalColumn: "Id", 
+                     onDelete: ReferentialAction.Cascade);
 
                 });
 
@@ -127,7 +130,7 @@ namespace TaskManager.Api.Migrations
                     principalColumn: "Id");
 
                     table.ForeignKey(
-                    name: "FK_DesksTable_ProjectsTable_UserId",
+                    name: "FK_DesksTable_ProjectsTable_ProjectId",
                     column: x => x.ProjectId,
                     principalSchema: "TaskManager",
                     principalTable: "ProjectsTable",
@@ -286,25 +289,25 @@ namespace TaskManager.Api.Migrations
                 column: "Id");
             //---------------------------
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_DesksTable_ProjectsTable_ProjectId",
-                schema: "TaskManager",
-                table: "DesksTable",
-                column: "ProjectId",
-                principalSchema: "TaskManager",
-                principalTable: "ProjectsTable",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_DesksTable_ProjectsTable_ProjectId",
+            //    schema: "TaskManager",
+            //    table: "DesksTable",
+            //    column: "ProjectId",
+            //    principalSchema: "TaskManager",
+            //    principalTable: "ProjectsTable",
+            //    principalColumn: "Id",
+            //    onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_DesksTable_UsersTable_AdminId",
-                schema: "TaskManager",
-                table: "DesksTable",
-                column: "AdminId",
-                principalSchema: "TaskManager",
-                principalTable: "UsersTable",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_DesksTable_UsersTable_AdminId",
+            //    schema: "TaskManager",
+            //    table: "DesksTable",
+            //    column: "AdminId",
+            //    principalSchema: "TaskManager",
+            //    principalTable: "UsersTable",
+            //    principalColumn: "Id",
+            //    onDelete: ReferentialAction.Cascade);
 
             //migrationBuilder.AddForeignKey(
             //    name: "FK_ProjectsTable_UsersTable_AdminId",
@@ -336,25 +339,25 @@ namespace TaskManager.Api.Migrations
             //   principalColumn: "Id",
             //   onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.AddForeignKey(
-              name: "FK_ProjectUser_UsersTable_UserId",
-              schema: "TaskManager",
-              table: "ProjectUser",
-              column: "UserId",
-              principalSchema: "TaskManager",
-              principalTable: "UsersTable",
-              principalColumn: "Id",
-              onDelete: ReferentialAction.Cascade);
+            //migrationBuilder.AddForeignKey(
+            //  name: "FK_ProjectUser_UsersTable_UserId",
+            //  schema: "TaskManager",
+            //  table: "ProjectUser",
+            //  column: "UserId",
+            //  principalSchema: "TaskManager",
+            //  principalTable: "UsersTable",
+            //  principalColumn: "Id",
+            //  onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.AddForeignKey(
-             name: "FK_ProjectUser_ProjectsTable_ProjectId",
-             schema: "TaskManager",
-             table: "ProjectUser",
-             column: "ProjectId",
-             principalSchema: "TaskManager",
-             principalTable: "ProjectsTable",
-             principalColumn: "Id",
-             onDelete: ReferentialAction.Cascade);
+            //migrationBuilder.AddForeignKey(
+            // name: "FK_ProjectUser_ProjectsTable_ProjectId",
+            // schema: "TaskManager",
+            // table: "ProjectUser",
+            // column: "ProjectId",
+            // principalSchema: "TaskManager",
+            // principalTable: "ProjectsTable",
+            // principalColumn: "Id",
+            // onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
