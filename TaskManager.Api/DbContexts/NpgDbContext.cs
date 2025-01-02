@@ -74,6 +74,7 @@ namespace TaskManager.Api.DbContexts
             modelBuilder.Entity<ProjectUser>(e =>
             {
                 e.ToTable(_configuration.GetSection("PostgreDB")["ProjectUserTable"]);
+                e.HasKey(k => new { k.ProjectId, k.UserId });
             });
         }
     }
