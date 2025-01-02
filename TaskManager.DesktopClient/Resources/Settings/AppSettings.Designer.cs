@@ -22,5 +22,113 @@ namespace TaskManager.DesktopClient.Resources.Settings {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:7263/")]
+        public string HOST {
+            get {
+                return ((string)(this["HOST"]));
+            }
+            set {
+                this["HOST"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("api/users/")]
+        public string UsersApi {
+            get {
+                return ((string)(this["UsersApi"]));
+            }
+            set {
+                this["UsersApi"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("api/account/token")]
+        public string TokenUrl {
+            get {
+                return ((string)(this["TokenUrl"]));
+            }
+            set {
+                this["TokenUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("api/projects/")]
+        public string ProjectsApi {
+            get {
+                return ((string)(this["ProjectsApi"]));
+            }
+            set {
+                this["ProjectsApi"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("api/desks/")]
+        public string DesksApi {
+            get {
+                return ((string)(this["DesksApi"]));
+            }
+            set {
+                this["DesksApi"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("api/tasks/")]
+        public string TasksApi {
+            get {
+                return ((string)(this["TasksApi"]));
+            }
+            set {
+                this["TasksApi"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("lastUsedLogin.txt")]
+        public string SavedLoginFileName {
+            get {
+                return ((string)(this["SavedLoginFileName"]));
+            }
+            set {
+                this["SavedLoginFileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\StepikDesktop\\")]
+        public string SavedLoginLocalPath {
+            get {
+                return ((string)(this["SavedLoginLocalPath"]));
+            }
+            set {
+                this["SavedLoginLocalPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("iso-8859-1")]
+        public string EncodingType {
+            get {
+                return ((string)(this["EncodingType"]));
+            }
+            set {
+                this["EncodingType"] = value;
+            }
+        }
     }
 }

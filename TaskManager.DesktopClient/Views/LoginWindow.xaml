@@ -1,0 +1,64 @@
+﻿<Window x:Class="TaskManager.DesktopClient.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManager.DesktopClient.Views"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        mc:Ignorable="d"
+        Height="250" 
+        Width="400"
+        Background="{StaticResource WindowBackground}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" 
+             HorizontalAlignment="Stretch" 
+             VerticalAlignment="Center" 
+             Grid.Row="0">
+            <StackPanel Orientation="Horizontal" 
+                 HorizontalAlignment="Left">
+                <TextBlock Text="Enter Login:"
+                    Style="{StaticResource CommonTextBlockStyle}"
+                    Margin="70,0,5,0"/>
+                <TextBox Text="{Binding Login}" 
+                  Style="{StaticResource CommonTextBoxStyle}"
+                  Width="180" 
+                  Margin="5"
+                  x:Name="LoginWindowLoginTextBox"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" 
+                 HorizontalAlignment="Left">
+                <TextBlock Text="Enter Pasword:"
+                    Style="{StaticResource CommonTextBlockStyle}"
+                    Margin="55,0,10,0"/>
+                <PasswordBox Width="180"
+                      Style="{StaticResource CommonPaswordBoxStyle}"
+                      x:Name="LoginWindowPasswordBox"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                 Margin="0,25,0,0"
+                 HorizontalAlignment="Center">
+                <Button Width="100"
+                 Style="{StaticResource CommonButtonStyle}"
+                 Content="Cancel" 
+                 Margin="0,0,10,0"
+                 Command="{Binding CloseWindowCommand}"
+                 x:Name="LoginWindowCancelButton"/>
+                <Button Width="100"
+                 Style="{StaticResource CommonButtonStyle}"
+                 Content="OK" 
+                 Margin="10,0,0,0"
+                 Command="{Binding Path=GetUserCommand}"
+                 CommandParameter="{Binding ElementName=LoginWindowPasswordBox}"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>

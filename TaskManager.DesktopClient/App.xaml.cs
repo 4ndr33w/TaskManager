@@ -13,5 +13,16 @@ namespace TaskManager.DesktopClient
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            var resourceDictionaty = new ResourceDictionary
+            {
+                Source = new Uri("pack://application:,,,/Resources/Styles/MainStyleDictionaty.xaml")
+            };
+            Resources.MergedDictionaries.Add(resourceDictionaty);
+            new TaskManager.DesktopClient.Views.LoginWindow().ShowDialog();
+
+            Shutdown();
+        }
     }
 }
