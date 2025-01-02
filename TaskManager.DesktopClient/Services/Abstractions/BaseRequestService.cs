@@ -21,8 +21,8 @@ namespace TaskManager.DesktopClient.Services.Abstractions
         protected readonly string usersApiUrl = Resources.StaticResources.UsersApiUrl;
         protected readonly string tokenUrl = Resources.StaticResources.TokenUrl;
         protected readonly string projectsApiUrl = Resources.StaticResources.ProjectsApiUrl;
-        protected readonly string DesksApiUrl = Resources.StaticResources.DesksApiUrl;
-        protected readonly string TasksApiUrl = Resources.StaticResources.TasksApiUrl;
+        protected readonly string desksApiUrl = Resources.StaticResources.DesksApiUrl;
+        protected readonly string tasksApiUrl = Resources.StaticResources.TasksApiUrl;
 
         protected virtual string GetApiUrlString()
         {
