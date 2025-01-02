@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManager.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class SecondInitial : Migration
+    public partial class ThirdInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +25,7 @@ namespace TaskManager.Api.Migrations
                     Columns = table.Column<string[]>(type: "text[]", nullable: true),
                     AdminId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TaskIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
                     Color = table.Column<string>(type: "text", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -44,6 +46,8 @@ namespace TaskManager.Api.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     AdminId = table.Column<Guid>(type: "uuid", nullable: true),
                     ProjectStatus = table.Column<int>(type: "integer", nullable: false),
+                    UsersIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
+                    DesksIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -67,6 +71,9 @@ namespace TaskManager.Api.Migrations
                     Phone = table.Column<string>(type: "text", nullable: true),
                     LastLoginDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserStatus = table.Column<int>(type: "integer", nullable: false),
+                    ProjectsIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
+                    DesksIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
+                    TasksIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: true),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
