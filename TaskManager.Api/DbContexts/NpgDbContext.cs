@@ -43,8 +43,13 @@ namespace TaskManager.Api.DbContexts
 
                   e.HasKey(u => u.Id);
 
+                  //e.HasMany(u => u.Projects)
+                  //.WithMany(p => p.Users);
                   e.HasMany(u => u.Projects)
-                  .WithMany(p => p.Users);
+                  .WithOne(p => p.Admin)
+                  .HasForeignKey(p => p.AdminId)
+                  .HasPrincipalKey(u => u.Id)
+                  .OnDelete(DeleteBehavior.Cascade);
 
                   e.HasMany(u => u.Desks)
                   .WithOne(d => d.Admin)
@@ -53,14 +58,14 @@ namespace TaskManager.Api.DbContexts
                   .OnDelete(DeleteBehavior.Cascade);
 
                   e.HasMany(u => u.Tasks)
-                  .WithOne(t => t.Creator)
-                  .HasForeignKey(u => u.CreatorId)
-                  .HasPrincipalKey(u => u.Id);
+                  .WithOne(t => t.Creator);
+                  //.HasForeignKey(u => u.CreatorId)
+                  //.HasPrincipalKey(u => u.Id);
 
-                  e.HasMany(u => u.Tasks)
-                  .WithOne(t => t.Executor)
-                  .HasForeignKey(t => t.ExecutorId)
-                  .HasPrincipalKey(u => u.Id);
+                  //e.HasMany(u => u.Tasks)
+                  //.WithOne(t => t.Executor);
+                  //.HasForeignKey(t => t.ExecutorId)
+                  //.HasPrincipalKey(u => u.Id);
                   
               });
 
@@ -70,14 +75,14 @@ namespace TaskManager.Api.DbContexts
                 e.ToTable(_configuration.GetSection("PostgreDB")["ProjectTable"]);
                 e.HasKey(p => p.Id);
 
-                e.HasOne(p => p.Admin)
-                .WithMany(p => p.Projects)
-                .HasPrincipalKey(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey(u => u.AdminId);
+                //e.HasOne(p => p.Admin)
+                //.WithMany(p => p.Projects)
+                //.HasPrincipalKey(p => p.Id)
+                //.OnDelete(DeleteBehavior.Cascade)
+                //.HasForeignKey(u => u.AdminId);
 
-                e.HasMany(p => p.Users)
-                .WithMany(p => p.Projects);
+                e.HasMany(p => p.Users);
+                //.WithMany(p => p.Projects);
 
                 e.HasMany(p => p.Desks)
                 .WithOne(p => p.Project)
@@ -117,15 +122,15 @@ namespace TaskManager.Api.DbContexts
                 e.ToTable(_configuration.GetSection("PostgreDB")["TaskTable"]);
                 e.HasKey(d => d.Id);
 
-                e.HasOne(t => t.Creator)
-                .WithMany(t => t.Tasks)
-                .HasForeignKey(t => t.CreatorId)
-                .HasPrincipalKey(u => u.Id);
+                e.HasOne(t => t.Creator);
+                //.WithMany(t => t.Tasks);
+                //.HasForeignKey(t => t.CreatorId);
+                //.HasPrincipalKey(u => u.Id);
 
-                e.HasOne(t => t.Executor)
-                .WithMany(u => u.Tasks)
-                .HasForeignKey(t => t.ExecutorId)
-                .HasPrincipalKey(u => u.Id);
+                e.HasOne(t => t.Executor);
+                //.WithMany(u => u.Tasks);
+                //.HasForeignKey(t => t.ExecutorId);
+                //.HasPrincipalKey(u => u.Id);
 
                 e.HasOne(t => t.Desk)
                 .WithMany(t => t.Tasks)
