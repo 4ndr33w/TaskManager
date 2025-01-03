@@ -66,17 +66,22 @@ namespace TaskManager.Api.Controllers
                 var currentUser = await _accountService.GetUser(login);
                 ProjectDto projectDto = await _projectService.GetAsync(projectId);
 
-                bool isUserAdminOrEditor = currentUser.UserStatus == UserStatus.Admin || currentUser.UserStatus == UserStatus.Editor;
-                bool isUserProjectAdmin = currentUser.Id == projectDto.AdminId;
-                bool isUserInProjectUsersCollection = await _projectService.IsUserInProjectUsersOfProject(currentUser.Id, projectId);
-
-                if (isUserAdminOrEditor || isUserProjectAdmin || isUserInProjectUsersCollection)
+                if (projectDto != null)
                 {
-                    return Ok(projectDto);
+                    bool isUserAdminOrEditor = currentUser.UserStatus == UserStatus.Admin || currentUser.UserStatus == UserStatus.Editor;
+                    bool isUserProjectAdmin = currentUser.Id == projectDto.AdminId;
+                    bool isUserInProjectUsersCollection = await _projectService.IsUserInProjectUsersOfProject(currentUser.Id, projectId);
+
+                    if (isUserAdminOrEditor || isUserProjectAdmin || isUserInProjectUsersCollection)
+                    {
+                        return Ok(projectDto);
+                    }
+                    return Forbid();
                 }
-                return Forbid();
+                return NotFound();
+               
             }
-            return Unauthorized();
+            return BadRequest();
         }
 
         [HttpPatch("update/{projectId}/admin/{adminId}")]

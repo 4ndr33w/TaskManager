@@ -86,27 +86,70 @@ namespace TaskManager.Api.Controllers
             return NotFound();
         }
 
-        [HttpPatch("/update/mail")]
-        public async Task<IActionResult> ChangeUserEmail([FromBody] string newEmail)
+        [HttpPatch("update/mail")]
+        public async Task<IActionResult> ChangeUserEmail([FromBody]object newEmail)
         {
-            if (newEmail != null || newEmail != string.Empty)
+            if (newEmail != null || newEmail.ToString() != string.Empty)
             {
-                var login = HttpContext.User.Identity.Name;
+                string newMail = newEmail
+                    .ToString()
+                    .Split(":")[1]
+                    .ReplaceLineEndings()
+                    .Replace("\"", "")
+                    .Replace("}", "")
+                    .Replace("\n", "")
+                    .Replace("\r", "");
 
-                var result = await _usersService.ChangeEmailAsync(login, newEmail);
-                return Ok(result);
+                if (newMail[0] == ' ')
+                {
+                    newMail = newMail.Substring(1);
+                }
+
+                var login = HttpContext.User.Identity.Name;
+                var currentUser = await _usersService.GetAsync(login);
+
+                var isThaiEmailBusy = await _accountService.IsCurrentEmailAlreadyUsedByOtherUser(newMail);
+
+                if (currentUser != null)
+                {
+                    if (!isThaiEmailBusy && currentUser != null)
+                    {
+                        var result = await _usersService.ChangeEmailAsync(login, newMail);
+                        return Ok(result);
+                    }
+                    return Conflict("Change E-mail. Current e-mail already in use");
+                }
+                return NotFound();
             }
            return NoContent();
         }
-        [HttpPatch("/update/pass")]
-        public async Task<IActionResult> ChangeUserPassword([FromBody] string newPassword)
+        [HttpPatch("update/pass")]
+        public async Task<IActionResult> ChangeUserPassword([FromBody]object newPass)
         {
-            if (newPassword != null || newPassword != string.Empty)
+            if (newPass != null || newPass.ToString() != string.Empty)
             {
+                string newPassword = newPass.ToString()
+                    .Split(":")[1]
+                    .ReplaceLineEndings()
+                    .Replace("\"", "")
+                    .Replace("}", "")
+                    .Replace("\n", "")
+                    .Replace("\r", "");
+
+                if (newPassword[0] == ' ')
+                {
+                    newPassword = newPassword.Substring(1);
+                }
                 var login = HttpContext.User.Identity.Name;
 
                 var result = await _usersService.ChangePasswordAsync(login, newPassword);
-                return Ok(result);
+
+                var currentUser = await _usersService.GetAsync(login);
+                if (currentUser != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound();
             }
             return BadRequest();
         }
