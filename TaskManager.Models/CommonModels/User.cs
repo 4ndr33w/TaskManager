@@ -19,10 +19,6 @@ namespace TaskManager.Models
         public DateTime LastLoginDate { get; set; } = DateTime.UtcNow;
         public UserStatus UserStatus { get; set; } = UserStatus.User;
 
-        public List<Guid>? ProjectsIds { get; set; }
-        public List<Guid>? DesksIds { get; set; }
-        public List<Guid>? TasksIds { get; set; }
-
         public List<Project>? Projects { get; set; }
         public List<Desk>? Desks { get; set; }
         public List<TaskModel>? Tasks { get; set; }

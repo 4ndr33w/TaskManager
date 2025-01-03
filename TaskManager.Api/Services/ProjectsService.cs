@@ -135,24 +135,27 @@ namespace TaskManager.Api.Services
             return false;
         }
 
-        public async Task<bool> AddUsersToProject(Guid projectId, IEnumerable<Guid> userIdsCollection)
+        public async Task<bool> AddUsersToProject(ProjectDto projectDto, IEnumerable<Guid> userIdsCollection)
         {
             try
             {
-                Project project = await _npgDbContext.Projects.Include(p => p.Users).FirstOrDefaultAsync(p => p.Id == projectId);
+                List<Guid> usersIdsList = new List<Guid>();
+                Project project =  await _npgDbContext.Projects.Include(p => p.Users).FirstOrDefaultAsync(p => p.Id == projectDto.Id);
 
-                foreach (var userId in userIdsCollection)
+                foreach (var userId in userIdsCollection.ToList())
                 {
                     var user = await _npgDbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
-                    bool isUserColectionInProjectContainsCurrentUser = project.Users.Contains(user);
-
                     bool isUserProjectAdmin = project.AdminId == userId;
+                    //bool isUserIdsColectionInProjectContainsCurrentUserId = project.UsersIds.Contains(user.Id);
 
-                    if (!isUserColectionInProjectContainsCurrentUser && !isUserProjectAdmin)
+                    if (user != null &&( !isUserProjectAdmin/* && !isUserIdsColectionInProjectContainsCurrentUserId */))
                     {
                         project.Users.Add(user);
+                        usersIdsList.Add(userId);
                     }
                 }
+                //project.UsersIds.AddRange(usersIdsList);
+                _npgDbContext.Update(project);
                 await _npgDbContext.SaveChangesAsync();
                 return true;
             }

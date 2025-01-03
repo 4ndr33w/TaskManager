@@ -184,7 +184,7 @@ namespace TaskManager.Api.Controllers
 
                     if (isCurrentUserAdminOrEditor || isCurrentUserProjectAdmin)
                     {
-                        result = await _projectService.AddUsersToProject(projectId, usersIds);
+                        result = await _projectService.AddUsersToProject(existingProject, usersIds);
                         return result ? Ok(result) : BadRequest();
                     }
                     return Forbid();

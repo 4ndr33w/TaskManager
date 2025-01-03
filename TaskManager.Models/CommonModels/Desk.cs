@@ -22,7 +22,6 @@ namespace TaskManager.Models
         [ForeignKey("ProjectId")]
         public Guid ProjectId { get; set; }
         public Project? Project { get; set; }
-        public List<Guid>? TaskIds { get; set; } = new List<Guid>();
         public List<TaskModel>? Tasks { get; set; }
         public string? Color { get; set; }
 

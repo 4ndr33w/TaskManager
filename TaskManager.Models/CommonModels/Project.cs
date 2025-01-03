@@ -18,8 +18,6 @@ namespace TaskManager.Models
         public User Admin { get; set; }
         public ProjectStatus ProjectStatus { get; set; } = ProjectStatus.InProgress;
 
-        public List<Guid>? UsersIds { get; set; } = new List<Guid>();
-        public List<Guid>? DesksIds { get; set; } = new List<Guid>();
         public List<User>? Users { get; set; }
         public List<Desk>? Desks { get; set; }
 

@@ -20,7 +20,7 @@ namespace TaskManager.Api.DbContexts
         public DbSet<Project> Projects { get; set; }
         public DbSet<Desk> Desks { get; set; }
         public DbSet<TaskModel> Tasks { get; set; }
-        public DbSet<ProjectUser> ProjectUsers { get; set; }
+        //public DbSet<ProjectUser> ProjectUsers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,8 +43,8 @@ namespace TaskManager.Api.DbContexts
 
                   e.HasKey(u => u.Id);
 
-                  //e.HasMany(p => p.Projects)
-                  //.WithMany(p => p.Users);
+                  e.HasMany(p => p.Projects)
+                  .WithMany(p => p.Users);
 
                   //e.HasMany(u => u.Projects)
                   //.WithOne(p => p.Admin)
@@ -52,14 +52,14 @@ namespace TaskManager.Api.DbContexts
                   //.HasPrincipalKey(u => u.Id)
                   //.OnDelete(DeleteBehavior.Cascade);
 
-                  e.HasMany(u => u.Desks)
-                  .WithOne(d => d.Admin)
-                  .HasForeignKey(u => u.AdminId)
-                  .HasPrincipalKey(u => u.Id)
-                  .OnDelete(DeleteBehavior.Cascade);
+                  e.HasMany(u => u.Desks);
+                  //.WithOne(d => d.Admin)
+                  //.HasForeignKey(u => u.AdminId)
+                  //.HasPrincipalKey(u => u.Id)
+                  //.OnDelete(DeleteBehavior.Cascade);
 
-                  e.HasMany(u => u.Tasks)
-                  .WithOne(t => t.Creator);
+                  e.HasMany(u => u.Tasks);
+                  //.WithOne(t => t.Creator);
                   //.HasForeignKey(u => u.CreatorId)
                   //.HasPrincipalKey(u => u.Id);
 
@@ -74,21 +74,22 @@ namespace TaskManager.Api.DbContexts
             .Entity<Project>(e =>
             {
                 e.ToTable(_configuration.GetSection("PostgreDB")["ProjectTable"]);
+                e.HasMany(p => p.Users);
                 e.HasKey(p => p.Id);
 
-                e.HasOne(p => p.Admin)
-                .WithMany(p => p.Projects)
-                .HasPrincipalKey(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasForeignKey(u => u.AdminId);
+                e.HasOne(p => p.Admin);
+                //.WithMany(p => p.Projects)
+                //.HasPrincipalKey(p => p.Id)
+                //.OnDelete(DeleteBehavior.Cascade)
+                //.HasForeignKey(u => u.AdminId);
 
 
 
-                e.HasMany(p => p.Desks)
-                .WithOne(p => p.Project)
-                .HasForeignKey(u => u.ProjectId)
-                .HasPrincipalKey(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                e.HasMany(p => p.Desks);
+                //.WithOne(p => p.Project)
+                //.HasForeignKey(u => u.ProjectId)
+                //.HasPrincipalKey(p => p.Id)
+                //.OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder
@@ -109,11 +110,11 @@ namespace TaskManager.Api.DbContexts
                  .HasPrincipalKey(p => p.Id)
                  .OnDelete(DeleteBehavior.Cascade);
 
-                 e.HasMany(d => d.Tasks)
-                 .WithOne(d => d.Desk)
-                 .HasForeignKey(t => t.DeskId)
-                 .HasPrincipalKey(d => d.Id)
-                 .OnDelete(DeleteBehavior.Cascade);
+                 e.HasMany(d => d.Tasks);
+                 //.WithOne(d => d.Desk)
+                 //.HasForeignKey(t => t.DeskId)
+                 //.HasPrincipalKey(d => d.Id)
+                 //.OnDelete(DeleteBehavior.Cascade);
              });
 
             modelBuilder
@@ -139,11 +140,11 @@ namespace TaskManager.Api.DbContexts
                 .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<ProjectUser>(e =>
-            {
-                e.ToTable(_configuration.GetSection("PostgreDB")["ProjectUserTable"]);
-                e.HasKey(k => k.Id);
-            });
+            //modelBuilder.Entity<ProjectUser>(e =>
+            //{
+            //    e.ToTable(_configuration.GetSection("PostgreDB")["ProjectUserTable"]);
+            //    e.HasKey(k => k.Id);
+            //});
         }
     }
 }
