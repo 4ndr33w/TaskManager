@@ -20,7 +20,7 @@ namespace TaskManager.DesktopClient
                 Source = new Uri("pack://application:,,,/Resources/Styles/MainStyleDictionaty.xaml")
             };
             Resources.MergedDictionaries.Add(resourceDictionaty);
-            new TaskManager.DesktopClient.Views.LoginWindow().ShowDialog();
+            new /*TaskManager.DesktopClient.Views.*/MainWindow().ShowDialog();
 
             Shutdown();
         }

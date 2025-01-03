@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     x:Name="MainResourceDictionary">
     <LinearGradientBrush x:Key="WindowBackground" 
+                         x:Name="WindowBackground"
                       EndPoint="0.5,0" 
                       StartPoint="0.5,1">
         <GradientStop Color="#FF1D1D1D"/>
@@ -27,6 +28,15 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
+    <Style TargetType="Label" 
+ x:Key="CommonLabelStyle">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontStyle" Value="{StaticResource WindowTextStyleForeground}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
     <Style TargetType="PasswordBox" 
   x:Key="CommonPaswordBoxStyle">
         <Setter Property="Foreground" Value="White"/>
@@ -39,10 +49,29 @@
         <Setter Property="BorderBrush" Value="White"/>
     </Style>
     <Style x:Key="CommonButtonStyle"
-        TargetType="Button">
+           TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="White"/>
+    </Style>
+    <Style x:Key="CommonMenuStyle"
+           TargetType="Menu">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="White"/>
+    </Style>
+    <Style x:Key="CommonMenuItemStyle"
+           TargetType="MenuItem">
+        <Setter Property="Background" Value="{Binding ElementName=WindowBackground}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="Width" Value="50"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
     </Style>
 </ResourceDictionary>

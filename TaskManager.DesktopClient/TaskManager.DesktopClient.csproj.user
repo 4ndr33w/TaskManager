@@ -2,7 +2,19 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
+    <Compile Update="Views\Components\LoginPanels\AuthorizedUserPanelComponent.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Components\LoginPanels\BaseLoginBarComponent.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Components\LoginPanels\HaveCachedUserLoginBarComponent.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\LoginWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Windows\RegistrationWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -10,7 +22,19 @@
     <Page Update="Resources\Styles\MainStyleDictionaty.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Components\LoginPanels\AuthorizedUserPanelComponent.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Components\LoginPanels\BaseLoginBarComponent.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Components\LoginPanels\HaveCachedUserLoginBarComponent.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Windows\RegistrationWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

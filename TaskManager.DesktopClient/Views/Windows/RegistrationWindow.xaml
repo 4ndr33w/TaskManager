@@ -1,0 +1,43 @@
+﻿<Window x:Class="TaskManager.DesktopClient.Views.Windows.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Windows"
+        mc:Ignorable="d"
+        Background="{StaticResource WindowBackground}"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        x:Name="RegistrationNewUserWindow"
+        Title="RegistrationWindow" Height="250" Width="450">
+    <Grid>
+        
+        <DockPanel LastChildFill="True">
+            <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="Registraion of new user" Margin="10" Style="{StaticResource CommonTextBlockStyle}"></TextBlock>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
+                <Button Content="Cancel" Style="{StaticResource CommonButtonStyle}" Margin="0,0,10,0" Width="80" Command="{Binding CloseLocalWindowCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
+                <Button Content="Accept" Style="{StaticResource CommonButtonStyle}" Margin="10,0,0,0" Width="80"></Button>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Enter your name:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="Enter your Last name:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="Enter your E-Mail:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="Enter your Password:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="your Phone number:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="Load profile image:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Right">
+                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="13,5,0,0">
+                    <Button Content="Take picture" Style="{StaticResource CommonButtonStyle}" Width="230"></Button>
+                </StackPanel>
+            </StackPanel>
+            
+        </DockPanel>
+    </Grid>
+</Window>

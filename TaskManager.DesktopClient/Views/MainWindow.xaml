@@ -4,9 +4,47 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager.DesktopClient"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        xmlns:loginPanels="clr-namespace:TaskManager.DesktopClient.Views.Components.LoginPanels"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
+        Background="{StaticResource WindowBackground}"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel Background="{StaticResource WindowBackground}" LastChildFill="True">
+        <DockPanel DockPanel.Dock="Top" LastChildFill="True" Background="Transparent">
+            <DockPanel DockPanel.Dock="Left" Background="Transparent" Block.LineHeight="35">
+               
+                <Menu DockPanel.Dock="Left" Background="Transparent">
+                    <MenuItem Header="File" Style="{StaticResource CommonMenuItemStyle}" Width="45">
+                        <MenuItem Header="Open" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
+                        <MenuItem Header="Add From file..." Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
+                        <MenuItem Header="Save" Style="{StaticResource CommonMenuItemStyle}">
+                            <MenuItem Header="*.txt" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
+                            <MenuItem Header="*.xml" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
+                            <MenuItem Header="*.json" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
+                        </MenuItem>
+                        <MenuItem Header="Close" x:Name="MenuClose" Command="{Binding CloseApplicationCommand}"></MenuItem>
+                    </MenuItem>
+                    
+                    <MenuItem Header="Settings" Style="{StaticResource CommonMenuItemStyle}" Width="65" ></MenuItem>
+                    <MenuItem Header="Help" Style="{StaticResource CommonMenuItemStyle}" Width="50"></MenuItem>
+                    <MenuItem Header="About" Style="{StaticResource CommonMenuItemStyle}" Width="55"></MenuItem>
+                </Menu>
+            </DockPanel>
+            <loginPanels:BaseLoginBarComponent DockPanel.Dock="Right"></loginPanels:BaseLoginBarComponent>
+            <!--<loginPanels:AuthorizedUserPanelComponent DockPanel.Dock="Right" Visibility="{Binding Path=AuthorizedPanelVisibility}"></loginPanels:AuthorizedUserPanelComponent>-->
+            <!--<loginPanels:BaseLoginBarComponent DockPanel.Dock="Right"></loginPanels:BaseLoginBarComponent>-->
+            <!--<StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Height="30">
+                <Button Content="Register" Height="20" Width="70" Margin="0,0,5,0" Style="{StaticResource CommonButtonStyle}" Command="{Binding OpenRegisterWindowCommand}"></Button>
+                <Button Content="Log In" Height="20" Width="70" Margin="5,0,0,0" Style="{StaticResource CommonButtonStyle}"></Button>
+                <TextBox Width="150" Height="20" Margin="15,0,5,0" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <PasswordBox Width="120" Height="20" Margin="5,0,15,0" Style="{StaticResource CommonPaswordBoxStyle}"></PasswordBox>
+                <Button Width="0" Height="20"></Button>
+            </StackPanel>-->
+            <Label/>
+        </DockPanel>
+        <StackPanel></StackPanel>
+       
+    </DockPanel>
 </Window>

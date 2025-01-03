@@ -23,6 +23,12 @@ namespace TaskManager.DesktopClient
         public MainWindow()
         {
             InitializeComponent();
+            OnStartup();
+        }
+
+        private void OnStartup()
+        {
+            DataContext = new ViewModels.MainWindowViewModel();
         }
     }
 }
