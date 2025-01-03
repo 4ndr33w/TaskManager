@@ -61,18 +61,59 @@ namespace TaskManager.Api.Controllers
         [HttpGet("{deskId}")]
         public async Task<IActionResult> GetDeskById(Guid deskId)
         {
-            return Ok();
+            var login = HttpContext.User.Identity.Name;
+            if (login != null)
+            {
+                var currentUser = await _userService.GetAsync(login);
+                if (currentUser != null)
+                {
+                    var currentDesk = await _desksService.GetAsync(deskId);
+                    if (currentUser.DesksIds.Contains(currentDesk.Id))
+                    {
+                        return Ok(currentDesk);
+                    }
+                    return Forbid();
+                }
+                return NotFound();
+            }
+            return NoContent();
         }
 
         [HttpGet("project/{projectId}")]
         public async Task<IActionResult> GetProjectDesks(Guid projectId)
         {
-            return Ok();
+            var login = HttpContext.User.Identity.Name;
+            if (login != null)
+            {
+                var currentUser = await _userService.GetAsync(login);
+                if (currentUser != null)
+                {
+                    bool isUserInProject = currentUser.ProjectsIds.Contains(projectId);
+                    if (isUserInProject)
+                    {
+                        var result = await _desksService.GetByProjectIdAsync(projectId, currentUser.Id);
+                        return Ok(result);
+                    }
+                    return Forbid();
+                }
+                return NotFound();
+            }
+            return BadRequest();
         }
         [HttpGet]
         public async Task<IActionResult> GetUserDesks()
         {
-            return Ok();
+            var login = HttpContext.User.Identity.Name;
+            if (login != null)
+            {
+                var currentUser = await _userService.GetAsync(login);
+                if (currentUser != null)
+                {
+                    return Ok(await _desksService.GetAllUserDesksAsync(currentUser.DesksIds));
+                }
+                return NotFound();
+            }
+            return BadRequest();
         }
         [HttpPatch("{deskId}")]
         public async Task<IActionResult> UpdateDeskById(Guid deskId)
