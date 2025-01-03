@@ -133,12 +133,19 @@ namespace TaskManager.Api.Services
                 IEnumerable<TaskDto> tasksCollection = new List<TaskDto>();
 
                 var desksCollection = new List<Desk>();
-                foreach (var project in user.Projects)
+                foreach (var project in user.Projects.ToList())
                 {
+                    var projectAdmins = await _npgDbContext.Projects.FirstOrDefaultAsync(p => p.AdminId == user.Id);
+
                     var currentProjectDesks = await _npgDbContext.Desks
                         .Where(d => (d.ProjectId == project.Id && d.AdminId != user.Id && d.IsPrivate != true))
                         .ToListAsync();
                     desksCollection.AddRange(currentProjectDesks);
+
+                    if (!user.Projects.Contains(projectAdmins))
+                    {
+                        user.Projects.Add(projectAdmins);
+                    }
                 }
 
                 foreach (var desk in desksCollection)

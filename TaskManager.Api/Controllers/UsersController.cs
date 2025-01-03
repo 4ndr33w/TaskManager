@@ -80,8 +80,12 @@ namespace TaskManager.Api.Controllers
             if (login != null)
             {
                 var userDto = await _usersService.GetAsync(login);
-                userDto.Password = "**************";
-                return Ok(userDto);
+                if (userDto != null)
+                {
+                    userDto.Password = "**************";
+                    return Ok(userDto);
+                }
+                return NotFound();
             }
             return NotFound();
         }

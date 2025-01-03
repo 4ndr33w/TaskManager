@@ -193,5 +193,54 @@ namespace TaskManager.Api.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPatch("{projectId}/users/remove")]
+        public async Task<IActionResult> RemoveUsersFromProject(Guid projectId, [FromBody] List<Guid> usersIds)
+        {
+            bool result = false;
+            if (usersIds != null)
+            {
+                string login = HttpContext.User.Identity.Name;
+
+                var existingProject = await _projectService?.GetAsync(projectId);
+                if (existingProject != null)
+                {
+                    var currentUser = await _accountService.GetUser(login);
+
+                    bool isCurrentUserAdminOrEditor = currentUser.UserStatus == UserStatus.Admin || currentUser.UserStatus == UserStatus.Editor;
+                    bool isCurrentUserProjectAdmin = existingProject.AdminId == currentUser.Id;
+
+                    if (isCurrentUserAdminOrEditor || isCurrentUserProjectAdmin)
+                    {
+                        result = await _projectService.RemoveUsersFromProject(existingProject.Id, usersIds);
+                        return result ? Ok(result) : BadRequest();
+                    }
+                    return Forbid();
+                }
+                return NotFound();
+            }
+            return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUserProjects()
+        {
+            var login = HttpContext.User.Identity.Name;
+            if (login != null)
+            {
+                var currentUser = await _userService.GetAsync(login);
+                if (currentUser != null)
+                {
+                    var projectsCollection = await _projectService.GetAsync(currentUser);
+                    if (projectsCollection != null)
+                    {
+                        return Ok(projectsCollection);
+                    }
+                    return NoContent();
+                }
+                else NoContent();
+            }
+            return Forbid();
+        }
     }
 }
