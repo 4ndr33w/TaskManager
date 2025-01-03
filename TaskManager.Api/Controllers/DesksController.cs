@@ -57,5 +57,32 @@ namespace TaskManager.Api.Controllers
             }
             return Unauthorized();
         }
+
+        [HttpGet("{deskId}")]
+        public async Task<IActionResult> GetDeskById(Guid deskId)
+        {
+            return Ok();
+        }
+
+        [HttpGet("project/{projectId}")]
+        public async Task<IActionResult> GetProjectDesks(Guid projectId)
+        {
+            return Ok();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUserDesks()
+        {
+            return Ok();
+        }
+        [HttpPatch("{deskId}")]
+        public async Task<IActionResult> UpdateDeskById(Guid deskId)
+        {
+            return Ok();
+        }
+        [HttpDelete("{deskId}")]
+        public async Task<IActionResult> DeleteDeskById(Guid deskId)
+        {
+            return Ok();
+        }
     }
 }
