@@ -23,7 +23,7 @@ namespace TaskManager.Models
         public Guid ProjectId { get; set; }
         public Project? Project { get; set; }
         public List<TaskModel>? Tasks { get; set; }
-        public string? Color { get; set; }
+        public string? Color { get; set; } = "Green";
 
         public Desk() { }
 

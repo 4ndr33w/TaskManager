@@ -142,7 +142,7 @@ namespace TaskManager.Api.Services
                         .ToListAsync();
                     desksCollection.AddRange(currentProjectDesks);
 
-                    if (!user.Projects.Contains(projectAdmins))
+                    if (!user.Projects.Contains(projectAdmins) && projectAdmins != null)
                     {
                         user.Projects.Add(projectAdmins);
                     }

@@ -9,7 +9,7 @@ namespace TaskManager.Models.Dtos
         public Guid AdminId { get; set; }
         public Guid ProjectId { get; set; }
         public List<Guid>? TaskIds { get; set; } = new List<Guid>();
-        public string Color { get; set; }
+        public string Color { get; set; } = "Green";
 
         public DeskDto() : base() { }
         public DeskDto(DeskDto desk) : base(desk)
