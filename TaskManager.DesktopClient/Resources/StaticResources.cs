@@ -18,8 +18,9 @@ namespace TaskManager.DesktopClient.Resources
         public static string DesksApiUrl = StaticResources._settings.DesksApi;
         public static string TasksApiUrl = StaticResources._settings.TasksApi;
 
-        public static string SavedUserLoginFileName = StaticResources._settings.SavedLoginFileName;
-        public static string SavedLoginLocalPath = StaticResources._settings.SavedLoginLocalPath;
+        public static string CachedUserFileName = StaticResources._settings.CachedUserFileName;
+        public static string LocalUserFileName = StaticResources._settings.LocalUserFileName;
+        public static string CachedUserFilePath = StaticResources._settings.SavedLoginLocalPath;
 
         public static string EncodingType = StaticResources._settings.EncodingType;
     }

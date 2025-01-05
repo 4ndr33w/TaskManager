@@ -5,32 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Components.LoginPanels"
              x:Name="BaseLoginBarUserControlElement"
-             Visibility="Visible"
              mc:Ignorable="d">
     <StackPanel>
-        <StackPanel Orientation="Horizontal" Height="{Binding BaseLoginPaneHeight}" Visibility="{Binding BaseLoginPanelVisibility}">
-            <!--Visibility="{Binding BaseLoginPanelVisibility}">-->
-            <Button Content="Register" 
-            Height="20" 
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Height="{Binding BaseLoginPaneHeight}" Visibility="{Binding BaseLoginPanelVisibility}">
+            <Button Content="Register"
             Width="70" 
             Margin="0,0,5,0" 
             Style="{StaticResource CommonButtonStyle}" 
             Command="{Binding OpenRegisterWindowCommand}"></Button>
-            <Button Content="Log In" 
-            Height="20" 
+            <Button Content="Log In"
             Width="70" 
             Margin="5,0,0,0" 
             Style="{StaticResource CommonButtonStyle}"
             Command="{Binding Path=GetUserCommand}"
             CommandParameter="{Binding ElementName=BaseLoginBarUserControlElement}"></Button>
             <TextBox Text="{Binding Login}" 
-             Width="150" 
-             Height="20" 
+             Width="150"
              Margin="15,0,5,0" 
              Style="{StaticResource CommonTextBoxStyle}"></TextBox>
             <PasswordBox x:Name="LoginWindowPasswordBox" 
-                 Width="120" Height="20" 
-                 Margin="5,0,15,0" 
+                 Width="120"
+                 Margin="5,0,15,0"
                  Style="{StaticResource CommonPaswordBoxStyle}"></PasswordBox>
             <Button Width="0" 
             Height="20"></Button>
@@ -38,21 +33,41 @@
         <StackPanel Orientation="Horizontal" Height="{Binding AuthorizedPanelHeight}" Visibility="{Binding AuthorizedPanelVisibility}">
             <!--Visibility="{Binding AuthorizedPanelVisibility}">-->
             <Button Content="Change user" 
-                    Height="20" 
                     Width="90" 
                     Margin="0,0,5,0" 
                     Style="{StaticResource CommonButtonStyle}" 
                     Command="{Binding DropAuthorizationCommand}"></Button>
-            <Label Height="20" Width="200" Margin="5,0,0,0" Padding="0,0,0,-5" Style="{StaticResource CommonLabelStyle}">
+            <Label Width="200" Margin="5,0,0,0" Padding="0,7,0,0" Style="{StaticResource CommonLabelStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Login as:" Style="{StaticResource CommonLabelStyle}" VerticalAlignment="Top" FontSize="12" Padding="0,0,-6,0"/>
+                    <Label Content=" " Style="{StaticResource CommonLabelStyle}" VerticalAlignment="Top" FontSize="12" Padding="0,0,-6,0"/>
                     <Label Content="  " Style="{StaticResource CommonLabelStyle}"/>
-                    <Label Content="{Binding CurrentUser.Name}" Padding="0,0,0,-5" Style="{StaticResource CommonLabelStyle}"/>
+                    <Label Content="{Binding CurrentUser.Name}" Padding="0,5,0,0" Style="{StaticResource CommonLabelStyle}"/>
                     <Label Content="  " Style="{StaticResource CommonLabelStyle}"/>
-                    <Label Content="{Binding CurrentUser.LastName}" Padding="0,0,0,-5" Style="{StaticResource CommonLabelStyle}"/>
+                    <Label Content="{Binding CurrentUser.LastName}" Padding="0,5,0,0" Style="{StaticResource CommonLabelStyle}"/>
                     <Image/>
                 </StackPanel>
             </Label>
+            <TextBlock Width="120" Height="20" Margin="5,0,15,0" Style="{StaticResource CommonTextBlockStyle}"></TextBlock>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Visibility="{Binding CachedUserPanelVisibility}" Margin="0,10,0,0">
+            <Button Content="Cancel" Width="90" Margin="0,0,5,0" Style="{StaticResource CommonButtonStyle}" Command="{Binding DropAuthorizationCommand}"></Button>
+            <Button Width="250" Margin="5,0,0,0" Style="{StaticResource CommonButtonStyle}" Command="{Binding LoginCachedUserCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Previous user:    " Style="{StaticResource CommonLabelStyle}" VerticalAlignment="Top" FontSize="12" Padding="0,4,0,0"/>
+                    <Label Content=" "/>
+                    <Label BorderBrush="White" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding CurrentUser.Image}"/>
+                            <Label Content=" "/>
+                            <Label Content="{Binding CurrentUser.Name}" Margin="0,2,0,0" Style="{StaticResource CommonLabelStyle}"/>
+                            <!--<Label Content=" "/>-->
+                            <Label Content="{Binding CurrentUser.LastName}" Margin="0,2,0,0" Style="{StaticResource CommonLabelStyle}"/>
+                        </StackPanel>
+                    </Label>
+                   
+                </StackPanel>
+            </Button>
             <TextBlock Width="120" Height="20" Margin="5,0,15,0" Style="{StaticResource CommonTextBlockStyle}"></TextBlock>
         </StackPanel>
     </StackPanel>

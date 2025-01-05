@@ -36,6 +36,31 @@ namespace TaskManager.Api.Services.SecurityOptions
             }
         }
 
+        public bool VerifyPasswordIfHashed(string userHashedPassword, string hashedPassword)
+        {
+            if (hashedPassword == null || userHashedPassword == null)
+            {
+                return false;
+            }
+            byte[] src = Convert.FromBase64String(hashedPassword);
+            if ((src.Length != 0x31) || (src[0] != 0))
+            {
+                return false;
+            }
+            byte[] dst = new byte[0x10];
+            Buffer.BlockCopy(src, 1, dst, 0, 0x10);
+            byte[] buffer3 = new byte[0x20];
+            Buffer.BlockCopy(src, 0x11, buffer3, 0, 0x20);
+
+            byte[] src1 = Convert.FromBase64String(hashedPassword);
+            byte[] dst1 = new byte[0x10];
+            Buffer.BlockCopy(src1, 1, dst1, 0, 0x10);
+            byte[] buffer4 = new byte[0x20];
+            Buffer.BlockCopy(src1, 0x11, buffer4, 0, 0x20);
+
+            return ByteArrayEquals(buffer3, buffer4);
+        }
+
         public bool VerifyHashedPassword(string userPassword, string hashedPassword)
         {
             byte[] buffer4;

@@ -32,25 +32,25 @@ namespace TaskManager.Api.Controllers
             _usersService = usersService;
         }
 
-        [HttpPost("test")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Test()
-        {
-            UserDto user = new UserDto
-            {
-                Name = "Andr33w",
-                Description = "Test",
+        //[HttpPost("test")]
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Test()
+        //{
+        //    UserDto user = new UserDto
+        //    {
+        //        Name = "Andr33w",
+        //        Description = "Test",
 
-                LastName = "McFly",
-                Email = "123",
-                Password = "123",
-                Phone = "123",
-                UserStatus = UserStatus.Admin
-            };
+        //        LastName = "McFly",
+        //        Email = "123",
+        //        Password = "123",
+        //        Phone = "123",
+        //        UserStatus = UserStatus.Admin
+        //    };
 
-            var result = await _usersService.CreateAsync(user);
-            return Ok(result);
-        }
+        //    var result = await _usersService.CreateAsync(user);
+        //    return Ok(result);
+        //}
 
         [HttpGet("info")]
         public async Task<IActionResult> GetCurrentUserInfo()
@@ -58,8 +58,6 @@ namespace TaskManager.Api.Controllers
             string login = HttpContext.User.Identity.Name;
 
             var currentUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == login);
-
-            currentUser.Password = "********************";
 
             return Ok(currentUser.ToDto());
         }

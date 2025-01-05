@@ -10,8 +10,9 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         mc:Ignorable="d"
-        Height="250" 
+        Height="280" 
         Width="400"
+        x:Name="loginWindow"
         Background="{StaticResource WindowBackground}">
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +23,8 @@
              HorizontalAlignment="Stretch" 
              VerticalAlignment="Center" 
              Grid.Row="0">
-            <StackPanel Orientation="Horizontal" 
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,15,0,0"
                  HorizontalAlignment="Left">
                 <TextBlock Text="Enter Login:"
                     Style="{StaticResource CommonTextBlockStyle}"
@@ -47,7 +49,7 @@
                  HorizontalAlignment="Center">
                 <Button Width="100"
                  Style="{StaticResource CommonButtonStyle}"
-                 Content="Cancel" 
+                 Content="Exit" 
                  Margin="0,0,10,0"
                  Command="{Binding CloseWindowCommand}"
                  x:Name="LoginWindowCancelButton"/>
@@ -56,9 +58,60 @@
                  Content="OK" 
                  Margin="10,0,0,0"
                  Command="{Binding Path=GetUserCommand}"
-                 CommandParameter="{Binding ElementName=LoginWindowPasswordBox}"/>
+                 CommandParameter="{Binding ElementName=loginWindow}"/>
             </StackPanel>
 
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Height" Value="0"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <Button Style="{StaticResource CommonButtonStyle}" 
+                    Margin="5" 
+                    Height="{Binding CachedUserButtonHeigh}" 
+                    Width="390"
+                    Visibility="{Binding CachedUserLoginButtonVisibility}"
+                    Command="{Binding OpenMainWindowCommand}"
+                    CommandParameter="{Binding ElementName=loginWindow}"
+                    >
+                <DockPanel LastChildFill="True">
+                    <Label DockPanel.Dock="Left" Margin="1" Content="Last user: " Style="{StaticResource CommonLabelStyle}"/>
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Image/>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CurrentUser.Name}"/>
+                                <Label Content="" Style="{StaticResource CommonLabelStyle}"/>
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CurrentUser.LastName}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Text="{Binding CurrentUser.Email}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <Label Content=" " Style="{StaticResource CommonLabelStyle}"/>
+                </DockPanel>
+            </Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Local user" 
+                        Width="190"
+                        Style="{StaticResource CommonButtonStyle}" 
+                        Margin="5"
+                        Command="{Binding OpenMainWindowForLocalUserCommand}"
+                        CommandParameter="{Binding ElementName=loginWindow}"></Button>
+                <Button Content="Registration" 
+                        Width="190"
+                        Style="{StaticResource CommonButtonStyle}" Margin="5"
+                        Command="{Binding OpenRegisterWindowCommand}"></Button>
+            </StackPanel>
+            
         </StackPanel>
     </Grid>
 </Window>

@@ -3,7 +3,8 @@
     public enum UserStatus
     {
         Admin = 0,
-        User = 1,
-        Editor = 2
+        Editor = 1,
+        User = 2,
+        Local = 3
     }
 }

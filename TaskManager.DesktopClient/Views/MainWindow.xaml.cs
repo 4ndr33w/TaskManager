@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using TaskManager.Models.Content;
+using TaskManager.Models.Dtos;
+
 namespace TaskManager.DesktopClient
 {
     /// <summary>
@@ -26,9 +29,19 @@ namespace TaskManager.DesktopClient
             OnStartup();
         }
 
+        public MainWindow(AuthToken token, UserDto onlineUser, UserDto localUser)
+        {
+            InitializeComponent();
+            OnStartup(token, onlineUser, localUser);
+        }
+
         private void OnStartup()
         {
             DataContext = new ViewModels.MainWindowViewModel();
+        }
+        private void OnStartup(AuthToken token, UserDto onlineUser, UserDto localUser)
+        {
+            DataContext = new ViewModels.MainWindowViewModel(token, onlineUser, localUser);
         }
     }
 }

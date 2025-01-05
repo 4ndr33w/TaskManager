@@ -10,14 +10,14 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         x:Name="RegistrationNewUserWindow"
-        Title="RegistrationWindow" Height="250" Width="450">
+        Title="RegistrationWindow" Height="350" Width="450">
     <Grid>
         
         <DockPanel LastChildFill="True">
             <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="Registraion of new user" Margin="10" Style="{StaticResource CommonTextBlockStyle}"></TextBlock>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
                 <Button Content="Cancel" Style="{StaticResource CommonButtonStyle}" Margin="0,0,10,0" Width="80" Command="{Binding CloseLocalWindowCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
-                <Button Content="Accept" Style="{StaticResource CommonButtonStyle}" Margin="10,0,0,0" Width="80"></Button>
+                <Button Content="Accept" Style="{StaticResource CommonButtonStyle}" Margin="10,0,0,0" Width="80" Command="{Binding RegisterNewUserCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
             </StackPanel>
             <StackPanel DockPanel.Dock="Left">
                 <TextBlock Text="Enter your name:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
@@ -28,13 +28,13 @@
                 <TextBlock Text="Load profile image:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
             </StackPanel>
             <StackPanel DockPanel.Dock="Right">
-                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
-                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
-                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
-                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
-                <TextBox Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox x:Name="UsernameTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox x:Name="UserLastNameTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox x:Name="UserEmailTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox x:Name="UserPasswordTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
+                <TextBox x:Name="UserPhoneTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="13,5,0,0">
-                    <Button Content="Take picture" Style="{StaticResource CommonButtonStyle}" Width="230"></Button>
+                    <Button Content="Take picture" Style="{StaticResource CommonButtonStyle}" Command="{Binding SearchImageFileCommand}" Width="230"></Button>
                 </StackPanel>
             </StackPanel>
             

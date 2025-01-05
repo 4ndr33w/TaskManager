@@ -97,13 +97,13 @@ namespace TaskManager.DesktopClient.Resources.Settings {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("lastUsedLogin.txt")]
-        public string SavedLoginFileName {
+        [global::System.Configuration.DefaultSettingValueAttribute("CachedUser.txt")]
+        public string CachedUserFileName {
             get {
-                return ((string)(this["SavedLoginFileName"]));
+                return ((string)(this["CachedUserFileName"]));
             }
             set {
-                this["SavedLoginFileName"] = value;
+                this["CachedUserFileName"] = value;
             }
         }
         
@@ -128,6 +128,18 @@ namespace TaskManager.DesktopClient.Resources.Settings {
             }
             set {
                 this["EncodingType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LocalUser.txt")]
+        public string LocalUserFileName {
+            get {
+                return ((string)(this["LocalUserFileName"]));
+            }
+            set {
+                this["LocalUserFileName"] = value;
             }
         }
     }

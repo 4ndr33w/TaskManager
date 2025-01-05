@@ -50,8 +50,9 @@ namespace TaskManager.Api.Services
 
                 if (existingUser != null)
                 {
+                    bool isPasswordAlreadyHashedAndEquals = _securityService.VerifyPasswordIfHashed(password, existingUser.Password);
                     bool isPasswordHashquals = _securityService.VerifyHashedPassword(password, existingUser.Password);
-                    if (isPasswordHashquals)
+                    if (isPasswordHashquals || isPasswordAlreadyHashedAndEquals)
                     {
                         return existingUser;
                     }
