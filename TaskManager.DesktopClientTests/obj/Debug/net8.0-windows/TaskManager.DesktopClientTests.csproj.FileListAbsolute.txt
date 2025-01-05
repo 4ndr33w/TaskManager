@@ -142,3 +142,7 @@ C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\obj\Deb
 C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\obj\Debug\net8.0-windows\TaskManager.DesktopClientTests.pdb
 C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\obj\Debug\net8.0-windows\TaskManager.DesktopClientTests.genruntimeconfig.cache
 C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\obj\Debug\net8.0-windows\ref\TaskManager.DesktopClientTests.dll
+C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\bin\Debug\net8.0-windows\Microsoft.AspNetCore.WebUtilities.dll
+C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\bin\Debug\net8.0-windows\Microsoft.Extensions.WebEncoders.dll
+C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\bin\Debug\net8.0-windows\Microsoft.Net.Http.Headers.dll
+C:\My_Projects\C#\2025\01_Jan\TaskManager\TaskManager.DesktopClientTests\bin\Debug\net8.0-windows\System.IO.Pipelines.dll

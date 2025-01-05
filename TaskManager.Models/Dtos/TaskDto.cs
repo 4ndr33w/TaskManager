@@ -19,7 +19,8 @@ namespace TaskManager.Models.Dtos
         public Guid CreatorId { get; set; }
         public Guid? ExecutorId { get; set; }
         public Priority Priority { get; set; }
-        public string Color { get; set; }
+        public string? Color { get; set; }
+        public string? FileName { get; set; }
 
         public TaskDto() { }
         public TaskDto(TaskDto taskDto) : base(taskDto)
@@ -33,6 +34,7 @@ namespace TaskManager.Models.Dtos
             ExecutorId = taskDto.ExecutorId;
             Priority = taskDto.Priority;
             Color = taskDto.Color;
+            FileName = taskDto.FileName;
         }
     }
 }

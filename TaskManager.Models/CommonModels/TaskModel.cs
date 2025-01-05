@@ -16,6 +16,7 @@ namespace TaskManager.Models
         public DateTime StartDate { get; set; } = DateTime.UtcNow;
         public DateTime EndDate { get; set; } = DateTime.UtcNow;
         public byte[]? File { get; set; }
+        public string? FileName { get; set; }
         public string? Column { get; set; }
         [ForeignKey("DeskId")]
         public Guid DeskId { get; set; }
@@ -41,6 +42,7 @@ namespace TaskManager.Models
             this.ExecutorId = task.ExecutorId;
             this.Priority = task.Priority;
             this.Color = task.Color;
+            this.FileName = task.FileName;
         }
 
         public TaskDto ToDto()
@@ -64,6 +66,7 @@ namespace TaskManager.Models
 
                 Priority = this.Priority,
                 Color = this.Color,
+                FileName = this.FileName,
             };
         }
     }
