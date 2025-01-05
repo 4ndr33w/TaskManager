@@ -39,7 +39,7 @@
                  HorizontalAlignment="Left">
                 <TextBlock Text="Enter Pasword:"
                     Style="{StaticResource CommonTextBlockStyle}"
-                    Margin="55,0,10,0"/>
+                    Margin="53,0,10,0"/>
                 <PasswordBox Width="180"
                       Style="{StaticResource CommonPaswordBoxStyle}"
                       x:Name="LoginWindowPasswordBox"/>

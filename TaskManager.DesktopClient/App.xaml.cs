@@ -23,7 +23,8 @@ namespace TaskManager.DesktopClient
             //new /*TaskManager.DesktopClient.Views.*/MainWindow().ShowDialog();
             new TaskManager.DesktopClient.Views.LoginWindow().ShowDialog();//MainWindow().ShowDialog();
 
-            Shutdown();
+            Environment.Exit(0);
+            //Shutdown();
         }
     }
 }
