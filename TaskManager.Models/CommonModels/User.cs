@@ -60,5 +60,10 @@ namespace TaskManager.Models
                 TasksIds = Tasks != null ? this.Tasks.Select(p => p.Id).ToList() : new List<Guid>(),
             };
         }
+
+        public override string ToString()
+        {
+            return $"{Name} {LastName}";
+        }
     }
 }

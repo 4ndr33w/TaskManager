@@ -4,26 +4,24 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Pages"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      mc:Ignorable="d"
       Title="TasksPage">
 
-    <Grid>
-        <ListView>
+    <Grid Style="{StaticResource GridStyle}">
+        <ListView ItemsSource="{Binding TasksColection}" Style="{StaticResource ListViewStyle}">
             <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Path=Description}"/>
-                    <GridViewColumn Header="Creator" DisplayMemberBinding="{Binding Path=Creator.Email}"/>
-                    <GridViewColumn Header="Executor" DisplayMemberBinding="{Binding Path=Executor.Email}"/>
-                    <GridViewColumn Header="StartDate" DisplayMemberBinding="{Binding Path=StartDate}"/>
-                    <GridViewColumn Header="EndDate" DisplayMemberBinding="{Binding Path=EndDate}"/>
-                    <GridViewColumn Header="Desk" DisplayMemberBinding="{Binding Path=Desk.Name}"/>
-                    <GridViewColumn Header="File" DisplayMemberBinding="{Binding Path=FileName}"/>
-                    <GridViewColumn Header="Column" DisplayMemberBinding="{Binding Path=Column}"/>
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Path=Priority}"/>
-                    <GridViewColumn Header="Color" DisplayMemberBinding="{Binding Path=Color}"/>
+                <GridView >
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Path=Description}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Creator" DisplayMemberBinding="{Binding Path=Creator}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Executor" DisplayMemberBinding="{Binding Path=Executor}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="StartDate" DisplayMemberBinding="{Binding Path=StartDate}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="EndDate" DisplayMemberBinding="{Binding Path=EndDate}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Desk" DisplayMemberBinding="{Binding Path=Desk.Name}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="File" DisplayMemberBinding="{Binding Path=FileName}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Column" DisplayMemberBinding="{Binding Path=Column}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Path=Priority}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
+                    <GridViewColumn Header="Color" DisplayMemberBinding="{Binding Path=Color}" HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"/>
                 </GridView>
             </ListView.View>
         </ListView>

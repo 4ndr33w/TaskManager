@@ -19,11 +19,12 @@ namespace TaskManager.Models.Extensions
                 return null;
             }
 
-            using (var mStream = new MemoryStream(model.Image))
-            {
-                System.Drawing.Image image = System.Drawing.Image.FromStream(mStream);
-                return image;
-            }
+            //using (var mStream = new MemoryStream(model.Image))
+            //{
+            //    System.Drawing.Image image = System.Drawing.Image.FromStream(mStream);
+            //    return image = image == null? new System.Drawing.Image() : image;
+            //}
+            return null;
         }
 
         public static byte[] SaveImage(this Image image)

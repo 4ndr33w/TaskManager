@@ -20,17 +20,19 @@ namespace TaskManager.DesktopClient.ViewModels
         private TasksRequestService _tasksRequestService;
         private readonly UsersRequestService _usersRequestService = new UsersRequestService();
         private readonly DesksRequestService _deskRequestsService = new DesksRequestService();
+        //public List<ClientSideTaskModel> TasksCollection = new List<ClientSideTaskModel> { };
 
         public TasksPageViewModel() { }
         public TasksPageViewModel(AuthToken token)
         {
             _token = token;
             _tasksRequestService = new TasksRequestService(_usersRequestService, _deskRequestsService);
+            OnStartup();
         }
 
 
-        private List<ClientSideTaskModel> _tasksColection;
-        public List<ClientSideTaskModel>  TasksColection
+        private ObservableCollection<ClientSideTaskModel> _tasksColection;
+        public ObservableCollection<ClientSideTaskModel>  TasksColection
         {
             get => _tasksColection;
             set
@@ -40,14 +42,38 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-        private async Task<IEnumerable<ClientSideTaskModel>> GetAllTasks(AuthToken token)
+        private async void OnStartup()
         {
-            var tasks = await _tasksRequestService.GetAllAsync(token);
+            TasksColection = await GetAllTasks(_token);
+        }
+        private async Task<ObservableCollection<ClientSideTaskModel>> GetAllTasks(AuthToken token)
+        {
+            var tasksCollection = await _tasksRequestService.GetAllAsync(token);
 
+            //foreach (var task in tasksCollection)
+            //{
+            //    var taskCreator = await _usersRequestService.GetAsync(token, task.CreatorId);
+            //    task.Creator = new User(taskCreator);
+            //    if (task.CreatorId != task.ExecutorId)
+            //    {
+            //        var taskExecutor = await _usersRequestService.GetAsync(token, task.ExecutorId);
+            //        task.Executor = new User(taskExecutor);
+            //    }
+            //    else
+            //    {
+            //        task.Executor = task.Creator;
+            //    }
+                
+            //}
 
+            var result = new ObservableCollection<ClientSideTaskModel>();
 
+            foreach (var task in tasksCollection)
+            {
+                result.Add(task);
+            }
 
-            return tasks;
+            return result;
         }
         
         //public AuthToken Token

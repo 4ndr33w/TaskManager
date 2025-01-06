@@ -112,4 +112,23 @@
            BasedOn="{StaticResource CommonTextBlockStyle}">
         <Setter Property="FontSize" Value="20"/>
     </Style>
+    <Style TargetType="Frame"
+           x:Key="FrameStyle">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style TargetType="Grid"
+         x:Key="GridStyle">
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    <Style TargetType="GridViewColumnHeader"
+      x:Key="GridViewColumnHeaderStyle">
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    <Style TargetType="ListView"
+        x:Key="ListViewStyle">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
 </ResourceDictionary>

@@ -30,8 +30,7 @@ namespace TaskManager.DesktopClient.Services
             _desksRequestService = desksRequestService;
         }
 
-
-        public async Task<IEnumerable<ClientSideTaskModel>> GetAllAsync(AuthToken token)
+        public async Task<List<ClientSideTaskModel>> GetAllAsync(AuthToken token, Guid userId = default)
         {
             try
             {
@@ -54,15 +53,13 @@ namespace TaskManager.DesktopClient.Services
 
                     var deserializedTasksCollection = JsonSerializer.Deserialize<IEnumerable<TaskModel>>(result, options).ToList();
 
-
-
                     var clientTaskModelCollection = new List<ClientSideTaskModel>();
 
                     foreach (var task in deserializedTasksCollection)
                     {
                         var clientTaskModel = new ClientSideTaskModel(task);
 
-                        clientTaskModel.Creator = new User( await _usersRequestService.GetAsync(token, task.CreatorId) );
+                        clientTaskModel.Creator = new User( await _usersRequestService.GetAsync(token, task.CreatorId));
                         clientTaskModel.Executor = new User(await _usersRequestService.GetAsync(token, task.ExecutorId));
                         clientTaskModel.Desk = new Desk(await _desksRequestService.GetAsync(token, task.DeskId));
 
@@ -71,12 +68,12 @@ namespace TaskManager.DesktopClient.Services
                     }
                     return clientTaskModelCollection;
                 }
+                return new List<ClientSideTaskModel>();
             }
             catch (Exception)
             {
                 return new List<ClientSideTaskModel>();
             }
-            return new List<ClientSideTaskModel>();
         }
     }
 }

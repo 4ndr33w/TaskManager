@@ -177,7 +177,20 @@ namespace TaskManager.DesktopClient.ViewModels
 
             CheckPasswordAndLoginIfEmpty(Login, Password);
 
-            Token = await _usersRequestService.GetToken(Login, Password);
+            var getTokenResult = await _usersRequestService.GetToken(Login, Password);
+
+            
+            //ToDo: продумать как заставить кнопку OK стать неактивной, пока не подгрузился токен
+
+            while (getTokenResult == null)
+            {
+                window.OkButton.IsEnabled = false;
+            }
+            window.OkButton.IsEnabled = true;
+
+            Token = getTokenResult;
+
+            //
 
             if (Token.accessToken == null)
             {

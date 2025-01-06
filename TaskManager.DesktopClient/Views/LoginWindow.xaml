@@ -38,27 +38,28 @@
             <StackPanel Orientation="Horizontal" 
                  HorizontalAlignment="Left">
                 <TextBlock Text="Enter Pasword:"
-                    Style="{StaticResource CommonTextBlockStyle}"
-                    Margin="53,0,10,0"/>
+                           Style="{StaticResource CommonTextBlockStyle}"
+                           Margin="53,0,10,0"/>
                 <PasswordBox Width="180"
                       Style="{StaticResource CommonPaswordBoxStyle}"
                       x:Name="LoginWindowPasswordBox"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                 Margin="0,25,0,0"
-                 HorizontalAlignment="Center">
+                        Margin="0,25,0,0"
+                        HorizontalAlignment="Center">
                 <Button Width="100"
-                 Style="{StaticResource CommonButtonStyle}"
-                 Content="Exit" 
-                 Margin="0,0,10,0"
-                 Command="{Binding CloseWindowCommand}"
-                 x:Name="LoginWindowCancelButton"/>
+                        Style="{StaticResource CommonButtonStyle}"
+                        Content="Exit" 
+                        Margin="0,0,10,0"
+                        Command="{Binding CloseWindowCommand}"
+                        x:Name="LoginWindowCancelButton"/>
                 <Button Width="100"
-                 Style="{StaticResource CommonButtonStyle}"
-                 Content="OK" 
-                 Margin="10,0,0,0"
-                 Command="{Binding Path=GetUserCommand}"
-                 CommandParameter="{Binding ElementName=loginWindow}"/>
+                        x:Name="OkButton"
+                        Style="{StaticResource CommonButtonStyle}"
+                        Content="OK" 
+                        Margin="10,0,0,0"
+                        Command="{Binding Path=GetUserCommand}"
+                        CommandParameter="{Binding ElementName=loginWindow}"/>
             </StackPanel>
 
         </StackPanel>

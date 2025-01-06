@@ -30,5 +30,10 @@ namespace TaskManager.Models.Dtos
             LastLoginDate = user.LastLoginDate;
             UserStatus = user.UserStatus;
         }
+
+        public override string ToString()
+        {
+            return $"{Name} {LastName}";
+        }
     }
 }

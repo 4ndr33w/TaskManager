@@ -29,6 +29,7 @@ namespace TaskManager.DesktopClient.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private UsersRequestService _usersRequestService;
+        private Services.ViewServices.BaseViewService _viewService;
 
         public MainWindowViewModel()
         {
@@ -69,7 +70,6 @@ namespace TaskManager.DesktopClient.ViewModels
                 RaisePropertyChanged(nameof(ProfileButtons));
             }
         }
-
 
         private Dictionary<string, DelegateCommand> _onlineUserNavButtons = new Dictionary<string, DelegateCommand>();
         public Dictionary<string, DelegateCommand> OnlineUserNavButtons
@@ -266,7 +266,6 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         #endregion
 
-
         #region CurrentUser 
 
         private UserDto _currentUser;
@@ -309,7 +308,6 @@ namespace TaskManager.DesktopClient.ViewModels
 
         public DelegateCommand CloseApplicationCommand { get; private set; }
         public DelegateCommand OpenRegisterWindowCommand { get; private set; }
-        public DelegateCommand DropAuthorizationCommand { get; private set; }
         public DelegateCommand LoginCachedUserCommand { get; private set; }
 
         #endregion
@@ -347,20 +345,23 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region METHODS
 
-        #region NavButtons Region 
+        #region OpenPages
 
         #region profile 
+
+
 
         private void OpenMyInfoPage()
         {
             var page = new UserInfoPage();
             page.DataContext = this;
-            OpenPage(page, _userInfoButtonName);
+            OpenPage(page, _userInfoButtonName, this);
         }
         private void OpenUserManagement()
         {
             SelectedPageName = _manageUsersButtonName;
-            MessageBox.Show(_manageUsersButtonName);
+            _viewService.ShowMessage(_manageUsersButtonName);
+            //MessageBox.Show(_manageUsersButtonName);
         }
         private void Logout()
         {
@@ -381,18 +382,20 @@ namespace TaskManager.DesktopClient.ViewModels
 
         private void OpenProjectsPage()
         {
-            SelectedPageName = _userProjectsButtonName;
-            MessageBox.Show(_userProjectsButtonName);
+            var page = new ProjectsPage();
+            page.projectUsersListBox.Items.Clear();
+            OpenPage(page, _userProjectsButtonName, new ProjectsPageViewModel(Token));
         }
         private void OpenDesksPage()
         {
             SelectedPageName = _userDesksButtonName;
-            MessageBox.Show(_userDesksButtonName);
+            _viewService.ShowMessage(_userDesksButtonName);
         }
         private void OpenTasksPage()
         {
-            SelectedPageName = _userTasksButtonName;
-            MessageBox.Show(_userTasksButtonName);
+            var page = new TasksPage();
+            OpenPage(page, _userTasksButtonName, new TasksPageViewModel(Token));
+            //MessageBox.Show(_userTasksButtonName);
         }
 
         #endregion
@@ -402,17 +405,17 @@ namespace TaskManager.DesktopClient.ViewModels
         private void OpenLocalProjectsPage()
         {
             SelectedPageName += _localProjectsButtonName;
-            MessageBox.Show("ToDo: Projects Page");
+            _viewService.ShowMessage("ToDo: Projects Page");
         }
         private void OpenLocalDesksPage()
         {
             SelectedPageName = _localDesksButtonName;
-            MessageBox.Show("ToDo: Desks Page");
+            _viewService.ShowMessage("ToDo: Desks Page");
         }
         private void OpenLocalTasksPage()
         {
             SelectedPageName = _localTasksButtonName;
-            MessageBox.Show("ToDo: Tasks Page");
+            _viewService.ShowMessage("ToDo: Tasks Page");
         }
 
         #endregion
@@ -421,20 +424,22 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region COMMAND METHODS
 
+        public void OpenPage(Page page, string pageName, BindableBase viewModel)
+        {
+            DateFormat = CurrentUser.Created.ToString("U");
+            SelectedPageName = pageName;
+            SelectedPage = page;
+            SelectedPage.DataContext = viewModel;
+        }
+
         public async void GetUser(object parameter)
         {
-            var passwordBox = (parameter as BaseLoginBarComponent).LoginWindowPasswordBox; //parameter as PasswordBox;
+            var passwordBox = (parameter as BaseLoginBarComponent).LoginWindowPasswordBox;
             Password = passwordBox.Password;
 
             CheckPasswordAndLoginIfEmpty(Login, Password);
 
-
             Token = await _usersRequestService.GetToken(Login, Password);
-
-            if (Token.accessToken == null)
-            {
-                return;
-            }
 
             if (Token.accessToken != null)
             {
@@ -443,14 +448,6 @@ namespace TaskManager.DesktopClient.ViewModels
                 if (CurrentUser != null)
                 {
                     CacheCurrentUser(CurrentUser);
-
-                    BaseLoginPanelVisibility = "Collapsed";
-                    AuthorizedPanelVisibility = "Visible";
-                    CachedUserPanelVisibility = "Collapsed";
-
-                    AuthorizedPanelHeight = "50";
-                    BaseLoginPanelHeight = "0";
-                    CachedUserPanelHeight = "0";
                 }
             }
         }
@@ -470,13 +467,7 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         public void DropAuthorization()
         {
-            BaseLoginPanelVisibility = "Visible";
-            AuthorizedPanelVisibility = "Collapsed";
-            CachedUserPanelVisibility = "Collapsed";
 
-            AuthorizedPanelHeight = "0";
-            BaseLoginPanelHeight = "50";
-            CachedUserPanelHeight = "0";
         }
         public async void RegisterNewUser(object parameter)
         {
@@ -506,11 +497,6 @@ namespace TaskManager.DesktopClient.ViewModels
 
             Token = await _usersRequestService.GetToken(CurrentUser.Email, CurrentUser.Password);
 
-            if (Token.accessToken == null)
-            {
-                return;
-            }
-
             if (Token.accessToken != null)
             {
                 CurrentUser = await GetCurrentUser(Token);
@@ -518,24 +504,8 @@ namespace TaskManager.DesktopClient.ViewModels
                 if (CurrentUser != null)
                 {
                     CacheCurrentUser(CurrentUser);
-
-                    BaseLoginPanelVisibility = "Collapsed";
-                    AuthorizedPanelVisibility = "Visible";
-                    CachedUserPanelVisibility = "Collapsed";
-
-                    AuthorizedPanelHeight = "50";
-                    BaseLoginPanelHeight = "0";
-                    CachedUserPanelHeight = "0";
                 }
             }
-        }
-
-
-        public void OpenPage(Page page, string pageName)
-        {
-            DateFormat = CurrentUser.Created.ToString("U");
-            SelectedPageName = pageName;
-            SelectedPage = page;
         }
 
         #endregion
@@ -543,15 +513,15 @@ namespace TaskManager.DesktopClient.ViewModels
         #region OnStartup
         private async void OnStartup()
         {
+            _viewService = new Services.ViewServices.BaseViewService();
+
             #region otherCommands 
 
             _usersRequestService = new UsersRequestService();
             GetUserCommand = new DelegateCommand<object>(GetUser);
             CloseApplicationCommand = new DelegateCommand(CloseApplication);
-            //OpenRegisterWindowCommand = new DelegateCommand(OpenRegisterWindow);
             CloseLocalWindowCommand = new DelegateCommand<object>(CloseLocalWindow);
             ShowAuthorizedUserPanelCommand = new DelegateCommand<object>(ShowAuthorizedUserPanel);
-            DropAuthorizationCommand = new DelegateCommand(DropAuthorization);
             RegisterNewUserCommand = new DelegateCommand<object>(RegisterNewUser);
             SearchImageFileCommand = new DelegateCommand<object>(SearchImageFile);
             LoginCachedUserCommand = new DelegateCommand(LoginCachedUser);
@@ -630,24 +600,10 @@ namespace TaskManager.DesktopClient.ViewModels
             #endregion
 
             #endregion
-
-            
         }
 
         #endregion
 
-        private void CheckIsUserAdmin()
-        {
-            if (CurrentUser.UserStatus == Models.Enums.UserStatus.Admin)
-            {
-                var test = new KeyValuePair<string, DelegateCommand>(_manageUsersButtonName, OpenUserManagementCommand);
-                var isCommangActive = OnlineUserNavButtons.Contains(test);
-                if (!isCommangActive)
-                {
-                    OnlineUserNavButtons.Add(_manageUsersButtonName, OpenUserManagementCommand);
-                }
-            }
-        }
 
         #region Alert Message
         private void ShowMessage(string message)
@@ -655,7 +611,6 @@ namespace TaskManager.DesktopClient.ViewModels
             MessageBox.Show(message);
         }
         #endregion
-
 
         private async Task<UserDto> GetCurrentUser(AuthToken token)
         {
@@ -719,6 +674,10 @@ namespace TaskManager.DesktopClient.ViewModels
                 return null;
             }
         }
+
+
+        #region Load / Save user Cache 
+
         private async void CacheCurrentUser(UserDto user)
         {
             if (user != null)
@@ -726,13 +685,21 @@ namespace TaskManager.DesktopClient.ViewModels
                 string directoryPath = _environmentPath + _savedUserLoginLocalFilePath;
                 string filePath = directoryPath + _savedUserLoginFilename; ;
 
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-                var serializedUser = SerializeUser(user);
-                var encodedUser = EncodeUser(serializedUser);
+                var isDirectoryExists = IsDirectoryExistAndCreateIfNotExist(directoryPath);
 
+                if (isDirectoryExists)
+                {
+                    var serializedUser = SerializeUser(user);
+                    var encodedUser = EncodeUser(serializedUser);
+
+                    await SaveUserCacheIntoLocalFile(filePath, encodedUser);
+                }
+            }
+        }
+        private async Task SaveUserCacheIntoLocalFile(string filePath, string encodedUser)
+        {
+            try
+            {
                 if (!File.Exists(filePath))
                 {
                     using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
@@ -747,6 +714,26 @@ namespace TaskManager.DesktopClient.ViewModels
                     File.WriteAllText(filePath, encodedUser);
                 }
             }
+            catch (Exception)
+            {
+            }
+        }
+        private bool IsDirectoryExistAndCreateIfNotExist(string directoryPath)
+        {
+            bool result = false;
+            try
+            {
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory($"{directoryPath}");
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                return result;
+            }
         }
         private async Task<UserDto> LoadUserCache()
         {
@@ -756,26 +743,36 @@ namespace TaskManager.DesktopClient.ViewModels
 
             var userDto = new UserDto();
 
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
+            var isDirectoryExists = IsDirectoryExistAndCreateIfNotExist(directoryPath);
 
-            if (File.Exists(filePath))
+            if (isDirectoryExists)
             {
-                userData = File.ReadAllText(filePath);
-            }
-            var decodedUser = DecodeUser(userData);
-            userDto = DeserializeUser(decodedUser);
+                userData = ReadEncodedUserDataFromLocalFile(filePath);
 
-            if (userData != null)
-            {
-                BaseLoginPanelVisibility = "Collapsed";
-                CachedUserPanelVisibility = "Visible";
-                CachedUserPanelHeight = "50";
+                var decodedUser = DecodeUser(userData);
+                userDto = DeserializeUser(decodedUser);
             }
             return userDto;
         }
+        private string ReadEncodedUserDataFromLocalFile(string filePath)
+        {
+            string userData = String.Empty;
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    userData = File.ReadAllText(filePath);
+                }
+                return userData;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
+        #endregion
+
         private void CheckPasswordAndLoginIfEmpty(string login, string password)
         {
             if (password == String.Empty && login == String.Empty)
@@ -790,6 +787,19 @@ namespace TaskManager.DesktopClient.ViewModels
             if (login == String.Empty)
             {
                 MessageBox.Show("Enter login");
+            }
+        }
+
+        private void CheckIsUserAdmin()
+        {
+            if (CurrentUser.UserStatus == Models.Enums.UserStatus.Admin)
+            {
+                var test = new KeyValuePair<string, DelegateCommand>(_manageUsersButtonName, OpenUserManagementCommand);
+                var isCommangActive = OnlineUserNavButtons.Contains(test);
+                if (!isCommangActive)
+                {
+                    OnlineUserNavButtons.Add(_manageUsersButtonName, OpenUserManagementCommand);
+                }
             }
         }
 
