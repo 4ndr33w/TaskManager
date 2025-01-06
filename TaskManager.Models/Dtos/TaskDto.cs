@@ -17,7 +17,7 @@ namespace TaskManager.Models.Dtos
         public string? Column { get; set; }
         public Guid DeskId { get; set; }
         public Guid CreatorId { get; set; }
-        public Guid? ExecutorId { get; set; }
+        public Guid ExecutorId { get; set; }
         public Priority Priority { get; set; }
         public string? Color { get; set; }
         public string? FileName { get; set; }

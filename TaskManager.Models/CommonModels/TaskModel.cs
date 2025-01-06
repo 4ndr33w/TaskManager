@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 using TaskManager.Models.Abstractions;
 using TaskManager.Models.Dtos;
@@ -25,7 +26,7 @@ namespace TaskManager.Models
         public Guid CreatorId { get; set; }
         public User? Creator { get; set; }
         [ForeignKey("ExecutorId")]
-        public Guid? ExecutorId { get; set; }
+        public Guid ExecutorId { get; set; }
         public User? Executor { get; set; }
         public Priority Priority { get; set; } = Priority.IfYouHaveFreeTime;
         public string? Color { get; set; }
@@ -69,5 +70,7 @@ namespace TaskManager.Models
                 FileName = this.FileName,
             };
         }
+
+        //public BitmapImage Picture();
     }
 }

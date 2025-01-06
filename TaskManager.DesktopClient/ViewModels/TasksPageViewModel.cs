@@ -9,6 +9,7 @@ using Prism.Mvvm;
 
 using TaskManager.DesktopClient.Services;
 using TaskManager.Models;
+using TaskManager.Models.ClientModels;
 using TaskManager.Models.Content;
 
 namespace TaskManager.DesktopClient.ViewModels
@@ -17,17 +18,19 @@ namespace TaskManager.DesktopClient.ViewModels
     {
         private AuthToken _token;
         private TasksRequestService _tasksRequestService;
+        private readonly UsersRequestService _usersRequestService = new UsersRequestService();
+        private readonly DesksRequestService _deskRequestsService = new DesksRequestService();
 
         public TasksPageViewModel() { }
         public TasksPageViewModel(AuthToken token)
         {
             _token = token;
-            _tasksRequestService = new TasksRequestService();
+            _tasksRequestService = new TasksRequestService(_usersRequestService, _deskRequestsService);
         }
 
 
-        private List<TaskModel> _tasksColection;
-        public List<TaskModel>  TasksColection
+        private List<ClientSideTaskModel> _tasksColection;
+        public List<ClientSideTaskModel>  TasksColection
         {
             get => _tasksColection;
             set
@@ -37,7 +40,7 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-        private async Task<IEnumerable<TaskModel>> GetAllTasks(AuthToken token)
+        private async Task<IEnumerable<ClientSideTaskModel>> GetAllTasks(AuthToken token)
         {
             var tasks = await _tasksRequestService.GetAllAsync(token);
 

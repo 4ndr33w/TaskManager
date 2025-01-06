@@ -63,7 +63,7 @@ namespace TaskManager.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<byte[]>("Picture")
                         .HasColumnType("bytea");
 
                     b.Property<bool>("IsPrivate")
@@ -102,7 +102,7 @@ namespace TaskManager.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<byte[]>("Picture")
                         .HasColumnType("bytea");
 
                     b.Property<string>("Name")
@@ -154,7 +154,7 @@ namespace TaskManager.Api.Migrations
                     b.Property<byte[]>("File")
                         .HasColumnType("bytea");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<byte[]>("Picture")
                         .HasColumnType("bytea");
 
                     b.Property<string>("Name")
@@ -201,7 +201,7 @@ namespace TaskManager.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Image")
+                    b.Property<byte[]>("Picture")
                         .HasColumnType("bytea");
 
                     b.Property<DateTime>("LastLoginDate")

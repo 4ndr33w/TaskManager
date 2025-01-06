@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using TaskManager.DesktopClient.Services.Abstractions;
 using TaskManager.Models;
+using TaskManager.Models.ClientModels;
 using TaskManager.Models.Content;
 using TaskManager.Models.Dtos;
 using TaskManager.Models.Enums;
@@ -15,12 +16,22 @@ namespace TaskManager.DesktopClient.Services
 {
     public class TasksRequestService : BaseRequestService<TaskDto>
     {
+        private readonly UsersRequestService _usersRequestService;
+        private readonly DesksRequestService _desksRequestService;
+
         protected override string GetApiUrlString()
         {
             return HOST + tasksApiUrl;
         }
 
-        public async Task<IEnumerable<TaskModel>> GetAllAsync(AuthToken token)
+        public TasksRequestService(UsersRequestService usersRequestService, DesksRequestService desksRequestService)
+        {
+            _usersRequestService = usersRequestService;
+            _desksRequestService = desksRequestService;
+        }
+
+
+        public async Task<IEnumerable<ClientSideTaskModel>> GetAllAsync(AuthToken token)
         {
             try
             {
@@ -41,15 +52,31 @@ namespace TaskManager.DesktopClient.Services
                     options.PropertyNameCaseInsensitive = true;
                     var result = await GetDataByUrl(httpContent);
 
-                    var entity = JsonSerializer.Deserialize<IEnumerable<TaskModel>>(result, options).ToList();
-                    return entity;
+                    var deserializedTasksCollection = JsonSerializer.Deserialize<IEnumerable<TaskModel>>(result, options).ToList();
+
+
+
+                    var clientTaskModelCollection = new List<ClientSideTaskModel>();
+
+                    foreach (var task in deserializedTasksCollection)
+                    {
+                        var clientTaskModel = new ClientSideTaskModel(task);
+
+                        clientTaskModel.Creator = new User( await _usersRequestService.GetAsync(token, task.CreatorId) );
+                        clientTaskModel.Executor = new User(await _usersRequestService.GetAsync(token, task.ExecutorId));
+                        clientTaskModel.Desk = new Desk(await _desksRequestService.GetAsync(token, task.DeskId));
+
+
+                        clientTaskModelCollection.Add(clientTaskModel);
+                    }
+                    return clientTaskModelCollection;
                 }
             }
             catch (Exception)
             {
-                return new List<TaskModel>();
+                return new List<ClientSideTaskModel>();
             }
-            return new List<TaskModel>();
+            return new List<ClientSideTaskModel>();
         }
     }
 }

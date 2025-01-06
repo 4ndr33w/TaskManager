@@ -1,4 +1,6 @@
-﻿using TaskManager.Models.Abstractions;
+﻿using System.ComponentModel.DataAnnotations;
+
+using TaskManager.Models.Abstractions;
 using TaskManager.Models.Enums;
 
 namespace TaskManager.Models.Dtos
@@ -6,7 +8,10 @@ namespace TaskManager.Models.Dtos
     public class UserDto : ModelBase
     {
         public string? LastName { get; set; }
+
+        [Required(ErrorMessage ="Email field is empty!")]
         public string Email { get; set; } = string.Empty;
+        [Required(ErrorMessage ="Password field is empty!")]
         public string Password { get; set; } = string.Empty;
         public string? Phone { get; set; }
         public DateTime LastLoginDate { get; set; } = DateTime.UtcNow;

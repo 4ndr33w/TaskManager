@@ -136,5 +136,26 @@ namespace TaskManager.Api.Services
                 return null;
             }
         }
+
+        public async Task<bool> IsUserDeskAdmin(Guid userId, Guid deskId)
+        {
+            try
+            {
+                var desk = await _npgDbContext.Desks.FirstOrDefaultAsync(d => d.Id == deskId);
+                if (desk != null)
+                {
+                    bool result = desk.AdminId == userId;
+                    if (result == true)
+                        return true;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
     }
 }

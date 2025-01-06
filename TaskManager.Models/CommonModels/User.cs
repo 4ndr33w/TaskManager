@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,10 @@ namespace TaskManager.Models
     public class User : ModelBase
     {
         public string? LastName { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        //[Required(ErrorMessage = "Email field is empty")]
+        public string Email { get; set; }// = string.Empty;
+        //[Required(ErrorMessage = "Password field is empty")]
+        public string Password { get; set; }// = string.Empty;
         public string? Phone { get; set; }
         public DateTime LastLoginDate { get; set; } = DateTime.UtcNow;
         public UserStatus UserStatus { get; set; } = UserStatus.User;

@@ -17,7 +17,7 @@ namespace TaskManager.DesktopClient.ViewModels.Tests
         {
             var test = new MainWindowViewModel();
 
-            var result = "";// test.EncodeUser("{\"LastName\":\"McFly\",\"Email\":\"ra.081@hotmail.com\",\"Password\":\"Da3lRfh3pW\",\"Phone\":null,\"LastLoginDate\":\"2025-01-03T19:36:58.0832978Z\",\"UserStatus\":0,\"ProjectsIds\":null,\"DesksIds\":null,\"TasksIds\":null,\"Id\":\"f9a179e3-948a-4b94-a582-8cb9d1562cc3\",\"Name\":\"Andr33w\",\"Description\":null,\"Created\":\"2025-01-03T19:36:58.0832753Z\",\"Updated\":\"2025-01-03T19:36:58.0832888Z\",\"Image\":null}");
+            var result = "";// test.EncodeUser("{\"LastName\":\"McFly\",\"Email\":\"ra.081@hotmail.com\",\"Password\":\"Da3lRfh3pW\",\"Phone\":null,\"LastLoginDate\":\"2025-01-03T19:36:58.0832978Z\",\"UserStatus\":0,\"ProjectsIds\":null,\"DesksIds\":null,\"TasksIds\":null,\"Id\":\"f9a179e3-948a-4b94-a582-8cb9d1562cc3\",\"Name\":\"Andr33w\",\"Description\":null,\"Created\":\"2025-01-03T19:36:58.0832753Z\",\"Updated\":\"2025-01-03T19:36:58.0832888Z\",\"Picture\":null}");
             Console.WriteLine(result);
             Assert.IsNotNull(result);
         }

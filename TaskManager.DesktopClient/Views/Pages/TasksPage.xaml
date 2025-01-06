@@ -15,12 +15,12 @@
                     <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Path=Id}"/>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}"/>
                     <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Path=Description}"/>
-                    <GridViewColumn Header="Creator" DisplayMemberBinding="{Binding Path=CreatorId}"/>
-                    <GridViewColumn Header="Executor" DisplayMemberBinding="{Binding Path=ExecutorId}"/>
+                    <GridViewColumn Header="Creator" DisplayMemberBinding="{Binding Path=Creator.Email}"/>
+                    <GridViewColumn Header="Executor" DisplayMemberBinding="{Binding Path=Executor.Email}"/>
                     <GridViewColumn Header="StartDate" DisplayMemberBinding="{Binding Path=StartDate}"/>
                     <GridViewColumn Header="EndDate" DisplayMemberBinding="{Binding Path=EndDate}"/>
-                    <GridViewColumn Header="Desk" DisplayMemberBinding="{Binding Path=DeskId}"/>
-                    <GridViewColumn Header="File" DisplayMemberBinding="{Binding Path=File}"/>
+                    <GridViewColumn Header="Desk" DisplayMemberBinding="{Binding Path=Desk.Name}"/>
+                    <GridViewColumn Header="File" DisplayMemberBinding="{Binding Path=FileName}"/>
                     <GridViewColumn Header="Column" DisplayMemberBinding="{Binding Path=Column}"/>
                     <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Path=Priority}"/>
                     <GridViewColumn Header="Color" DisplayMemberBinding="{Binding Path=Color}"/>

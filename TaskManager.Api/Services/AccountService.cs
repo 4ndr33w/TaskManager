@@ -99,9 +99,9 @@ namespace TaskManager.Api.Services
 
         public async Task<bool> IsCurrentEmailAlreadyUsedByOtherUser(string login)
         {
-            var result = await _npgDbContext.Users.Select(u => u.Email).FirstOrDefaultAsync(e => e == login);
+            var result = await _npgDbContext.Users.FirstOrDefaultAsync(u => u.Email == login);//.Users.Select(u => u.Email).FirstOrDefaultAsync(e => e == login);
 
-            if (result == null || result == string.Empty)
+            if (result == null)
             {
                 return false;
             }

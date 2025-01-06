@@ -84,7 +84,22 @@ namespace TaskManager.Api.Controllers
                 {
                     return Ok(userDto);
                 }
-                return NotFound();
+            }
+            return NotFound();
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUser(Guid userId)
+        {
+            var login = HttpContext.User.Identity.Name;
+
+            var currentUser = await _usersService.GetAsync(login);
+
+            if (currentUser != null)
+            {
+                var userById = await _usersService.GetAsync(userId);
+                userById.Password = "";
+                return Ok(userById);
             }
             return NotFound();
         }
