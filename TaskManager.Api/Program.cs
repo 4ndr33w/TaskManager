@@ -54,6 +54,7 @@ namespace TaskManager.Api
             builder.Services.AddTransient<Services.UsersService>();
             builder.Services.AddTransient<Services.ProjectsService>();
             builder.Services.AddTransient<Services.DesksService>();
+            builder.Services.AddTransient<Services.TasksService>();
 
             #endregion
 

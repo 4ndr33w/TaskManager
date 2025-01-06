@@ -44,6 +44,9 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             var tasks = await _tasksRequestService.GetAllAsync(token);
 
+
+
+
             return tasks;
         }
         
