@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Win32;
 
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Mvvm;
 
 using TaskManager.DesktopClient.Resources;
@@ -43,7 +47,7 @@ namespace TaskManager.DesktopClient.ViewModels
             LocalUser = localUser;
             CurrentWindow = currentWindow;
 
-            DateFormat = CurrentUser.Created.ToString("U");
+            DateFormat = CurrentUser == null? DateTime.Now.ToString("U") : CurrentUser.Created.ToString("U");
             OnStartup();
 
         }
@@ -90,6 +94,39 @@ namespace TaskManager.DesktopClient.ViewModels
             {
                 _localUserNavButtons = value;
                 RaisePropertyChanged(nameof(LocalUserNavButtons));
+            }
+        }
+
+        private byte[] _imageBytes;
+        public byte[] ImageBytes
+        {
+            get => _imageBytes;
+            set
+            {
+                _imageBytes = value;
+                RaisePropertyChanged(nameof(ImageBytes));
+            }
+        }
+
+        private System.Drawing.Image _userPicture;
+        public System.Drawing.Image UserPicture
+        {
+            get => _userPicture;
+            set
+            {
+                _userPicture = value;
+                RaisePropertyChanged(nameof(UserPicture));
+            }
+        }
+
+        private BitmapSource _bitmappedImage;
+        public BitmapSource BitmappedImage
+        {
+            get => _bitmappedImage;
+            set
+            {
+                _bitmappedImage = value;
+                RaisePropertyChanged($"{nameof(BitmappedImage)}");
             }
         }
 
@@ -354,6 +391,7 @@ namespace TaskManager.DesktopClient.ViewModels
         private void OpenMyInfoPage()
         {
             var page = new UserInfoPage();
+            BitmappedImage = GetBitmapSource(CurrentUser.Image);
             page.DataContext = this;
             OpenPage(page, _userInfoButtonName, this);
         }
@@ -447,6 +485,10 @@ namespace TaskManager.DesktopClient.ViewModels
 
                 if (CurrentUser != null)
                 {
+                    if (CurrentUser.Image != null)
+                    {
+                        BitmappedImage = GetBitmapSource(CurrentUser.Image);
+                    }
                     CacheCurrentUser(CurrentUser);
                 }
             }
@@ -479,6 +521,8 @@ namespace TaskManager.DesktopClient.ViewModels
             userDto.Email = window.UserEmailTextBox.Text;
             userDto.Password = window.UserPasswordTextBox.Text;
             userDto.Phone = window.UserPhoneTextBox.Text;
+            userDto.Image = this.ImageBytes;
+            //userDto.ImageBytes = window.
 
             var result = await _usersRequestService.CreateAsync(userDto);
 
@@ -487,6 +531,27 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         public async void SearchImageFile(object parameter)
         {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                var result = dialog.ShowDialog();
+                dialog.Filter = "Изображения (*.jpg; *.jpeg; *.png; *.bmp)|*.jpg; *.jpeg; *.png; *.bmp|Все файлы (*.*)|*.*";
+                dialog.Title = "Выбор изображения";
+
+                if (result.Value == true)
+                {
+                    this.ImageBytes = EncodingImage(dialog.FileName);
+                    //MessageBox.Show($"Вы выбрали файл: {selectedFile}", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
             //https://metanit.com/sharp/wpf/22.6.php
             //https://learn.microsoft.com/ru-ru/dotnet/desktop/wpf/windows/how-to-open-common-system-dialog-box?view=netdesktop-9.0
             //https://wpf-tutorial.com/ru/46/%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2%D1%8B%D0%B5-%D0%BE%D0%BA%D0%BD%D0%B0/openfiledialog/
@@ -503,6 +568,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
                 if (CurrentUser != null)
                 {
+                    BitmappedImage = GetBitmapSource(CurrentUser.Image);
                     CacheCurrentUser(CurrentUser);
                 }
             }
@@ -581,6 +647,7 @@ namespace TaskManager.DesktopClient.ViewModels
                 OnlineUserNavButtons.Add(_userTasksButtonName, OpenTasksPageCommand);
 
                 #endregion
+                BitmappedImage = GetBitmapSource(CurrentUser.Image);
 
                 OpenMyInfoPage();
             }
@@ -662,19 +729,32 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         #endregion 
 
-        private async Task<byte[]> EncodingImage(string imagePath)
+        private byte[] EncodingImage(string imagePath)
         {
-            try
+            string outputFilePath = "";
+            using (System.Drawing.Image image = System.Drawing.Image.FromFile(imagePath))
             {
-                byte[] imageBytes = File.ReadAllBytes(imagePath);
+                byte[] imageBytes = ImageToByteArray(image);
+                //var result = SaveByteArray(imageBytes, outputFilePath);
+
                 return imageBytes;
             }
-            catch (Exception)
+
+        }
+        private static byte[] ImageToByteArray(System.Drawing.Image image)
+        {
+            using(MemoryStream mStream = new MemoryStream())
             {
-                return null;
+                image.Save(mStream, image.RawFormat);
+
+                return mStream.ToArray();
             }
         }
 
+        private static void SaveByteArray(byte[] bytes, string filePath)
+        {
+            File.WriteAllBytes(filePath, bytes);
+        }
 
         #region Load / Save user Cache 
 
@@ -752,7 +832,31 @@ namespace TaskManager.DesktopClient.ViewModels
                 var decodedUser = DecodeUser(userData);
                 userDto = DeserializeUser(decodedUser);
             }
+            BitmappedImage = GetBitmapSource(userDto.Image);
             return userDto;
+        }
+
+        private BitmapSource GetBitmapSource(byte[] imageBytes)
+        {
+            try
+            {
+                using (MemoryStream mStream = new MemoryStream(imageBytes))
+                {
+                    System.Drawing.Image imageFromBytes = System.Drawing.Image.FromStream(mStream);
+
+                    mStream.Position = 0;
+                    BitmapDecoder decoder = BitmapDecoder.Create(
+                        mStream,
+                        BitmapCreateOptions.PreservePixelFormat,
+                        BitmapCacheOption.OnLoad);
+
+                    return decoder.Frames[0];
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
         private string ReadEncodedUserDataFromLocalFile(string filePath)
         {

@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 using Prism.Commands;
 using Prism.Mvvm;
@@ -51,6 +52,17 @@ namespace TaskManager.DesktopClient.ViewModels
             {
                 _cachedUserLoginButtonVisibility = value;
                 RaisePropertyChanged(nameof(CachedUserLoginButtonVisibility));
+            }
+        }
+
+        private BitmapSource _bitmappedImage;
+        public BitmapSource BitmappedImage
+        {
+            get => _bitmappedImage;
+            set
+            {
+                _bitmappedImage = value;
+                RaisePropertyChanged($"{nameof(BitmappedImage)}");
             }
         }
 
@@ -137,6 +149,8 @@ namespace TaskManager.DesktopClient.ViewModels
             {
                 CachedUserButtonHeigh = "60";
                 CachedUserLoginButtonVisibility = "Visible";
+
+                BitmappedImage = GetBitmapSource(cachedUser.Image);
             }
         }
 
@@ -249,6 +263,29 @@ namespace TaskManager.DesktopClient.ViewModels
                     }
                     OpenMainWindow(parameter);
                 }
+            }
+        }
+
+        private BitmapSource GetBitmapSource(byte[] imageBytes)
+        {
+            try
+            {
+                using (MemoryStream mStream = new MemoryStream(imageBytes))
+                {
+                    System.Drawing.Image imageFromBytes = System.Drawing.Image.FromStream(mStream);
+
+                    mStream.Position = 0;
+                    BitmapDecoder decoder = BitmapDecoder.Create(
+                        mStream,
+                        BitmapCreateOptions.PreservePixelFormat,
+                        BitmapCacheOption.OnLoad);
+
+                    return decoder.Frames[0];
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 

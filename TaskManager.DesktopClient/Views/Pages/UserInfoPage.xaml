@@ -10,15 +10,24 @@
 
     <Grid HorizontalAlignment="Stretch">
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center">
-           
+
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Email:  " Style="{StaticResource CommonTextBlockStyle}"/>
-                <TextBlock Text="{Binding CurrentUser.Email}" Style="{StaticResource CommonTextBlockStyle}"/>
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Status:  " Style="{StaticResource CommonTextBlockStyle}"/>
-                <TextBlock Text="{Binding CurrentUser.UserStatus}" Style="{StaticResource CommonTextBlockStyle}"/>
+                <Image Grid.Column="0" x:Name="mainImage" Width="200" Height="200" Source="{Binding BitmappedImage}">
+                    <!--<Image.Source>
+                        <FormatConvertedBitmap Source="{Binding UserPicture}"/>
+                    </Image.Source>-->
+                </Image>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Email:  " Style="{StaticResource CommonTextBlockStyle}"/>
+                        <TextBlock Text="{Binding CurrentUser.Email}" Style="{StaticResource CommonTextBlockStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Status:  " Style="{StaticResource CommonTextBlockStyle}"/>
+                        <TextBlock Text="{Binding CurrentUser.UserStatus}" Style="{StaticResource CommonTextBlockStyle}"/>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
 
             <Border BorderThickness="0,0,0,1" Style="{StaticResource CommonBorderStyle}" VerticalAlignment="Top"/>

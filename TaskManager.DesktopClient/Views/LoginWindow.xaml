@@ -85,7 +85,7 @@
                 <DockPanel LastChildFill="True">
                     <Label DockPanel.Dock="Left" Margin="1" Content="Last user: " Style="{StaticResource CommonLabelStyle}"/>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                        <Image/>
+                        <Image x:Name="mainImage" Width="80" Height="80" Source="{Binding BitmappedImage}" Margin="10,0,20,0"/>
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CurrentUser.Name}"/>
