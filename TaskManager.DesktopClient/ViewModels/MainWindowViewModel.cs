@@ -97,28 +97,6 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-        private byte[] _imageBytes;
-        public byte[] ImageBytes
-        {
-            get => _imageBytes;
-            set
-            {
-                _imageBytes = value;
-                RaisePropertyChanged(nameof(ImageBytes));
-            }
-        }
-
-        private System.Drawing.Image _userPicture;
-        public System.Drawing.Image UserPicture
-        {
-            get => _userPicture;
-            set
-            {
-                _userPicture = value;
-                RaisePropertyChanged(nameof(UserPicture));
-            }
-        }
-
         private BitmapSource _bitmappedImage;
         public BitmapSource BitmappedImage
         {
@@ -130,6 +108,14 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+
+        private byte[] _imageBytes;
+
+        public byte[] ImageBytes
+        {
+            get { return _imageBytes; }
+            set { _imageBytes = value; }
+        }
 
         private string _selectedPageName;
         public string SelectedPageName
@@ -170,6 +156,7 @@ namespace TaskManager.DesktopClient.ViewModels
         private readonly string _localProjectsButtonName = "Local Projects";
         private readonly string _localDesksButtonName = "Local Desks";
         private readonly string _localTasksButtonName = "Local Tasks";
+        private readonly string _EditUserPageName = "Edit user profile";
 
         public readonly string CollectiveProjectsLabelString = "Collective Projects Work";
 
@@ -182,99 +169,6 @@ namespace TaskManager.DesktopClient.ViewModels
         private readonly string _savedUserLoginFilename = StaticResources.CachedUserFileName;
         private readonly string _savedUserLoginLocalFilePath = StaticResources.CachedUserFilePath;
         private readonly string _environmentPath = Environment.SpecialFolder.MyDocuments.ToString();
-
-        #region AuthorizationPanelBindings 
-
-        private string _authorizedPanelVisibility = "Collapsed";
-        private string _baseLoginPanelVisibility = "Visible";
-        private string _cachedUserPanelVisibility = "Collapsed";
-
-        private string _authorizedPanelHeight = "0";
-        private string _baseLoginPanelHeight = "50";
-        private string _cachedUserPanelHeight = "0";
-
-        public string CachedUserPanelVisibility
-        {
-            get => _cachedUserPanelVisibility;
-            set
-            {
-                _cachedUserPanelVisibility= value;
-                RaisePropertyChanged(nameof(CachedUserPanelVisibility));
-            }
-        }
-        public string AuthorizedPanelVisibility
-        {
-            get => _authorizedPanelVisibility;
-            set
-            {
-                _authorizedPanelVisibility = value;
-                RaisePropertyChanged(nameof(AuthorizedPanelVisibility));
-
-                if (_authorizedPanelVisibility == "Collapsed")
-                {
-                    BaseLoginPanelVisibility = "Visible";
-                }
-            }
-        }
-        public string BaseLoginPanelVisibility
-        {
-            get => _baseLoginPanelVisibility;
-            set
-            {
-                _baseLoginPanelVisibility = value;
-                RaisePropertyChanged(nameof(BaseLoginPanelVisibility));
-                if (_baseLoginPanelVisibility == "Collapsed")
-                {
-                    AuthorizedPanelVisibility = "Visible";
-                }
-            }
-        }
-        public string AuthorizedPanelHeight
-        {
-            get => _authorizedPanelHeight;
-            set
-            {
-                _authorizedPanelHeight = value;
-                RaisePropertyChanged(nameof(AuthorizedPanelHeight));
-
-                if (_authorizedPanelHeight == "50")
-                {
-                    BaseLoginPanelHeight = "0";
-                    CachedUserPanelHeight = "0";
-                }
-            }
-        }
-        public string CachedUserPanelHeight
-        {
-            get => _cachedUserPanelHeight;
-            set
-            {
-                _cachedUserPanelHeight = value;
-                RaisePropertyChanged(nameof(CachedUserPanelHeight));
-
-                if (_cachedUserPanelHeight == "50")
-                {
-                    BaseLoginPanelHeight = "0";
-                    AuthorizedPanelHeight = "0";
-                }
-            }
-        }
-        public string BaseLoginPanelHeight
-        {
-            get => _baseLoginPanelHeight;
-            set
-            {
-                _baseLoginPanelHeight = value;
-                RaisePropertyChanged(nameof(BaseLoginPanelHeight));
-                if (_baseLoginPanelHeight == "50")
-                {
-                    AuthorizedPanelHeight = "0";
-                    CachedUserPanelHeight = "0";
-                }
-            }
-        }
-
-        #endregion
 
         #endregion
 
@@ -335,6 +229,8 @@ namespace TaskManager.DesktopClient.ViewModels
 
 
         #region COMMANDS
+
+        public DelegateCommand EditUserPageCommand { get; private set; }
 
         #region Other 
         public DelegateCommand<object> GetUserCommand { get; private set; }
@@ -455,6 +351,15 @@ namespace TaskManager.DesktopClient.ViewModels
             SelectedPageName = _localTasksButtonName;
             _viewService.ShowMessage("ToDo: Tasks Page");
         }
+        private void EditUserPage()
+        {
+            var page = new EditUserPage();
+            SelectedPageName = _EditUserPageName;
+            BitmappedImage = GetBitmapSource(CurrentUser.Image);
+            page.DataContext = this;
+            OpenPage(page, _EditUserPageName, this);
+
+        }
 
         #endregion
 
@@ -502,14 +407,6 @@ namespace TaskManager.DesktopClient.ViewModels
         public void CloseLocalWindow(object parameter)
         {
             (parameter as Window).Hide();
-        }
-        public void ShowAuthorizedUserPanel(object parameter)
-        {
-            (parameter as UserControl).Visibility = Visibility.Collapsed;
-        }
-        public void DropAuthorization()
-        {
-
         }
         public async void RegisterNewUser(object parameter)
         {
@@ -587,10 +484,10 @@ namespace TaskManager.DesktopClient.ViewModels
             GetUserCommand = new DelegateCommand<object>(GetUser);
             CloseApplicationCommand = new DelegateCommand(CloseApplication);
             CloseLocalWindowCommand = new DelegateCommand<object>(CloseLocalWindow);
-            ShowAuthorizedUserPanelCommand = new DelegateCommand<object>(ShowAuthorizedUserPanel);
             RegisterNewUserCommand = new DelegateCommand<object>(RegisterNewUser);
             SearchImageFileCommand = new DelegateCommand<object>(SearchImageFile);
             LoginCachedUserCommand = new DelegateCommand(LoginCachedUser);
+            EditUserPageCommand = new DelegateCommand(EditUserPage);
 
             #endregion
 
@@ -619,6 +516,9 @@ namespace TaskManager.DesktopClient.ViewModels
             OpenLocalTasksPageCommand = new DelegateCommand(OpenLocalTasksPage);
 
             #endregion
+
+            
+
 
             #endregion
 
