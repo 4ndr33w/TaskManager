@@ -1,0 +1,86 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+
+using Microsoft.Win32;
+
+namespace TaskManager.DesktopClient.Services.ViewServices
+{
+    public class ImageLoadSaveService
+    {
+        public ImageLoadSaveService() { }
+
+        private byte[] ImageToByteArray(System.Drawing.Image image)
+        {
+            using (MemoryStream mStream = new MemoryStream())
+            {
+                image.Save(mStream, image.RawFormat);
+
+                return mStream.ToArray();
+            }
+        }
+
+        public byte[] EncodingImage(string imagePath)
+        {
+            string outputFilePath = "";
+            using (System.Drawing.Image image = System.Drawing.Image.FromFile(imagePath))
+            {
+                byte[] imageBytes = ImageToByteArray(image);
+
+                return imageBytes;
+            }
+        }
+
+        public BitmapSource GetBitmapSource(byte[] imageBytes)
+        {
+            try
+            {
+                using (MemoryStream mStream = new MemoryStream(imageBytes))
+                {
+                    System.Drawing.Image imageFromBytes = System.Drawing.Image.FromStream(mStream);
+
+                    mStream.Position = 0;
+                    BitmapDecoder decoder = BitmapDecoder.Create(
+                        mStream,
+                        BitmapCreateOptions.PreservePixelFormat,
+                        BitmapCacheOption.OnLoad);
+
+                    return decoder.Frames[0];
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<byte[]> SearchImageFile()
+        {
+            try
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                var result = dialog.ShowDialog();
+                dialog.Filter = "Изображения (*.jpg; *.jpeg; *.png; *.bmp)|*.jpg; *.jpeg; *.png; *.bmp|Все файлы (*.*)|*.*";
+                dialog.Title = "Выбор изображения";
+
+                if (result.Value == true)
+                {
+                    var byteResult = EncodingImage(dialog.FileName);
+                    return byteResult;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return null;
+        }
+    }
+}

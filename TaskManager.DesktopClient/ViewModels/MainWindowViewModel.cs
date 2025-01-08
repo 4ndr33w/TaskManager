@@ -21,6 +21,7 @@ using Prism.Mvvm;
 
 using TaskManager.DesktopClient.Resources;
 using TaskManager.DesktopClient.Services;
+using TaskManager.DesktopClient.Services.ViewServices;
 using TaskManager.DesktopClient.Views;
 using TaskManager.DesktopClient.Views.Components.LoginPanels;
 using TaskManager.DesktopClient.Views.Pages;
@@ -32,11 +33,18 @@ namespace TaskManager.DesktopClient.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private UsersRequestService _usersRequestService;
-        private Services.ViewServices.BaseViewService _viewService;
+        private readonly ImageLoadSaveService _imageLoadSaveService;
+        private readonly UsersRequestService _usersRequestService;
+        private readonly BaseViewService _viewService;
+        private readonly LoginUserService _loginUserService;
 
         public MainWindowViewModel()
         {
+            _viewService = new Services.ViewServices.BaseViewService();
+            _imageLoadSaveService = new ImageLoadSaveService();
+            _usersRequestService = new UsersRequestService();
+            _loginUserService = new LoginUserService();
+
             OnStartup();
         }
 
@@ -48,6 +56,12 @@ namespace TaskManager.DesktopClient.ViewModels
             CurrentWindow = currentWindow;
 
             DateFormat = CurrentUser == null? DateTime.Now.ToString("U") : CurrentUser.Created.ToString("U");
+
+            _viewService = new Services.ViewServices.BaseViewService();
+            _imageLoadSaveService = new ImageLoadSaveService();
+            _usersRequestService = new UsersRequestService();
+            _loginUserService = new LoginUserService();
+
             OnStartup();
 
         }
@@ -278,12 +292,10 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region profile 
 
-
-
         private void OpenMyInfoPage()
         {
             var page = new UserInfoPage();
-            BitmappedImage = GetBitmapSource(CurrentUser.Image);
+            BitmappedImage = _imageLoadSaveService.GetBitmapSource(CurrentUser.Image);
             page.DataContext = this;
             OpenPage(page, _userInfoButtonName, this);
         }
@@ -291,7 +303,6 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             SelectedPageName = _manageUsersButtonName;
             _viewService.ShowMessage(_manageUsersButtonName);
-            //MessageBox.Show(_manageUsersButtonName);
         }
         private void Logout()
         {
@@ -325,7 +336,6 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             var page = new TasksPage();
             OpenPage(page, _userTasksButtonName, new TasksPageViewModel(Token));
-            //MessageBox.Show(_userTasksButtonName);
         }
 
         #endregion
@@ -351,20 +361,19 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             var page = new EditUserPage();
             SelectedPageName = _EditUserPageName;
-            BitmappedImage = GetBitmapSource(CurrentUser.Image);
+            BitmappedImage = _imageLoadSaveService.GetBitmapSource(CurrentUser.Image);
             page.DataContext = this;
             OpenPage(page, _EditUserPageName, this);
-
         }
 
-        private void ChangeImage()
+        private async void ChangeImage()
         {
-            //MessageBox.Show("Изменить изображение?" );
             var result = MessageBox.Show("Изменить изображение?", "Choose new image file", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
-                SearchImageFile();
+                ImageBytes = await _imageLoadSaveService.SearchImageFile();
+                CurrentUser.Image = ImageBytes;
             }
         }
 
@@ -393,14 +402,11 @@ namespace TaskManager.DesktopClient.ViewModels
             userDto.Password = window.UserPasswordTextBox.Text;
             userDto.Phone = window.UserPhoneTextBox.Text;
             userDto.Image = this.ImageBytes;
-            //userDto.ImageBytes = window.
 
             var result = await _usersRequestService.CreateAsync(userDto);
 
             (parameter as Window).Hide();
-
         }
-
 
         public async void SaveEditedUser(object parameter)
         {
@@ -414,38 +420,14 @@ namespace TaskManager.DesktopClient.ViewModels
 
             var result = await _usersRequestService.UpdateAsync(Token, CurrentUser);
 
-            var savedUserCache = await LoadUserCache();
+            var savedUserCache = await _loginUserService.LoadUserCache(_savedUserLoginFilename);
             if (savedUserCache.Id == CurrentUser.Id)
             {
-                CacheCurrentUser(CurrentUser);
-                await LoadUserCache();
+                result = await _loginUserService.SaveUserCache(CurrentUser, _savedUserLoginFilename);
+                CurrentUser = await _loginUserService.LoadUserCache(_savedUserLoginFilename);
 
             }
             OpenMyInfoPage();
-        }
-        public async void SearchImageFile()
-        {
-            try
-            {
-                OpenFileDialog dialog = new OpenFileDialog();
-
-                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-                var result = dialog.ShowDialog();
-                dialog.Filter = "Изображения (*.jpg; *.jpeg; *.png; *.bmp)|*.jpg; *.jpeg; *.png; *.bmp|Все файлы (*.*)|*.*";
-                dialog.Title = "Выбор изображения";
-
-                if (result.Value == true)
-                {
-                    this.ImageBytes = EncodingImage(dialog.FileName);
-                    CurrentUser.Image = ImageBytes;
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
         }
 
         #endregion
@@ -453,14 +435,9 @@ namespace TaskManager.DesktopClient.ViewModels
         #region OnStartup
         private async void OnStartup()
         {
-            _viewService = new Services.ViewServices.BaseViewService();
-
             #region otherCommands 
 
-            _usersRequestService = new UsersRequestService();
-
             RegisterNewUserCommand = new DelegateCommand<object>(RegisterNewUser);
-            SearchImageFileCommand = new DelegateCommand(SearchImageFile);
             EditUserPageCommand = new DelegateCommand(EditUserPage);
             ChangeImageCommand = new DelegateCommand(ChangeImage);
             SaveEditedUserCommand = new DelegateCommand<object>(SaveEditedUser);
@@ -493,11 +470,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
             #endregion
 
-            
-
-
             #endregion
-
 
             #region navButtonsDictionaryFill 
 
@@ -523,7 +496,8 @@ namespace TaskManager.DesktopClient.ViewModels
                 OnlineUserNavButtons.Add(_userTasksButtonName, OpenTasksPageCommand);
 
                 #endregion
-                BitmappedImage = GetBitmapSource(CurrentUser.Image);
+
+                BitmappedImage = _imageLoadSaveService.GetBitmapSource(CurrentUser.Image);
 
                 OpenMyInfoPage();
             }
@@ -538,7 +512,6 @@ namespace TaskManager.DesktopClient.ViewModels
                 LocalUserNavButtons.Add(_localProjectsButtonName, OpenLocalProjectsPageCommand);
                 LocalUserNavButtons.Add(_localDesksButtonName, OpenLocalDesksPageCommand);
                 LocalUserNavButtons.Add(_localTasksButtonName, OpenLocalTasksPageCommand);
-
             }
             #endregion
 
@@ -555,125 +528,8 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         #endregion
 
-        private async Task<UserDto> GetCurrentUser(AuthToken token)
-        {
-            var user = await _usersRequestService.GetAsync(token);
-            return user;
-        }
-
-        #region ENCODING/DECODING
-
-        private string EncodeUser(string serializedUser)
-        {
-            string encodingType = Resources.StaticResources.EncodingType;
-
-            var test1 = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedUser));
-            return test1;
-        }
-        private string DecodeUser(string encodedUser)
-        {
-            string encodingType = Resources.StaticResources.EncodingType;
-            var encoding = System.Text.Encoding.GetEncoding(encodingType);
-
-            var encLength = encodedUser.Length;
-            int paddingLength = encLength % 4;
-            if (paddingLength > 0)
-            {
-                encodedUser += new string('=', 4 - paddingLength);
-            }
-            string nameAndPassArray = encoding.GetString(Convert.FromBase64String(encodedUser));
-            return nameAndPassArray.ToString();
-        }
-        private UserDto DeserializeUser(string user)
-        {
-            try
-            {
-                UserDto userDto = JsonSerializer.Deserialize<UserDto>(user);
-                return userDto;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            
-            
-        }
-        private string SerializeUser(UserDto userDto)
-        {
-            string user = JsonSerializer.Serialize(userDto);
-            return user;
-        }
-        #endregion 
-
-        private byte[] EncodingImage(string imagePath)
-        {
-            string outputFilePath = "";
-            using (System.Drawing.Image image = System.Drawing.Image.FromFile(imagePath))
-            {
-                byte[] imageBytes = ImageToByteArray(image);
-                //var result = SaveByteArray(imageBytes, outputFilePath);
-
-                return imageBytes;
-            }
-
-        }
-        private static byte[] ImageToByteArray(System.Drawing.Image image)
-        {
-            using(MemoryStream mStream = new MemoryStream())
-            {
-                image.Save(mStream, image.RawFormat);
-
-                return mStream.ToArray();
-            }
-        }
-
-        private static void SaveByteArray(byte[] bytes, string filePath)
-        {
-            File.WriteAllBytes(filePath, bytes);
-        }
-
         #region Load / Save user Cache 
 
-        private async void CacheCurrentUser(UserDto user)
-        {
-            if (user != null)
-            {
-                string directoryPath = _environmentPath + _savedUserLoginLocalFilePath;
-                string filePath = directoryPath + _savedUserLoginFilename; ;
-
-                var isDirectoryExists = IsDirectoryExistAndCreateIfNotExist(directoryPath);
-
-                if (isDirectoryExists)
-                {
-                    var serializedUser = SerializeUser(user);
-                    var encodedUser = EncodeUser(serializedUser);
-
-                    await SaveUserCacheIntoLocalFile(filePath, encodedUser);
-                }
-            }
-        }
-        private async Task SaveUserCacheIntoLocalFile(string filePath, string encodedUser)
-        {
-            try
-            {
-                if (!File.Exists(filePath))
-                {
-                    using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                    {
-
-                        byte[] buffer = System.Text.Encoding.Default.GetBytes(encodedUser);
-                        await stream.WriteAsync(buffer, 0, buffer.Length);
-                    }
-                }
-                if (File.Exists(filePath))
-                {
-                    File.WriteAllText(filePath, encodedUser);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
         private bool IsDirectoryExistAndCreateIfNotExist(string directoryPath)
         {
             bool result = false;
@@ -691,84 +547,8 @@ namespace TaskManager.DesktopClient.ViewModels
                 return result;
             }
         }
-        private async Task<UserDto> LoadUserCache()
-        {
-            string directoryPath = _environmentPath + _savedUserLoginLocalFilePath;
-            string filePath = directoryPath + _savedUserLoginFilename;
-            string userData = String.Empty;
-
-            var userDto = new UserDto();
-
-            var isDirectoryExists = IsDirectoryExistAndCreateIfNotExist(directoryPath);
-
-            if (isDirectoryExists)
-            {
-                userData = ReadEncodedUserDataFromLocalFile(filePath);
-
-                var decodedUser = DecodeUser(userData);
-                userDto = DeserializeUser(decodedUser);
-            }
-            BitmappedImage = GetBitmapSource(userDto.Image);
-            return userDto;
-        }
-
-        private BitmapSource GetBitmapSource(byte[] imageBytes)
-        {
-            try
-            {
-                using (MemoryStream mStream = new MemoryStream(imageBytes))
-                {
-                    System.Drawing.Image imageFromBytes = System.Drawing.Image.FromStream(mStream);
-
-                    mStream.Position = 0;
-                    BitmapDecoder decoder = BitmapDecoder.Create(
-                        mStream,
-                        BitmapCreateOptions.PreservePixelFormat,
-                        BitmapCacheOption.OnLoad);
-
-                    return decoder.Frames[0];
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-        private string ReadEncodedUserDataFromLocalFile(string filePath)
-        {
-            string userData = String.Empty;
-            try
-            {
-                if (File.Exists(filePath))
-                {
-                    userData = File.ReadAllText(filePath);
-                }
-                return userData;
-            }
-            catch (Exception)
-            {
-                return string.Empty;
-            }
-        }
-
+     
         #endregion
-
-        private void CheckPasswordAndLoginIfEmpty(string login, string password)
-        {
-            if (password == String.Empty && login == String.Empty)
-            {
-                MessageBox.Show("Enter login and password");
-            }
-            if (password == String.Empty)
-            {
-                MessageBox.Show("Enter password");
-            }
-
-            if (login == String.Empty)
-            {
-                MessageBox.Show("Enter login");
-            }
-        }
 
         private void CheckIsUserAdmin()
         {

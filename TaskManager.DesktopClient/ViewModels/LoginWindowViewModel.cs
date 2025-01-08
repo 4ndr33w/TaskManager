@@ -15,6 +15,7 @@ using Prism.Mvvm;
 
 using TaskManager.DesktopClient.Resources;
 using TaskManager.DesktopClient.Services;
+using TaskManager.DesktopClient.Services.ViewServices;
 using TaskManager.Models;
 using TaskManager.Models.Content;
 using TaskManager.Models.Dtos;
@@ -23,10 +24,15 @@ namespace TaskManager.DesktopClient.ViewModels
 {
     public class LoginWindowViewModel : BindableBase
     {
-        private UsersRequestService _usersRequestService;
+        private readonly UsersRequestService _usersRequestService;
+        private readonly ImageLoadSaveService _imageLoadSaveService;
+        private readonly LoginUserService _loginUserService;
 
         public LoginWindowViewModel()
         {
+            _usersRequestService = new UsersRequestService();
+            _imageLoadSaveService = new ImageLoadSaveService();
+            _loginUserService = new LoginUserService();
 
             OnStartup();
         }
@@ -66,7 +72,6 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-
         public string Login { get; set; }
         public string Password { get; private set; }
 
@@ -74,8 +79,6 @@ namespace TaskManager.DesktopClient.ViewModels
         private readonly string _localUserFileName = StaticResources.LocalUserFileName;
         private readonly string _cachedUserFilePath = StaticResources.CachedUserFilePath;
         private readonly string _environmentPath = Environment.SpecialFolder.MyDocuments.ToString();
-        //private readonly string _fullLoginFilePath = Environment.SpecialFolder.MyDocuments.ToString() + StaticResources.CachedUserFilePath + StaticResources.CachedUserFileName;
-
 
         #region Token 
         private AuthToken _token;
@@ -120,11 +123,6 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region COMMANDS
 
-        public DelegateCommand OpenRegisterWindowCommand { get; private set; }
-        public DelegateCommand<object> GetUserCommand { get; private set; }
-        public DelegateCommand CreateOrLoadLocalUserCommand { get; private set; }
-        public DelegateCommand<object> OpenMainWindowCommand { get; private set; }
-        public DelegateCommand<object> OpenMainWindowForLocalUserCommand { get; private set; }
         #endregion
 
         #region METHODS
@@ -133,14 +131,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
         private async void OnStartup()
         {
-            _usersRequestService = new UsersRequestService();
-            GetUserCommand = new DelegateCommand<object>(GetUser);
-            OpenRegisterWindowCommand = new DelegateCommand(OpenRegisterWindow);
-            CreateOrLoadLocalUserCommand = new DelegateCommand(CreateLocalUser);
-            OpenMainWindowCommand = new DelegateCommand<object> (OpenMainWindow);
-            OpenMainWindowForLocalUserCommand = new DelegateCommand<object>(OpenMainWindowForLocalUser);
-
-            var cachedUser = await LoadUserCache(_cachedUserFileName);
+            var cachedUser = await _loginUserService.LoadUserCache(_cachedUserFileName);
 
             CurrentUser = cachedUser;
             if (cachedUser.Password != string.Empty)
@@ -148,319 +139,12 @@ namespace TaskManager.DesktopClient.ViewModels
                 CachedUserButtonHeigh = "60";
                 CachedUserLoginButtonVisibility = "Visible";
 
-                BitmappedImage = GetBitmapSource(cachedUser.Image);
+                BitmappedImage = _imageLoadSaveService.GetBitmapSource(cachedUser.Image);
             }
         }
 
         #endregion
 
-      
-        public async void CreateLocalUser()
-        {
-            var userDto = new UserDto();
-
-            userDto.Id = default;
-            userDto.Name = "Local User";
-            userDto.Email = "Local";
-            userDto.UserStatus = Models.Enums.UserStatus.Local;
-            LocalUser = userDto;
-
-            SaveUserCache(LocalUser, _localUserFileName);
-        }
-        public void OpenRegisterWindow()
-        {
-            Views.Windows.RegistrationWindow registrationWindow = new Views.Windows.RegistrationWindow();
-            registrationWindow.Owner = Application.Current.MainWindow;
-            registrationWindow.ShowDialog();
-        }
-        public async void GetUser(object parameter)
-        {
-            var window = (parameter as Views.LoginWindow);
-            var passwordBox = window.LoginWindowPasswordBox;
-            Password = passwordBox.Password;
-
-            bool isNewUser = false;
-
-            CheckPasswordAndLoginIfEmpty(Login, Password);
-
-            var getTokenResult = await _usersRequestService.GetToken(Login, Password);
-
-            
-            //ToDo: продумать как заставить кнопку OK стать неактивной, пока не подгрузился токен
-
-            while (getTokenResult == null)
-            {
-                window.OkButton.IsEnabled = false;
-            }
-            window.OkButton.IsEnabled = true;
-
-            Token = getTokenResult;
-
-            //
-
-            if (Token.accessToken == null)
-            {
-                var result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    CurrentUser = null;
-                    OpenMainWindow(parameter);
-                }
-                if (result == MessageBoxResult.No && CurrentUser == null)
-                {
-                    result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
-
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        OpenMainWindow(parameter);
-                    }
-                }
-            }
-
-            if (Token.accessToken != null)
-            {
-                if (CurrentUser.Email != Login)
-                {
-                    isNewUser = true;
-                }
-
-                CurrentUser = await GetCurrentUser(Token);
-
-                LocalUser = await TryToLoadLocalUser();
-                if (LocalUser == null)
-                {
-                    CreateLocalUser();
-                }
-
-                if (CurrentUser == null)
-                {
-                    var result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
-
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        OpenMainWindowForLocalUser(parameter);
-                    }
-                }
-                else
-                {
-                    if (isNewUser)
-                    {
-                        var saveUserMessage = MessageBox.Show("Сохранить логин и пароль?", "SaveData", MessageBoxButton.YesNo);
-
-                        if (saveUserMessage == MessageBoxResult.Yes)
-                        {
-                            SaveUserCache(CurrentUser, _cachedUserFileName);
-                        }
-                    }
-                    OpenMainWindow(parameter);
-                }
-            }
-        }
-
-        private BitmapSource GetBitmapSource(byte[] imageBytes)
-        {
-            try
-            {
-                using (MemoryStream mStream = new MemoryStream(imageBytes))
-                {
-                    System.Drawing.Image imageFromBytes = System.Drawing.Image.FromStream(mStream);
-
-                    mStream.Position = 0;
-                    BitmapDecoder decoder = BitmapDecoder.Create(
-                        mStream,
-                        BitmapCreateOptions.PreservePixelFormat,
-                        BitmapCacheOption.OnLoad);
-
-                    return decoder.Frames[0];
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public void OpenMainWindowForLocalUser(object parameter)
-        {
-            CurrentUser= null;
-            OpenMainWindow(parameter);
-        }
-
-        private async void OpenMainWindow(object parameter)
-        {
-            if (LocalUser == null)
-            {
-                CreateLocalUser();
-            }
-            if (CurrentUser != null)
-            {
-                if (Token == null)
-                {
-                    Token = await _usersRequestService.GetToken(CurrentUser.Email, CurrentUser.Password);
-                }
-            }
-            var window = (parameter as Views.LoginWindow);
-            window.Hide();
-
-            var mainWindow = new MainWindow(/*Token, CurrentUser, LocalUser*/);
-            var mainWindowDataContext = new MainWindowViewModel(Token, CurrentUser, LocalUser, mainWindow);
-            mainWindow.DataContext = mainWindowDataContext;
-            mainWindow.ShowDialog();
-        }
-
-
-        private async Task<UserDto> GetCurrentUser(AuthToken token)
-        {
-            try
-            {
-                var user = await _usersRequestService.GetAsync(token);
-                return user;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        private void CheckPasswordAndLoginIfEmpty(string login, string password)
-        {
-            if (password == String.Empty && login == String.Empty)
-            {
-                MessageBox.Show("Enter login and password");
-            }
-            if (password == String.Empty)
-            {
-                MessageBox.Show("Enter password");
-            }
-
-            if (login == String.Empty)
-            {
-                MessageBox.Show("Enter login");
-            }
-        }
-
-        #region ENCODING/DECODING
-
-        private string EncodeUser(string serializedUser)
-        {
-            string encodingType = Resources.StaticResources.EncodingType;
-
-            var test1 = Convert.ToBase64String(Encoding.UTF8.GetBytes(serializedUser));
-            return test1;
-        }
-        private string DecodeUser(string encodedUser)
-        {
-            string encodingType = Resources.StaticResources.EncodingType;
-            var encoding = System.Text.Encoding.GetEncoding(encodingType);
-
-            var encLength = encodedUser.Length;
-            int paddingLength = encLength % 4;
-            if (paddingLength > 0)
-            {
-                encodedUser += new string('=', 4 - paddingLength);
-            }
-            string nameAndPassArray = encoding.GetString(Convert.FromBase64String(encodedUser));
-            return nameAndPassArray.ToString();
-        }
-        private UserDto DeserializeUser(string user)
-        {
-            try
-            {
-                UserDto userDto = JsonSerializer.Deserialize<UserDto>(user);
-                return userDto;
-            }
-            catch (Exception)
-            {
-                return new UserDto();
-            }
-        }
-        private string SerializeUser(UserDto userDto)
-        {
-            string user = JsonSerializer.Serialize(userDto);
-            return user;
-        }
-        #endregion
-
-        #region CachedUser 
-
-        private async void SaveUserCache(UserDto user, string filename)
-        {
-            if (user != null)
-            {
-                string directoryPath = _environmentPath + _cachedUserFilePath;
-                string filePath = directoryPath + filename;
-
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-                var serializedUser = SerializeUser(user);
-                var encodedUser = EncodeUser(serializedUser);
-
-                if (!File.Exists(filePath))
-                {
-                    using (FileStream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                    {
-
-                        byte[] buffer = System.Text.Encoding.Default.GetBytes(encodedUser);
-                        await stream.WriteAsync(buffer, 0, buffer.Length);
-                    }
-                }
-                if (File.Exists(filePath))
-                {
-                    File.WriteAllText(filePath, encodedUser);
-                }
-            }
-        }
-        private async Task<UserDto> LoadUserCache(string fileName)
-        {
-            string directoryPath = _environmentPath + _cachedUserFilePath;
-            string filePath = directoryPath + fileName;
-            string userData = String.Empty;
-
-            var userDto = new UserDto();
-
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            if (File.Exists(filePath))
-            {
-                userData = File.ReadAllText(filePath);
-            }
-            var decodedUser = DecodeUser(userData);
-            userDto = DeserializeUser(decodedUser);
-
-            return userDto;
-        }
-        public async Task<UserDto> TryToLoadLocalUser()
-        {
-            var userDto = new UserDto();
-            string directory = _environmentPath + _cachedUserFilePath;
-            string filePath = directory + _localUserFileName;
-            string userData = String.Empty;
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    userData += File.ReadAllText(filePath);
-                    var decodedUser = DecodeUser(userData);
-                    userDto = DeserializeUser(decodedUser);
-                    return userDto;
-                }
-                catch (Exception) {}
-            }
-            return null;
-        }
-
-        #endregion
 
         #endregion
     }

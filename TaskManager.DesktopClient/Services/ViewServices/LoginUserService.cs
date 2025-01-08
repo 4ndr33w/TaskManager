@@ -142,7 +142,7 @@ namespace TaskManager.DesktopClient.Services.ViewServices
 
         #region LOAD AND SAVE CACHE AND CREATE LOCAL USER 
 
-        private async Task<UserDto> LoadUserCache(string fileName)
+        public async Task<UserDto> LoadUserCache(string fileName)
         {
             var userDto = new UserDto();
             string directory = _environmentPath + _cachedUserFilePath;
@@ -173,7 +173,7 @@ namespace TaskManager.DesktopClient.Services.ViewServices
             return null;
         }
 
-        private async Task<bool> SaveUserCache(UserDto user, string filename)
+        public async Task<bool> SaveUserCache(UserDto user, string filename)
         {
             if(user != null)
             {
