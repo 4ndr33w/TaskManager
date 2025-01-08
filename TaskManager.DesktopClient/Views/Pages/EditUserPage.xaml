@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Pages"
       mc:Ignorable="d" 
+      x:Name="EditUserViewPage"
       Title="EditUserPage">
 
     <Grid HorizontalAlignment="Stretch">
@@ -17,6 +18,7 @@
                        Width="200" 
                        Height="200" 
                        Source="{Binding BitmappedImage}">
+                    <!--MouseRightButtonDown="{Binding ChangeImageCommand}">-->
                 </Image>
 
                 <StackPanel VerticalAlignment="Center" Margin="10,0,0,0">
@@ -37,7 +39,9 @@
                         <Button Content="change email" Style="{StaticResource CommonButtonStyle}" Padding="5,0,5,0" Margin="5"/>
                         <Button Content="change password" Style="{StaticResource CommonButtonStyle}" Padding="5,0,5,0" Margin="5"/>
                     </StackPanel>
+                    <Button Content="change image" Command="{Binding ChangeImageCommand}" Width="196" Style="{StaticResource CommonButtonStyle}"/>
                 </StackPanel>
+                
             </StackPanel>
 
             <Border BorderThickness="0,0,0,1" 
@@ -50,6 +54,7 @@
                            VerticalAlignment="Bottom"/>
                 <TextBox Text="{Binding CurrentUser.Name}" 
                            Style="{StaticResource CommonTextBoxStyle}" 
+                         x:Name="EditedUserNameTextBox"
                          Padding="45,0,45,0"
                          VerticalAlignment="Top" 
                          VerticalContentAlignment="Top"/>
@@ -61,6 +66,7 @@
                 <TextBox Text="{Binding CurrentUser.LastName}" 
                            Style="{StaticResource CommonTextBoxStyle}" 
                          Padding="45,0,45,0" 
+                         x:Name="EditedUserLastNameTextBox"
                          VerticalAlignment="Top" 
                          VerticalContentAlignment="Top"/>
             </StackPanel>
@@ -71,6 +77,7 @@
                 <TextBox Text="{Binding CurrentUser.Phone}" 
                            Style="{StaticResource CommonTextBoxStyle}" 
                          Padding="45,0,45,0" 
+                         x:Name="EditedUserPhoneTextBox"
                          VerticalAlignment="Top" 
                          VerticalContentAlignment="Top"/>
             </StackPanel>
@@ -87,7 +94,9 @@
 
                 <Button Content="Save" 
                         Margin="10,0,5,0" 
-                        Style="{StaticResource CommonButtonStyle}" 
+                        Style="{StaticResource CommonButtonStyle}"
+                        Command="{Binding SaveEditedUserCommand}"
+                        CommandParameter="{Binding ElementName=EditUserViewPage}"
                         HorizontalAlignment="Center" 
                         HorizontalContentAlignment="Center" 
                         Width="100"/>

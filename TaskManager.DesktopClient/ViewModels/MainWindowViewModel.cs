@@ -231,17 +231,13 @@ namespace TaskManager.DesktopClient.ViewModels
         #region COMMANDS
 
         public DelegateCommand EditUserPageCommand { get; private set; }
+        public DelegateCommand ChangeImageCommand { get; private set; }
 
         #region Other 
-        public DelegateCommand<object> GetUserCommand { get; private set; }
-        public DelegateCommand<object> CloseLocalWindowCommand { get; private set; }
-        public DelegateCommand<object> ShowAuthorizedUserPanelCommand { get; private set; }
         public DelegateCommand<object> RegisterNewUserCommand { get; private set; }
-        public DelegateCommand<object> SearchImageFileCommand { get; private set; }
+        public DelegateCommand SearchImageFileCommand { get; private set; }
 
-        public DelegateCommand CloseApplicationCommand { get; private set; }
-        public DelegateCommand OpenRegisterWindowCommand { get; private set; }
-        public DelegateCommand LoginCachedUserCommand { get; private set; }
+        public DelegateCommand<object> SaveEditedUserCommand { get; private set; }
 
         #endregion
 
@@ -361,6 +357,17 @@ namespace TaskManager.DesktopClient.ViewModels
 
         }
 
+        private void ChangeImage()
+        {
+            //MessageBox.Show("Изменить изображение?" );
+            var result = MessageBox.Show("Изменить изображение?", "Choose new image file", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                SearchImageFile();
+            }
+        }
+
         #endregion
 
         #endregion
@@ -374,40 +381,7 @@ namespace TaskManager.DesktopClient.ViewModels
             SelectedPage = page;
             SelectedPage.DataContext = viewModel;
         }
-
-        public async void GetUser(object parameter)
-        {
-            var passwordBox = (parameter as BaseLoginBarComponent).LoginWindowPasswordBox;
-            Password = passwordBox.Password;
-
-            CheckPasswordAndLoginIfEmpty(Login, Password);
-
-            Token = await _usersRequestService.GetToken(Login, Password);
-
-            if (Token.accessToken != null)
-            {
-                CurrentUser = await GetCurrentUser(Token);
-
-                if (CurrentUser != null)
-                {
-                    if (CurrentUser.Image != null)
-                    {
-                        BitmappedImage = GetBitmapSource(CurrentUser.Image);
-                    }
-                    CacheCurrentUser(CurrentUser);
-                }
-            }
-        }
-        public void CloseApplication()
-        {
-            Environment.Exit(0);
-            //Application.Current.MainWindow.Close();
-            //Application.Current.Shutdown();
-        }
-        public void CloseLocalWindow(object parameter)
-        {
-            (parameter as Window).Hide();
-        }
+        
         public async void RegisterNewUser(object parameter)
         {
             var window = (parameter as Views.Windows.RegistrationWindow);
@@ -426,7 +400,30 @@ namespace TaskManager.DesktopClient.ViewModels
             (parameter as Window).Hide();
 
         }
-        public async void SearchImageFile(object parameter)
+
+
+        public async void SaveEditedUser(object parameter)
+        {
+            var page = (parameter as Views.Pages.EditUserPage);
+
+
+            CurrentUser.Name = page.EditedUserNameTextBox.Text;
+            CurrentUser.LastName = page.EditedUserLastNameTextBox.Text;
+            CurrentUser.Phone = page.EditedUserPhoneTextBox.Text;
+            //CurrentUser.Image = 
+
+            var result = await _usersRequestService.UpdateAsync(Token, CurrentUser);
+
+            var savedUserCache = await LoadUserCache();
+            if (savedUserCache.Id == CurrentUser.Id)
+            {
+                CacheCurrentUser(CurrentUser);
+                await LoadUserCache();
+
+            }
+            OpenMyInfoPage();
+        }
+        public async void SearchImageFile()
         {
             try
             {
@@ -441,33 +438,13 @@ namespace TaskManager.DesktopClient.ViewModels
                 if (result.Value == true)
                 {
                     this.ImageBytes = EncodingImage(dialog.FileName);
-                    //MessageBox.Show($"Вы выбрали файл: {selectedFile}", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CurrentUser.Image = ImageBytes;
                 }
 
             }
             catch (Exception)
             {
 
-            }
-            //https://metanit.com/sharp/wpf/22.6.php
-            //https://learn.microsoft.com/ru-ru/dotnet/desktop/wpf/windows/how-to-open-common-system-dialog-box?view=netdesktop-9.0
-            //https://wpf-tutorial.com/ru/46/%D0%B4%D0%B8%D0%B0%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2%D1%8B%D0%B5-%D0%BE%D0%BA%D0%BD%D0%B0/openfiledialog/
-        }
-        public async void LoginCachedUser()
-        {
-            Password = CurrentUser.Password;
-
-            Token = await _usersRequestService.GetToken(CurrentUser.Email, CurrentUser.Password);
-
-            if (Token.accessToken != null)
-            {
-                CurrentUser = await GetCurrentUser(Token);
-
-                if (CurrentUser != null)
-                {
-                    BitmappedImage = GetBitmapSource(CurrentUser.Image);
-                    CacheCurrentUser(CurrentUser);
-                }
             }
         }
 
@@ -481,13 +458,12 @@ namespace TaskManager.DesktopClient.ViewModels
             #region otherCommands 
 
             _usersRequestService = new UsersRequestService();
-            GetUserCommand = new DelegateCommand<object>(GetUser);
-            CloseApplicationCommand = new DelegateCommand(CloseApplication);
-            CloseLocalWindowCommand = new DelegateCommand<object>(CloseLocalWindow);
+
             RegisterNewUserCommand = new DelegateCommand<object>(RegisterNewUser);
-            SearchImageFileCommand = new DelegateCommand<object>(SearchImageFile);
-            LoginCachedUserCommand = new DelegateCommand(LoginCachedUser);
+            SearchImageFileCommand = new DelegateCommand(SearchImageFile);
             EditUserPageCommand = new DelegateCommand(EditUserPage);
+            ChangeImageCommand = new DelegateCommand(ChangeImage);
+            SaveEditedUserCommand = new DelegateCommand<object>(SaveEditedUser);
 
             #endregion
 

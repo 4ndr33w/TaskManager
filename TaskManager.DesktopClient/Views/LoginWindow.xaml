@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager.DesktopClient.Views"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:baseCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands"
+        xmlns:loginWindowCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.LoginWindowCommands"
         prism:ViewModelLocator.AutoWireViewModel="True"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -14,6 +16,13 @@
         Width="400"
         x:Name="loginWindow"
         Background="{StaticResource WindowBackground}">
+    <Window.Resources>
+        <baseCommands:CloseLocalWindow x:Key="CloseWindowCommand"/>
+        <baseCommands:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
+        <loginWindowCommands:LoginUserCommand x:Key="LoginUserCommand"/>
+        <loginWindowCommands:OpenRegistrationWindowCommand x:Key="OpenRegistrationWindowCommand"/>
+        <loginWindowCommands:LoginCachedOnlineUserCommand x:Key="LoginCachedOnlineUserCommand"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -51,15 +60,16 @@
                         Style="{StaticResource CommonButtonStyle}"
                         Content="Exit" 
                         Margin="0,0,10,0"
-                        Command="{Binding CloseWindowCommand}"
+                        Command="{StaticResource CloseApplicationCommand}"
                         x:Name="LoginWindowCancelButton"/>
                 <Button Width="100"
                         x:Name="OkButton"
                         Style="{StaticResource CommonButtonStyle}"
                         Content="OK" 
                         Margin="10,0,0,0"
-                        Command="{Binding Path=GetUserCommand}"
+                        Command="{StaticResource LoginUserCommand}"
                         CommandParameter="{Binding ElementName=loginWindow}"/>
+                <!--Command="{Binding Path=GetUserCommand}"-->
             </StackPanel>
 
         </StackPanel>
@@ -79,7 +89,7 @@
                     Height="{Binding CachedUserButtonHeigh}" 
                     Width="390"
                     Visibility="{Binding CachedUserLoginButtonVisibility}"
-                    Command="{Binding OpenMainWindowCommand}"
+                    Command="{StaticResource LoginCachedOnlineUserCommand}"
                     CommandParameter="{Binding ElementName=loginWindow}"
                     >
                 <DockPanel LastChildFill="True">
@@ -110,7 +120,8 @@
                 <Button Content="Registration" 
                         Width="190"
                         Style="{StaticResource CommonButtonStyle}" Margin="5"
-                        Command="{Binding OpenRegisterWindowCommand}"></Button>
+                        Command="{StaticResource OpenRegistrationWindowCommand}"
+                        CommandParameter="{Binding ElementName=loginWindow}"></Button>
             </StackPanel>
             
         </StackPanel>

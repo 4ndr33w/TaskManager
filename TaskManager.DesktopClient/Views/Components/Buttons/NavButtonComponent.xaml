@@ -10,12 +10,23 @@
             <Button Background="Transparent" Command="{Binding Value}" HorizontalAlignment="Stretch">
                 <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                     <TextBlock DockPanel.Dock="Left" 
-                               Margin="15,1,1,1"
-                               Width="100"
+                               Margin="10,1,1,1"
+                               Width="120"
                                Text="{Binding Key}" 
                                Style="{StaticResource CommonTextBlockStyle}" 
                                HorizontalAlignment="Stretch"/>
-                    <TextBox DockPanel.Dock="Right" HorizontalAlignment="Right" Style="{StaticResource CommonTextBoxStyle}" Background="Gray" BorderBrush="DarkGray" Text="0" Padding="15,0,15,0"/>
+                    <TextBox DockPanel.Dock="Right" 
+                             HorizontalAlignment="Right" 
+                             Style="{StaticResource CommonTextBoxStyle}" 
+                             Background="Gray" 
+                             BorderBrush="DarkGray" 
+                             Text="{Binding Path=CurrentUser.ProjectsIds.Count}"
+                             Padding="15,0,15,0"></TextBox>
+                    <!--Text="{Binding Path=CurrentUser.ProjectsIds.Count}"-->
+                        <!--<TextBox.DataContext>
+                            <Binding Source="{Binding CurrentUser.ProjectsIds.Count}"/>
+                        </TextBox.DataContext>-->
+                    <!--</TextBox>-->
                     <Label Content=" "/>
                 </DockPanel>
             </Button>

@@ -13,7 +13,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="0" MinWidth="600">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -41,7 +41,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource CommonBorderStyle}">
+                            <Border Style="{StaticResource ProjectPanelBorder}">
                                 <StackPanel Margin="10">
                                     <TextBlock Text="{Binding Path=Model.Name}" Style="{StaticResource CommonTextBlockStyle}"/>
                                     <StackPanel Orientation="Horizontal">
@@ -51,13 +51,13 @@
                                     <Image Source="{Binding Path=Image}" Width="100" Height="100"/>
                                     <Button Content="Open" 
                                             Style="{StaticResource CommonButtonStyle}" 
-                                            Command="{Binding Path=DataContext.ShowProjectInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                                            Command="{Binding Path=DataContext.OpenNewProjectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
                                             CommandParameter="{Binding}">
 
                                     </Button>
                                     <Button Content="Edit" 
                                             Style="{StaticResource CommonButtonStyle}" 
-                                            Command="{Binding Path=DataContext.ShowProjectInfoCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            Command="{Binding Path=DataContext.OpenUpdateProjectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}">
 
                                     </Button>
@@ -69,7 +69,7 @@
             </ScrollViewer>
         </Grid>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" MinWidth="200">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

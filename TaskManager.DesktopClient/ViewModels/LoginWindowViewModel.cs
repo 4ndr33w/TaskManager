@@ -122,7 +122,6 @@ namespace TaskManager.DesktopClient.ViewModels
 
         public DelegateCommand OpenRegisterWindowCommand { get; private set; }
         public DelegateCommand<object> GetUserCommand { get; private set; }
-        public DelegateCommand CloseWindowCommand { get; private set; }
         public DelegateCommand CreateOrLoadLocalUserCommand { get; private set; }
         public DelegateCommand<object> OpenMainWindowCommand { get; private set; }
         public DelegateCommand<object> OpenMainWindowForLocalUserCommand { get; private set; }
@@ -136,7 +135,6 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             _usersRequestService = new UsersRequestService();
             GetUserCommand = new DelegateCommand<object>(GetUser);
-            CloseWindowCommand = new DelegateCommand(CloseWindow);
             OpenRegisterWindowCommand = new DelegateCommand(OpenRegisterWindow);
             CreateOrLoadLocalUserCommand = new DelegateCommand(CreateLocalUser);
             OpenMainWindowCommand = new DelegateCommand<object> (OpenMainWindow);
@@ -175,12 +173,6 @@ namespace TaskManager.DesktopClient.ViewModels
             registrationWindow.Owner = Application.Current.MainWindow;
             registrationWindow.ShowDialog();
         }
-        public void CloseWindow()
-        {
-            Application.Current.MainWindow.Close();
-            Application.Current.Shutdown();
-
-        }
         public async void GetUser(object parameter)
         {
             var window = (parameter as Views.LoginWindow);
@@ -215,7 +207,7 @@ namespace TaskManager.DesktopClient.ViewModels
                     CurrentUser = null;
                     OpenMainWindow(parameter);
                 }
-                if (result == MessageBoxResult.No && CurrentUser != null)
+                if (result == MessageBoxResult.No && CurrentUser == null)
                 {
                     result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
 

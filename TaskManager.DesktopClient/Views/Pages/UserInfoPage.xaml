@@ -38,6 +38,7 @@
                         <Button Content="change email" IsEnabled="False" Style="{StaticResource CommonButtonStyle}" Padding="5,0,5,0" Margin="5"/>
                         <Button Content="change password" IsEnabled="False" Style="{StaticResource CommonButtonStyle}" Padding="5,0,5,0" Margin="5"/>
                     </StackPanel>
+                    <Button Content="change image" Visibility="Hidden" IsEnabled="False" Style="{StaticResource CommonButtonStyle}"/>
                 </StackPanel>
             </StackPanel>
 

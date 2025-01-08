@@ -50,14 +50,10 @@ namespace TaskManager.DesktopClient.Services
                     {
                         var clientProjectModel = new ClientModel<ProjectDto>(project);
 
-                        clientProjectsModelCollection.Add(clientProjectModel);
-
-                        //clientProjectModel.Creator = new User(await _usersRequestService.GetAsync(token, project.CreatorId));
-                        //clientProjectModel.Executor = new User(await _usersRequestService.GetAsync(token, project.ExecutorId));
-                        //clientProjectModel.Desk = new Desk(await _desksRequestService.GetAsync(token, project.DeskId));
-
-
-                        clientProjectsModelCollection.Add(clientProjectModel);
+                        if (!clientProjectsModelCollection.Contains(clientProjectModel))
+                        {
+                            clientProjectsModelCollection.Add(clientProjectModel);
+                        }
                     }
                     return clientProjectsModelCollection;
                 }

@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Windows"
+        xmlns:baseCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands"
+        xmlns:registrationWindowCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.RegistrationWindowCommands"
         mc:Ignorable="d"
         Background="{StaticResource WindowBackground}"
         WindowStyle="None"
@@ -11,12 +13,16 @@
         WindowStartupLocation="CenterOwner"
         x:Name="RegistrationNewUserWindow"
         Title="RegistrationWindow" Height="350" Width="450">
+    <Window.Resources>
+        <baseCommands:CloseLocalWindow x:Key="CloseLocalWindow"/>
+        <registrationWindowCommands:ReturnToLoginWindowCommand x:Key="ReturnToLoginWindowCommand"/>
+    </Window.Resources>
     <Grid>
         
         <DockPanel LastChildFill="True">
             <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="Registraion of new user" Margin="10" Style="{StaticResource CommonTextBlockStyle}"></TextBlock>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
-                <Button Content="Cancel" Style="{StaticResource CommonButtonStyle}" Margin="0,0,10,0" Width="80" Command="{Binding CloseLocalWindowCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
+                <Button Content="Cancel" Style="{StaticResource CommonButtonStyle}" Margin="0,0,10,0" Width="80" Command="{StaticResource ReturnToLoginWindowCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
                 <Button Content="Accept" Style="{StaticResource CommonButtonStyle}" Margin="10,0,0,0" Width="80" Command="{Binding RegisterNewUserCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
             </StackPanel>
             <StackPanel DockPanel.Dock="Left">

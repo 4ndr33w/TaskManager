@@ -7,12 +7,13 @@
         xmlns:loginPanels="clr-namespace:TaskManager.DesktopClient.Views.Components.LoginPanels"
         xmlns:navButtonsUserControl="clr-namespace:TaskManager.DesktopClient.Views.Components.Buttons"
         xmlns:dataContext="clr-namespace:TaskManager.DesktopClient.ViewModels"
+        xmlns:baseCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Background="{StaticResource WindowBackground}"
         Title="MainWindow" Height="650" Width="1200">
     <Window.Resources>
-
+        <baseCommands:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
         <dataContext:MainWindowViewModel x:Key="mainWindowDataContext"/>
 
     </Window.Resources>
@@ -29,7 +30,7 @@
                             <MenuItem Header="*.xml" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
                             <MenuItem Header="*.json" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
                         </MenuItem>
-                        <MenuItem Header="Close" x:Name="MenuClose" Command="{Binding CloseApplicationCommand}"></MenuItem>
+                        <MenuItem Header="Close" x:Name="MenuClose" Command="{StaticResource CloseApplicationCommand}"></MenuItem>
                     </MenuItem>
                     <MenuItem Header="Settings" Style="{StaticResource CommonMenuItemStyle}" Width="65" ></MenuItem>
                     <MenuItem Header="Help" Style="{StaticResource CommonMenuItemStyle}" Width="50"></MenuItem>
@@ -71,8 +72,8 @@
 
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Button Style="{StaticResource CommonButtonStyle}" Command="{Binding Value}">
-                                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Text="{Binding Key}"/>
+                                            <Button Style="{StaticResource CommonButtonStyle}" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding Value}">
+                                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" VerticalAlignment="Center" Text="{Binding Key}"/>
                                             </Button>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -101,7 +102,18 @@
                                         <DataTemplate>
 
 
-                                            <navButtonsUserControl:NavButtonComponent Margin="3,1,3,1" DataContext="{DynamicResource mainWindowDataContext.NavButtons}"/>
+                                        <navButtonsUserControl:NavButtonComponent Margin="3,1,3,1" DataContext="{DynamicResource mainWindowDataContext.NavButtons}">
+                                            <!--<navButtonsUserControl:NavButtonComponent.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding CurrentUser.UserStatus}" Value="{x:Reference Name=Admin}">
+                                                            <Setter Property="" Value="True"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </navButtonsUserControl:NavButtonComponent.Style>-->
+                                            
+                                        </navButtonsUserControl:NavButtonComponent>
 
 
                                         </DataTemplate>

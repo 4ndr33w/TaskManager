@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+    <Folder Include="Resources\Commands\MainWindowCommands\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Settings\AppSettings.Designer.cs">
