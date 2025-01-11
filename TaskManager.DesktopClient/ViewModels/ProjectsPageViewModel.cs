@@ -76,6 +76,16 @@ namespace TaskManager.DesktopClient.ViewModels
                 RaisePropertyChanged(nameof(CreateUpdateprojectPage));
             }
         }
+        private UserInfo _selectedUserToBeAdmin;
+        public UserInfo SelectedUserToBeAdmin
+        {
+            get => _selectedUserToBeAdmin;
+            set
+            {
+                _selectedUserToBeAdmin = value;
+                RaisePropertyChanged(nameof(SelectedUserToBeAdmin));
+            }
+        }
 
         private ObservableCollection<UserInfo> _usersInfoCollection;
         public ObservableCollection<UserInfo> UsersInfoCollection

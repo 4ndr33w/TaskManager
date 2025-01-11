@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Background="{StaticResource WindowBackground}"
-        Title="MainWindow" Height="650" Width="1200">
+        Title="MainWindow" Height="650" MinHeight="600" MinWidth="1000" Width="1200">
     <Window.Resources>
         <baseCommands:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
         <dataContext:MainWindowViewModel x:Key="mainWindowDataContext"/>

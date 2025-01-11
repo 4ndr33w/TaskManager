@@ -35,24 +35,36 @@
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Grid.Column="0">
                 <Grid Margin="10" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Name:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="ProjectNameTextBox" Text="{Binding NewProject.Model.Name}" Style="{StaticResource CommonTextBoxStyle}" HorizontalAlignment="Stretch"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Project Admin:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
+                        <Border Grid.Row="0" Grid.Column="1" BorderBrush="White" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding SelectedUserToBeAdmin.Image}" Height="25" Margin="10,0,10,0"/>
+                                <TextBlock x:Name="ProjectAdminTextBox"
+                                           Text="{Binding SelectedUserToBeAdmin, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" 
+                                           Style="{StaticResource CommonTextBlockStyle}" 
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                        </Border>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Name:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="ProjectNameTextBox" Text="{Binding NewProject.Model.Name}" Style="{StaticResource CommonTextBoxStyle}" HorizontalAlignment="Stretch"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Width="Auto" Text="Description:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
-                    <TextBox Grid.Row="1" x:Name="ProjectDescriptionTextBox" Grid.Column="1" Text="{Binding NewProject.Model.Description}" Style="{StaticResource MultiLineTextBox}" HorizontalAlignment="Stretch"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Width="Auto" Text="Description:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Row="2" x:Name="ProjectDescriptionTextBox" Grid.Column="1" Text="{Binding NewProject.Model.Description}" Style="{StaticResource MultiLineTextBox}" HorizontalAlignment="Stretch"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Image:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
-                    <Grid Grid.Row="2" Grid.Column="1">
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Image:" Margin="0,0,10,0" Style="{StaticResource CommonTextBlockStyle}" HorizontalAlignment="Right"/>
+                    <Grid Grid.Row="3" Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="30"/>
@@ -71,13 +83,13 @@
                         </Button>
                     </Grid>
 
-                    <TextBlock Grid.Row="3" 
+                    <TextBlock Grid.Row="4" 
                                Grid.Column="0" 
                                Text="Project Status:" 
                                Margin="0,0,10,0" 
                                Style="{StaticResource CommonTextBlockStyle}" 
                                HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="3" 
+                    <ComboBox Grid.Row="4" 
                               Grid.Column="1" 
                               Background="Transparent"
                               Foreground="DarkGray"
@@ -96,7 +108,7 @@
             </ScrollViewer>
 
 
-            <Grid Grid.Column="2" Grid.Row="1" Margin="10,5,10,5" MinWidth="250">
+            <Grid Grid.Column="2" Grid.Row="1" Margin="10,5,10,5" MinWidth="200" HorizontalAlignment="Stretch">
                 <!--<Grid.Style>
                         <Style TargetType="Grid">
                             <Style.Triggers>
@@ -108,20 +120,28 @@
                     </Grid.Style>-->
                 <StackPanel Margin="5">
                     <Button Grid.Row="2" Content="Select new project admin" Style="{StaticResource CommonButtonStyle}"/>
-                    <ListBox Grid.Row="3" x:Name="UsersListBox" HorizontalAlignment="Center" ItemsSource="{Binding Path=UsersInfoCollection}" Background="Transparent" Foreground="White" Margin="5">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Button Style="{StaticResource CommonButtonStyle}" Width="230" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding Image}" Margin="5,0,5,0" Height="15"/>
-                                        <TextBlock Style="{StaticResource CommonTextBlockStyle}" Margin="5,0,5,0" Text="{Binding}"/>
-                                    </StackPanel>
-                                </Button>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox Grid.Row="3" 
+                                 x:Name="UsersListBox" 
+                                 HorizontalAlignment="Center" 
+                                 ItemsSource="{Binding UsersInfoCollection}" 
+                                 Background="Transparent" 
+                                 Foreground="White"
+                                 SelectedItem="{Binding SelectedUserToBeAdmin, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="5">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                            <Image Source="{Binding Image}" Margin="5,0,5,0" Height="15"/>
+                                            <TextBlock Style="{StaticResource CommonTextBlockStyle}" Margin="5,0,5,0" Text="{Binding}"/>
+                                        </StackPanel>
 
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
 
-                    </ListBox>
+                        </ListBox>
+                    </ScrollViewer>
+                  
                 </StackPanel>
               
             </Grid>
