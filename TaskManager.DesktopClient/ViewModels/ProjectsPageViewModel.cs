@@ -37,6 +37,13 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region PROPERTIES
 
+        private ClientActions _ptojectActionType;
+        public ClientActions PtojectActionType
+        {
+            get => _ptojectActionType;
+            set => SetProperty(ref _ptojectActionType, value);
+        }
+
         private bool _isUserAdminOrProjectAdmin = false;
         public bool IsUserAdminOrProjectAdmin
         {
@@ -77,7 +84,6 @@ namespace TaskManager.DesktopClient.ViewModels
             private set => _currentUser = value;
         }
 
-
         private Page _projectPage;
         public Page ProjectPage
         {
@@ -101,14 +107,14 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-        private UserInfo _selectedUserToBeAdmin;
-        public UserInfo SelectedUserToBeAdmin
+        private UserInfo _selectedUser;
+        public UserInfo SelectedUser
         {
-            get => _selectedUserToBeAdmin;
+            get => _selectedUser;
             set
             {
-                _selectedUserToBeAdmin = value;
-                RaisePropertyChanged(nameof(SelectedUserToBeAdmin));
+                _selectedUser = value;
+                RaisePropertyChanged(nameof(SelectedUser));
             }
         }
 
@@ -197,13 +203,15 @@ namespace TaskManager.DesktopClient.ViewModels
         #region COMMANDS 
 
         public DelegateCommand OpenNewProjectPageCommand { get; private set; }
-        public DelegateCommand<object> OpenEditProjectPageCommand { get; private set; }
+        public DelegateCommand<object> CreateOrEditProjectCommand { get; private set; }
         public DelegateCommand<object> UpdateProjectCommand { get; private set; }
         public DelegateCommand<object> CreateNewProjectCommand { get; private set; }
         public DelegateCommand<object> ShowProjectInfoCommand { get; private set; }
 
         public DelegateCommand OpenProjectsPageCommand { get; private set; }
         public DelegateCommand AbortCreatingPageCommand { get; private set; }
+        public DelegateCommand<object> DeleteProjectCommand { get; private set; }
+        public DelegateCommand<object> AddUsersToProjectCommand { get; private set; }
 
         #endregion
 
@@ -215,9 +223,6 @@ namespace TaskManager.DesktopClient.ViewModels
             _projectsRequestsService = new ProjectsRequestService();
             _token = token;
             OnStartup(_token);
-
-            
-            
         }
 
         public ProjectsPageViewModel(AuthToken token, Page selectedPage)
@@ -267,7 +272,9 @@ namespace TaskManager.DesktopClient.ViewModels
             CreateNewProjectCommand = new DelegateCommand<object>(CreateNewProject);
             OpenProjectsPageCommand = new DelegateCommand(OpenProjectsPage);
             AbortCreatingPageCommand = new DelegateCommand(AbortCreatingPage);
-            OpenEditProjectPageCommand = new DelegateCommand<object>(OpenEditProjectPage);
+            CreateOrEditProjectCommand = new DelegateCommand<object>(CreateOrUpdateProject);
+            DeleteProjectCommand = new DelegateCommand<object>(DeleteProject);
+            AddUsersToProjectCommand = new DelegateCommand<object>(AddUsersToProject);
 
             CurrentUser = await _usersRequestService.GetAsync(_token);
 
@@ -286,6 +293,10 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region Methods 
 
+        private void AddUsersToProject(object parameter)
+        {
+            MessageBox.Show("ToDo: Add Users To Project");
+        }
         private void AbortCreatingPage()
         {
             _mainWindowViewModel.OpenPage(ProjectPage, Resources.TextData.UserProjectsButtonName, this);
@@ -293,6 +304,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
         private async void OpenNewProjectPage()
         {
+            PtojectActionType = ClientActions.Create;
             CreateUpdateprojectPage = new Views.Pages.CreateProjectPage();
             UsersInfoCollection = new ObservableCollection<UserInfo>();
             UsersInfoCollection.Clear();
@@ -306,9 +318,50 @@ namespace TaskManager.DesktopClient.ViewModels
             _mainWindowViewModel.OpenPage(CreateUpdateprojectPage, Resources.TextData.CreateNewProjectString, this);
         }
 
+        private async void CreateOrUpdateProject(object parameter)
+        {
+            if (PtojectActionType == ClientActions.Create)
+            {
+                OpenNewProjectPage();
+            }
+            if (PtojectActionType == ClientActions.Update)
+            {
+                OpenEditProjectPage(parameter);
+            }
+        }
+
+        private async void DeleteProject(object parameter)
+        {
+            if (IsUserAdminOrProjectAdmin)
+            {
+                var project = parameter as ClientModel<ProjectDto>;
+                var result = MessageBox.Show("Удалить проект?", "Delete Project", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    var deletingResult = await _projectsRequestsService.DeleteAsync(_token, project.Model.Id);
+
+                    if (deletingResult)
+                    {
+                        MessageBox.Show("Проект удалён");
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Error: {deletingResult}");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Нет прав на удаление");
+            }
+        }
+
         private async void OpenEditProjectPage(object parameter)
         {
+            PtojectActionType = ClientActions.Update;
             CreateUpdateprojectPage = new Views.Pages.CreateProjectPage();
+            SelectedUser = new UserInfo(await _usersRequestService.GetAsync(_token, Guid.Parse(SelectedProject.Model.AdminId.ToString())));
 
             SelectedProject = parameter as ClientModel<ProjectDto>;
             UsersInfoCollection = new ObservableCollection<UserInfo>();
@@ -343,7 +396,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
                 newProjectDto.ProjectStatus = DefineProjectStatus(status);
 
-                newProjectDto.AdminId = SelectedUserToBeAdmin == null ? CurrentUser.Id : SelectedUserToBeAdmin.Id;
+                newProjectDto.AdminId = SelectedUser == null ? CurrentUser.Id : SelectedUser.Id;
 
                 var result = await _projectsRequestsService.CreateAsync(newProjectDto, _token);
 

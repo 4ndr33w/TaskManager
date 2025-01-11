@@ -6,6 +6,8 @@
       xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Pages"
       xmlns:importImage="clr-namespace:TaskManager.DesktopClient.Resources.Commands.Common"
       xmlns:taskManagerEnums="clr-namespace:TaskManager.Models.Enums;assembly=TaskManager.Models"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:conv="clr-namespace:TaskManager.DesktopClient.ViewModels"
       mc:Ignorable="d" 
       HorizontalAlignment="Stretch"
       Margin="10,0,10,0"
@@ -62,10 +64,11 @@
                                 BorderBrush="White" 
                                 BorderThickness="1">
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding SelectedUserToBeAdmin.Image}" 
+                                <Image Source="{Binding SelectedUser.Image}"
+                                       x:Name="ProjectAdminImage"
                                        Height="25" Margin="10,0,10,0"/>
-                                <TextBlock x:Name="ProjectAdminTextBox"
-                                           Text="{Binding SelectedUserToBeAdmin, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" 
+                                <TextBlock x:Name="ProjectAdminTextBlock"
+                                           Text="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}" 
                                            Style="{StaticResource CommonTextBlockStyle}" 
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Stretch"/>
@@ -110,9 +113,6 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
-                        <Image Grid.Row="0" 
-                               Grid.Column="0" 
-                               Source="{Binding SelectedProject.Image}"/>
                         <Button Grid.Row="1" 
                                 Grid.Column="1" 
                                 HorizontalAlignment="Stretch"
@@ -120,7 +120,7 @@
                                 Command="{StaticResource GetPictureOpenFileDialogCommand}" 
                                 CommandParameter="{Binding ElementName=createProjectPage}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding SelectedProject.Image}" 
+                                <Image Source="{Binding Picture, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
                                        Height="30" 
                                        Margin="0,0,10,0"/>
                                 <TextBlock Text="Select Picture" 
@@ -178,8 +178,9 @@
                   MinWidth="250" 
                   HorizontalAlignment="Stretch">
                 
-                <StackPanel Margin="5">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Margin="5,5,5,5">
+                    <TextBlock Style="{StaticResource TextBlockHeader}" Text="Select Project Admin"/>
+                    <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Border BorderBrush="White" BorderThickness="1" Margin="0,0,1,0">
                             <TextBlock Grid.Row="2" 
                                        Padding="15,0,15,0"
@@ -222,9 +223,14 @@
                     </StackPanel>
                     
                     <CheckBox x:Name="userListCheckBox" 
-                              Style="{StaticResource ToggleStyleCheckBox}" 
                               HorizontalAlignment="Center">
-                    </CheckBox>
+                        <CheckBox.Style>
+                            <Style TargetType="CheckBox" BasedOn="{StaticResource ToggleStyleCheckBox}">
+                                <Style.Triggers>
+                                </Style.Triggers>
+                            </Style>
+                        </CheckBox.Style>
+                    </CheckBox>-->
                     
                     <TextBox Style="{StaticResource CommonTextBoxStyle}" 
                              Text="Search..." 
@@ -242,18 +248,24 @@
                                  ItemsSource="{Binding UsersInfoCollection}" 
                                  Background="Transparent" 
                                  Foreground="White"
-                                 SelectedItem="{Binding SelectedUserToBeAdmin, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                 SelectedItem="{Binding SelectedUser, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" 
-                                                    HorizontalAlignment="Stretch">
-                                            <Image Source="{Binding Image}" 
-                                                   Margin="5,0,5,0" 
-                                                   Height="15"/>
-                                            <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
-                                                       Margin="5,0,5,0" Text="{Binding}"/>
-                                        </StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding Image}" 
+                                               Margin="5,0,5,0"
+                                               Width="30"
+                                               Grid.Column="0"/>
+                                        <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
+                                                   Margin="5,0,5,0" Text="{Binding}"
+                                                   HorizontalAlignment="Stretch"
+                                                   Grid.Column="1"/>
+                                    </Grid>
 
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

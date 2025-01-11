@@ -66,29 +66,28 @@
     </Style>
 
 
-
     <SolidColorBrush x:Key="Button.Static.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="Button.Static.Foreground" Color="White"/>
     <SolidColorBrush x:Key="Button.Static.Border" Color="White"/>
     
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="DarkGray"/>
     <SolidColorBrush x:Key="Button.MouseOver.Border" Color="White"/>
     <SolidColorBrush x:Key="Button.MouseOver.Foreground" Color="White"/>
     
     <SolidColorBrush x:Key="Button.Pressed.Background" Color="DimGray"/>
-    <SolidColorBrush x:Key="Button.Pressed.Foreground" Color="White"/>
-    <SolidColorBrush x:Key="Button.Pressed.Border" Color="Gray"/>
+    <SolidColorBrush x:Key="Button.Pressed.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="Button.Pressed.Border" Color="Black"/>
     
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="DimGray"/>
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="Gray"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="Black"/>
 
+   
+
     <Style x:Key="CommonButtonStyle"
            TargetType="Button">
         
-        
-        
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
+        <!--<Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>-->
         <Setter Property="Background" Value="{DynamicResource Button.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Button.Static.Border}"/>
         <Setter Property="Foreground" Value="White"/>
@@ -128,6 +127,25 @@
 
 
     </Style>
+
+    <Style x:Key="ProjectPajeEditButtonsStyle" 
+        TargetType="{x:Type Button}"
+        BasedOn="{StaticResource CommonButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="LightGray"/>
+                            <Setter Property="BorderBrush" Value="Blue"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 
     <Style x:Key="CommonMenuStyle"
            TargetType="Menu">

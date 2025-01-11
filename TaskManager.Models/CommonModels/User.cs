@@ -63,11 +63,15 @@ namespace TaskManager.Models
 
         public ShortInfoModels.UserInfo ToInfoModel()
         {
+
             return new ShortInfoModels.UserInfo
             {
                 Id = this.Id,
                 Name = this.Name,
                 Image = this.Image,
+                Description = this.Description,
+                Created = this.Created,
+                Updated = this.Updated,
 
                 LastName = this.LastName,
                 Email = this.Email,

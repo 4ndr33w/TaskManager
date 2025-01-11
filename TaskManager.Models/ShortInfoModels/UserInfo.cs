@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using TaskManager.Models.Abstractions;
+using TaskManager.Models.Dtos;
 using TaskManager.Models.Enums;
 
 namespace TaskManager.Models.ShortInfoModels
@@ -20,6 +21,18 @@ namespace TaskManager.Models.ShortInfoModels
         public override string ToString()
         {
             return $"{Name} {LastName}";
+        }
+        public UserInfo() : base()
+        {
+
+        }
+        public UserInfo(UserDto userDto) : base(userDto)
+        {
+            LastName = userDto.LastName;
+            Email = userDto.Email;
+            Phone = userDto.Phone;
+            LastLoginDate = userDto.LastLoginDate;
+            UserStatus = userDto.UserStatus;
         }
     }
 }

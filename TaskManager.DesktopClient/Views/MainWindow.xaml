@@ -95,7 +95,6 @@
                                 </StackPanel.Style>
                                 <ItemsControl ItemsSource="{Binding ProfileButtons}">
 
-
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Button Style="{StaticResource CommonButtonStyle}" 
