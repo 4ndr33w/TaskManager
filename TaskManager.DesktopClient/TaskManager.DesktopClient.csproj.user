@@ -17,6 +17,9 @@
     <Compile Update="Views\LoginWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Pages\CreateProjectPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Pages\EditUserPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -29,11 +32,20 @@
     <Compile Update="Views\Pages\UserInfoPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Windows\CreateUpdateProjectWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Windows\LoadingImageWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Windows\RegistrationWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Resources\Styles\ComboBoxGradientStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\MainStyleDictionaty.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -52,6 +64,9 @@
     <Page Update="Views\LoginWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Pages\CreateProjectPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Pages\EditUserPage.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -62,6 +77,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Pages\UserInfoPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Windows\CreateUpdateProjectWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Windows\LoadingImageWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Windows\RegistrationWindow.xaml">

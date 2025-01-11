@@ -61,6 +61,22 @@ namespace TaskManager.Models
             };
         }
 
+        public ShortInfoModels.UserInfo ToInfoModel()
+        {
+            return new ShortInfoModels.UserInfo
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Image = this.Image,
+
+                LastName = this.LastName,
+                Email = this.Email,
+                Phone = this.Phone,
+                LastLoginDate = this.LastLoginDate,
+                UserStatus = this.UserStatus,
+            };
+        }
+
         public override string ToString()
         {
             return $"{Name} {LastName}";

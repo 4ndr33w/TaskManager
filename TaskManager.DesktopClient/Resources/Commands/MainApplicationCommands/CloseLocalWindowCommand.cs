@@ -13,7 +13,11 @@ namespace TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands
 
         public override void Execute(object parameter)
         {
-            (parameter as Window).Hide();
+            if(parameter != null)
+            {
+                (parameter as Window).Hide();
+            }
+            
         }
     }
 }

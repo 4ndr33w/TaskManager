@@ -7,6 +7,7 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:baseCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands"
         xmlns:loginWindowCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.LoginWindowCommands"
+        xmlns:StaticTextsResource="clr-namespace:TaskManager.DesktopClient.Resources"
         prism:ViewModelLocator.AutoWireViewModel="True"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -22,8 +23,9 @@
         <loginWindowCommands:LoginUserCommand x:Key="LoginUserCommand"/>
         <loginWindowCommands:OpenRegistrationWindowCommand x:Key="OpenRegistrationWindowCommand"/>
         <loginWindowCommands:LoginCachedOnlineUserCommand x:Key="LoginCachedOnlineUserCommand"/>
+        <StaticTextsResource:TextData x:Key="textResources"/>
     </Window.Resources>
-    <Grid>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -77,38 +79,50 @@
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding CachedUser}" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Setter Property="Height" Value="0"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <Button Style="{StaticResource CommonButtonStyle}" 
-                    Margin="5" 
-                    Height="{Binding CachedUserButtonHeigh}" 
+            <Button 
+                    Margin="5"
+                    Height="60"
                     Width="390"
-                    Visibility="{Binding CachedUserLoginButtonVisibility}"
                     Command="{StaticResource LoginCachedOnlineUserCommand}"
-                    CommandParameter="{Binding ElementName=loginWindow}"
-                    >
-                <DockPanel LastChildFill="True">
-                    <Label DockPanel.Dock="Left" Margin="1" Content="Last user: " Style="{StaticResource CommonLabelStyle}"/>
-                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                        <Image x:Name="mainImage" Width="80" Height="80" Source="{Binding BitmappedImage}" Margin="10,0,20,0"/>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CurrentUser.Name}"/>
-                                <Label Content="" Style="{StaticResource CommonLabelStyle}"/>
-                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CurrentUser.LastName}"/>
-                            </StackPanel>
+                    CommandParameter="{Binding ElementName=loginWindow}">
+                <!--Style="{StaticResource CommonButtonStyle}"-->
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource CommonButtonStyle}">
+                        <!--<Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentUser}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Setter Property="Height" Value="0"/>
+                            </DataTrigger>
+                        </Style.Triggers>-->
+                    </Style>
+                </Button.Style>
+                <!--Visibility="{Binding CachedUserLoginButtonVisibility}"
+                Height="{Binding CachedUserButtonHeigh}"-->
+                    <DockPanel LastChildFill="True">
+                        <Label DockPanel.Dock="Left" Margin="1" Content="Last user: " Style="{StaticResource CommonLabelStyle}"/>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                        <Image x:Name="mainImage" Width="80" Height="80" Source="{Binding CachedUser.Image}" Margin="10,0,20,0"/>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Text="{Binding CurrentUser.Email}"/>
+                                <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CachedUser.Name}"/>
+                                    <Label Content="" Style="{StaticResource CommonLabelStyle}"/>
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Padding="0,4,0,0" Text="{Binding CachedUser.LastName}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Text="{Binding CachedUser.Email}"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                    <Label Content=" " Style="{StaticResource CommonLabelStyle}"/>
-                </DockPanel>
+                        <Label Content=" " Style="{StaticResource CommonLabelStyle}"/>
+                    </DockPanel>
+                
             </Button>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Local user" 

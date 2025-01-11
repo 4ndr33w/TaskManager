@@ -5,6 +5,8 @@ using TaskManager.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using TaskManager.Api.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using TaskManager.Models.ShortInfoModels;
 
 namespace TaskManager.Api.Services
 {
@@ -168,6 +170,20 @@ namespace TaskManager.Api.Services
             {
                 return null;
             }
+        }
+        public async Task<IEnumerable<UserInfo>> GetAllUsersInfoAsync()
+        {
+            var usersCollection = new List<UserInfo>();
+            try
+            {
+                var users = await _npgDbContext.Users.ToListAsync();
+                usersCollection = await _npgDbContext.Users.Select(u => u.ToInfoModel()).ToListAsync();
+                return usersCollection;
+            }
+            catch (Exception)
+            {
+            }
+            return usersCollection;
         }
 
         public async Task<bool> UpdateAsync(UserDto dataToUpdate)

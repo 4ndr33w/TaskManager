@@ -88,6 +88,18 @@ namespace TaskManager.Api.Controllers
             return NotFound();
         }
 
+        [HttpGet("info/all")]
+        public async Task<IActionResult> GetAllUsersInfo()
+        {
+            var login = HttpContext.User.Identity.Name;
+            if (login != null)
+            {
+                var usersCollection = await _usersService.GetAllUsersInfoAsync();
+                return Ok(usersCollection);
+            }
+            return Unauthorized();
+        }
+
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUser(Guid userId)
         {

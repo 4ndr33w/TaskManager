@@ -51,14 +51,18 @@ namespace TaskManager.DesktopClient.Services.ViewServices
 
         #endregion
 
-        public async Task LoginCachedUser(object parameter)
+        public async Task<bool> LoginCachedUser(object parameter)
         {
+            bool result = true;
             var cachedUser = await LoadUserCache(_onlineUserCacheFileName);
-            await LoginMethod(parameter, cachedUser);
+            result = await LoginMethod(parameter, cachedUser);
+            return result;
         }
 
-        public async Task LoginMethod(object parameter, UserDto cachedUser = null)
+        public async Task<bool> LoginMethod(object parameter, UserDto cachedUser = null)
         {
+            bool loginResult = false;
+            MessageBoxResult result = MessageBoxResult.Yes;
             _loginWindow = parameter as LoginWindow;
             if(_loginWindow != null)
             {
@@ -68,14 +72,15 @@ namespace TaskManager.DesktopClient.Services.ViewServices
 
                 if (_token == null)
                 {
-                    var result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
+                    result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
 
                     if (result == MessageBoxResult.Yes)
                     {
                         _onlineUser = null;
                         _localUser = await LoadOrCreateLocalUser();
 
-                        OpenMainWindow(_loginWindow, _localUser, null, null);
+                        loginResult = await OpenMainWindow(_loginWindow, _localUser, null, null);
+                        return loginResult;
                     }
                 }
                 if (_token != null)
@@ -84,37 +89,62 @@ namespace TaskManager.DesktopClient.Services.ViewServices
 
                     if (onlineUser == null)
                     {
-                        var result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
+                        result = MessageBox.Show("Пользователь не найден. Продолжить работу локально?", "Local Work", MessageBoxButton.YesNo);
                         if (result == MessageBoxResult.Yes)
                         {
                             _loginWindow.Hide();
-                            OpenMainWindow(_loginWindow, _localUser, null, null);
+                            loginResult = await OpenMainWindow(_loginWindow, _localUser, null, null);
+                            return loginResult;
                         }
-                    }
 
-                    cachedUser = cachedUser == null? await LoadUserCache(_onlineUserCacheFileName) : cachedUser;
-
-                    if (onlineUser.Email != cachedUser.Email)
-                    {
-                        isNewUser = true;
-                    }
-                    if (isNewUser)
-                    {
-                        var saveUserMessage = MessageBox.Show("Сохранить логин и пароль?", "SaveData", MessageBoxButton.YesNo);
-
-                        if (saveUserMessage == MessageBoxResult.Yes)
+                        if (result == MessageBoxResult.No)
                         {
-                            var result = await SaveUserCache(onlineUser, _onlineUserCacheFileName);
+                            return true;
+                        }
+                        else
+                        {
+                            return true;
                         }
                     }
-                    _onlineUser = onlineUser;
-                    OpenMainWindow(_loginWindow, _localUser, _onlineUser, _token);
+
+                    else
+                    {
+                        cachedUser = cachedUser == null ? await LoadUserCache(_onlineUserCacheFileName) : cachedUser;
+
+                        if (onlineUser != null && onlineUser.Email != cachedUser.Email)
+                        {
+                            isNewUser = true;
+                        }
+                        if (isNewUser)
+                        {
+                            var saveUserMessage = MessageBox.Show("Сохранить логин и пароль?", "SaveData", MessageBoxButton.YesNo);
+
+                            if (saveUserMessage == MessageBoxResult.Yes)
+                            {
+                                var saveCacheResult = await SaveUserCache(onlineUser, _onlineUserCacheFileName);
+
+                                _onlineUser = onlineUser;
+                                loginResult = await OpenMainWindow(_loginWindow, _localUser, _onlineUser, _token);
+                            }
+                            if (saveUserMessage == MessageBoxResult.No)
+                            {
+                                _onlineUser = onlineUser;
+                                loginResult = await OpenMainWindow(_loginWindow, _localUser, _onlineUser, _token);
+                            }
+                        }
+                        _onlineUser = onlineUser;
+                        loginResult = await OpenMainWindow(_loginWindow, _localUser, _onlineUser, _token);
+
+                        return loginResult;
+                    }
                 }
             }
+            return loginResult;
         }
 
-        private async void OpenMainWindow(Window window, UserDto localUser, UserDto onlineUser = null, AuthToken token = null)
+        private async Task<bool> OpenMainWindow(Window window, UserDto localUser, UserDto onlineUser = null, AuthToken token = null)
         {
+            //bool result = false;
             if (localUser == null)
             {
                 await CreateLocalUser();
@@ -126,12 +156,13 @@ namespace TaskManager.DesktopClient.Services.ViewServices
             _localUser = await LoadOrCreateLocalUser();
 
             window.Hide();
-
+            
             var mainWindow = new MainWindow();
             var mainWindowDataContext = new MainWindowViewModel(_token, _onlineUser, _localUser, mainWindow);
 
             mainWindow.DataContext = mainWindowDataContext;
             mainWindow.ShowDialog();
+            return true;
         }
 
         private async Task<UserDto> GetUser(AuthToken token)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 
 using TaskManager.DesktopClient.Views;
@@ -28,9 +29,29 @@ namespace TaskManager.DesktopClient.Resources.Commands.LoginWindowCommands
 
         public override async void Execute(object parameter)
         {
+            bool result = false;
             var loginService = new Services.ViewServices.LoginUserService();
+            Views.Windows.LoadingImageWindow loadingInage = new Views.Windows.LoadingImageWindow();
 
-            await loginService.LoginMethod(parameter);
+            try
+            {
+                result = await loginService.LoginMethod(parameter);
+                loadingInage.ShowDialog();
+
+                if (result)
+                {
+                    loadingInage.Close();
+                    loadingInage.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch (Exception)
+            {
+                loadingInage.Close();
+                loadingInage.Visibility = Visibility.Collapsed;
+            }
+
+            loadingInage.Close();
+            loadingInage.Visibility = Visibility.Collapsed;
         }
     }
 }

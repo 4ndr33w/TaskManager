@@ -87,6 +87,8 @@ namespace TaskManager.Api.Services
             List<ProjectDto> projectDtoCollection = new List<ProjectDto> ();
             User user = await _npgDbContext.Users
                 .Include(p => p.Projects)
+                .Include(p => p.Desks)
+                .Include(p => p.Tasks)
                 .FirstOrDefaultAsync(u => u.Id == userDto.Id);
 
             if (user.Projects != null)
@@ -94,10 +96,10 @@ namespace TaskManager.Api.Services
                 projectDtoCollection.AddRange(user.Projects.Select(p => p.ToDto()).ToList());
             }
 
-            var projectWhereUserIsAdmin = await _npgDbContext.Projects.FirstOrDefaultAsync(p => p.AdminId == userDto.Id);
+            var projectWhereUserIsAdmin = await _npgDbContext.Projects.Where(p => p.AdminId == userDto.Id).Select(p => p.ToDto()).ToListAsync();
             if (projectWhereUserIsAdmin != null)
             {
-                projectDtoCollection.Add(projectWhereUserIsAdmin.ToDto());
+                projectDtoCollection.AddRange(projectWhereUserIsAdmin);
             }var userProjects = new List<ProjectDto> ();
 
             foreach (var projectDto in projectDtoCollection)

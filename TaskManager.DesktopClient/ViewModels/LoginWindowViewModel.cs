@@ -39,39 +39,6 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region FIELDS
 
-        private string _cachedUserButtonHeight = "0";
-        private string _cachedUserLoginButtonVisibility = "Collapsed";
-
-        public string CachedUserButtonHeigh
-        {
-            get => _cachedUserButtonHeight;
-            set
-            {
-                _cachedUserButtonHeight = value;
-                RaisePropertyChanged(nameof(CachedUserButtonHeigh));
-            }
-        }
-        public string CachedUserLoginButtonVisibility
-        {
-            get => _cachedUserLoginButtonVisibility;
-            set
-            {
-                _cachedUserLoginButtonVisibility = value;
-                RaisePropertyChanged(nameof(CachedUserLoginButtonVisibility));
-            }
-        }
-
-        private BitmapSource _bitmappedImage;
-        public BitmapSource BitmappedImage
-        {
-            get => _bitmappedImage;
-            set
-            {
-                _bitmappedImage = value;
-                RaisePropertyChanged($"{nameof(BitmappedImage)}");
-            }
-        }
-
         public string Login { get; set; }
         public string Password { get; private set; }
 
@@ -80,7 +47,26 @@ namespace TaskManager.DesktopClient.ViewModels
         private readonly string _cachedUserFilePath = StaticResources.CachedUserFilePath;
         private readonly string _environmentPath = Environment.SpecialFolder.MyDocuments.ToString();
 
+
+        #region Localization Texts
+
+        public readonly string ExitButtonString = TextData.ExitButtonString;
+        public readonly string RegistrationButtonString = TextData.RegistrationButtonString;
+        public readonly string LocalUserButtonString = TextData.LocalUserButtonString;
+        public readonly string LastUserButtonString = TextData.LastUserButtonString;
+        public string EnterLoginString = Resources.TextData.EnterLoginString;
+        public readonly string EnterPasswordString = TextData.EnterPasswordString;
+
+        public readonly string OkButtonString = TextData.OkButtonString;
+        public readonly string CancelButtonString = TextData.CancelButtonString;
+
+        #endregion
+
+
+        #endregion
+
         #region Token 
+
         private AuthToken _token;
         public AuthToken Token
         {
@@ -94,6 +80,7 @@ namespace TaskManager.DesktopClient.ViewModels
         #endregion
 
         #region LocalUser 
+
         private UserDto _localUser;
         public UserDto LocalUser
         {
@@ -106,7 +93,8 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         #endregion
 
-        #region _netUser 
+        #region NetUser 
+
         private UserDto _currentUser;
         public UserDto CurrentUser
         {
@@ -119,11 +107,21 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         #endregion
 
+        #region CachedUser 
+
+        private UserDto _cachedUser;
+        public UserDto CachedUser
+        {
+            get => _cachedUser;
+            set
+            {
+                _cachedUser = value;
+                RaisePropertyChanged(nameof(CachedUser));
+            }
+        }
         #endregion
 
-        #region COMMANDS
-
-        #endregion
+        
 
         #region METHODS
 
@@ -131,16 +129,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
         private async void OnStartup()
         {
-            var cachedUser = await _loginUserService.LoadUserCache(_cachedUserFileName);
-
-            CurrentUser = cachedUser;
-            if (cachedUser.Password != string.Empty)
-            {
-                CachedUserButtonHeigh = "60";
-                CachedUserLoginButtonVisibility = "Visible";
-
-                BitmappedImage = _imageLoadSaveService.GetBitmapSource(cachedUser.Image);
-            }
+            CachedUser = await _loginUserService.LoadUserCache(_cachedUserFileName);
         }
 
         #endregion

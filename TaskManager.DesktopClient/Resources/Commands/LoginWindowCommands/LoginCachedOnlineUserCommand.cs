@@ -14,9 +14,19 @@ namespace TaskManager.DesktopClient.Resources.Commands.LoginWindowCommands
 
         public async override void Execute(object parameter)
         {
+            bool result = false;
             var loginService = new Services.ViewServices.LoginUserService();
+            Views.Windows.LoadingImageWindow loadingInage = new Views.Windows.LoadingImageWindow();
 
-            await loginService.LoginCachedUser(parameter);
+            result = await loginService.LoginCachedUser(parameter);
+
+            loadingInage.ShowDialog();
+
+            if (result)
+            {
+                loadingInage.Close();
+                loadingInage = null;
+            }
         }
     }
 }

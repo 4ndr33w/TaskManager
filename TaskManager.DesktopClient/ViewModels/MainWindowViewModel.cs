@@ -325,7 +325,7 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             var page = new ProjectsPage();
             page.projectUsersListBox.Items.Clear();
-            OpenPage(page, _userProjectsButtonName, new ProjectsPageViewModel(Token));
+            OpenPage(page, _userProjectsButtonName, new ProjectsPageViewModel(Token, page, this));
         }
         private void OpenDesksPage()
         {

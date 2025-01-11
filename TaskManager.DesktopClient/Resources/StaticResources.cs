@@ -23,5 +23,6 @@ namespace TaskManager.DesktopClient.Resources
         public static string CachedUserFilePath = StaticResources._settings.SavedLoginLocalPath;
 
         public static string EncodingType = StaticResources._settings.EncodingType;
+        public static string UsersInfoUri = StaticResources._settings.UsersInfoUri;
     }
 }

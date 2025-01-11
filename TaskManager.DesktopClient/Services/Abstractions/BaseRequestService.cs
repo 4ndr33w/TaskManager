@@ -211,26 +211,33 @@ namespace TaskManager.DesktopClient.Services.Abstractions
         }
         public async Task<T> GetAsync(AuthToken token, Guid id = default)
         {
-            string url = GetApiUrlString();
-            if (id != default)
+            try
             {
-                url += id.ToString();
+                string url = GetApiUrlString();
+                if (id != default)
+                {
+                    url += id.ToString();
+                }
+                Models.Content.DataContent httpContent = new Models.Content.DataContent
+                {
+                    HttpMethod = Models.Enums.HttpMethod.GET,
+                    AuthorizationType = AuthorizationType.Bearer,
+                    Url = url,
+                    Token = token.accessToken,
+                    Login = token.userName
+                };
+
+                JsonSerializerOptions options = new JsonSerializerOptions();
+                options.PropertyNameCaseInsensitive = true;
+                var result = await GetDataByUrl(httpContent);
+
+                var entity = JsonSerializer.Deserialize<T>(result, options);
+                return entity;
             }
-            Models.Content.DataContent httpContent = new Models.Content.DataContent
+            catch (Exception)
             {
-                HttpMethod = Models.Enums.HttpMethod.GET,
-                AuthorizationType = AuthorizationType.Bearer,
-                Url = url,
-                Token = token.accessToken,
-                Login = token.userName
-            };
-
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            options.PropertyNameCaseInsensitive = true;
-            var result = await GetDataByUrl(httpContent);
-
-            var entity = JsonSerializer.Deserialize<T>(result, options);
-            return entity;
+                return null;
+            }
         }
         public async Task<bool> UpdateAsync(AuthToken token, T Entity, Guid id = default)
         {

@@ -13,9 +13,9 @@ namespace TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands
 
         public override void Execute(object parameter)
         {
-            //Environment.Exit(0);
-            Application.Current.MainWindow.Close();
-            Application.Current.Shutdown();
+            Environment.Exit(0);
+            //Application.Current.MainWindow.Close();
+            //Application.Current.Shutdown();
         }
     }
 }

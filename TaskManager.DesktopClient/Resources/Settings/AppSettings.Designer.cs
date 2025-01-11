@@ -142,5 +142,17 @@ namespace TaskManager.DesktopClient.Resources.Settings {
                 this["LocalUserFileName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("info/all")]
+        public string UsersInfoUri {
+            get {
+                return ((string)(this["UsersInfoUri"]));
+            }
+            set {
+                this["UsersInfoUri"] = value;
+            }
+        }
     }
 }

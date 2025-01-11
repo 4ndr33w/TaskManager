@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -81,6 +82,20 @@ namespace TaskManager.DesktopClient.Services.ViewServices
 
             }
             return null;
+        }
+
+        public Bitmap ConvertBitmapFromBitmapImage(BitmapImage bitmapImage)
+        {
+            using (MemoryStream mStream = new MemoryStream())
+            {
+                BitmapEncoder encoder = new GifBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+                encoder.Save(mStream);
+
+                System.Drawing.Bitmap bitmap = new Bitmap(mStream);
+
+                return new Bitmap(bitmap);
+            }
         }
     }
 }

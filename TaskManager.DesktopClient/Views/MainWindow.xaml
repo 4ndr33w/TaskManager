@@ -103,7 +103,9 @@
 
 
                                         <navButtonsUserControl:NavButtonComponent Margin="3,1,3,1" DataContext="{DynamicResource mainWindowDataContext.NavButtons}">
-                                            <!--<navButtonsUserControl:NavButtonComponent.Style>
+                                        </navButtonsUserControl:NavButtonComponent>
+
+                                        <!--<navButtonsUserControl:NavButtonComponent.Style>
                                                 <Style>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding CurrentUser.UserStatus}" Value="{x:Reference Name=Admin}">
@@ -112,11 +114,8 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </navButtonsUserControl:NavButtonComponent.Style>-->
-                                            
-                                        </navButtonsUserControl:NavButtonComponent>
 
-
-                                        </DataTemplate>
+                                    </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </StackPanel>
@@ -153,7 +152,7 @@
                     </StackPanel>
 
             </StackPanel>
-            <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
@@ -165,7 +164,7 @@
                     <ColumnDefinition Width="10"/>
                 </Grid.ColumnDefinitions>
                 <!--<Border Grid.Row="0" Grid.Column="1" Margin="5" BorderThickness="1,0,0,2" Style="{StaticResource CommonBorderStyle}" HorizontalAlignment="Left"/>-->
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPageName}" Style="{StaticResource TextBlockHeader}" HorizontalAlignment="Stretch"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPageName}" Style="{StaticResource TextBlockHeader}" HorizontalAlignment="Center"/>
                 <Frame Grid.Row="1" Grid.Column="1" NavigationUIVisibility="Hidden" Content="{Binding SelectedPage}" IsEnabled="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                 <!--NavigationUIVisibility="Hidden"-->
                 <!--<Border Grid.Row="1" Grid.Column="1" Margin="-50,0,0,0" BorderThickness="1,1,0,0" Style="{StaticResource CommonBorderStyle}" HorizontalAlignment="Stretch"/>-->

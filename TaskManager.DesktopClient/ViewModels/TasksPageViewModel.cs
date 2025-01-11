@@ -50,21 +50,6 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             var tasksCollection = await _tasksRequestService.GetAllAsync(token);
 
-            //foreach (var task in tasksCollection)
-            //{
-            //    var taskCreator = await _usersRequestService.GetAsync(token, task.CreatorId);
-            //    task.Creator = new User(taskCreator);
-            //    if (task.CreatorId != task.ExecutorId)
-            //    {
-            //        var taskExecutor = await _usersRequestService.GetAsync(token, task.ExecutorId);
-            //        task.Executor = new User(taskExecutor);
-            //    }
-            //    else
-            //    {
-            //        task.Executor = task.Creator;
-            //    }
-                
-            //}
 
             var result = new ObservableCollection<ClientSideTaskModel>();
 
@@ -75,18 +60,5 @@ namespace TaskManager.DesktopClient.ViewModels
 
             return result;
         }
-        
-        //public AuthToken Token
-        //{
-        //    get => _token;
-        //    set
-        //    {
-        //        _token = value;
-        //        RaisePropertyChanged(nameof(Token));
-        //    }
-        //}
-
-       
-
     }
 }
