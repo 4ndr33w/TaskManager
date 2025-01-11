@@ -7,14 +7,11 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Visibility="Visible" Height="100" Width="100" Loaded="Window_Loaded">
-    <Grid>
-        <!--<MediaElement Height="100"
-                      Width="100"
-                      LoadedBehavior="Play"
-                      Visibility="Visible"
-                      Source="/Views/Windows/g0R5.gif"/>-->
-        <Image Source="/Resources/Images/Gothic.jpg" x:Name="loadingImageForm"/>
-    </Grid>
+        Visibility="Visible" 
+        Height="100" 
+        Width="100" 
+        Loaded="Window_Loaded">
+    
+        <Image Source="/Resources/Images/load.gif" x:Name="loadingImageForm"/>
     
 </Window>

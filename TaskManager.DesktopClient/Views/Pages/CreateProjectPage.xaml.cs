@@ -22,10 +22,6 @@ namespace TaskManager.DesktopClient.Views.Pages
     {
         public CreateProjectPage()
         {
-            //UsersListBox = new ListBox();//.ItemsSource = new List<TaskManager.Models.ShortInfoModels.UserInfo>();
-            //UsersListBox.Items.Clear();
-
-            //ProjectStatusComboBox.Items.Clear();
 
             InitializeComponent();
         }

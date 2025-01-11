@@ -20,7 +20,7 @@ namespace TaskManager.DesktopClient.Resources.Commands.Pages.ProjectPageCommands
             BaseViewService _baseViewService = new BaseViewService();
 
             var projectModel =  parameter as Models.ClientModels.ClientModel<ProjectDto>;
-            var editProjectWindow = new CreateUpdateProjectWindow(projectModel);
+            //var editProjectWindow = new CreateUpdateProjectWindow(projectModel);
 
             //_baseViewService.
             

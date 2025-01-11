@@ -24,23 +24,23 @@ namespace TaskManager.DesktopClient.Resources.Commands.MainWindowCommands
             ImageLoadSaveService _imageLoadSaveService = new ImageLoadSaveService();
             ProjectsRequestService _projectsRequestService = new ProjectsRequestService();
 
-            var projectModel = parameter as Models.ClientModels.ClientModel<ProjectDto>;
-            var newProjectDto = new ProjectDto();
-            var window = new CreateUpdateProjectWindow();
+            //var projectModel = parameter as Models.ClientModels.ClientModel<ProjectDto>;
+            //var newProjectDto = new ProjectDto();
+            //var window = new CreateUpdateProjectWindow();
 
-            var dataContext = window.DataContext as ProjectsPageViewModel;
-
-
-            newProjectDto.Name = window.ProjectNameTextBox.Text;
-            newProjectDto.Description = window.ProjectDescriptionTextBox.Text;
-            byte[] picture = await _imageLoadSaveService.SearchImageFile();
-            newProjectDto.Image = picture;
-
-            var status = window.ProjectStatusComboBox.SelectedItem.ToString();
+            //var dataContext = window.DataContext as ProjectsPageViewModel;
 
 
+            //newProjectDto.Name = window.ProjectNameTextBox.Text;
+            //newProjectDto.Description = window.ProjectDescriptionTextBox.Text;
+            //byte[] picture = await _imageLoadSaveService.SearchImageFile();
+            //newProjectDto.Image = picture;
 
-            window.Hide();
+            //var status = window.ProjectStatusComboBox.SelectedItem.ToString();
+
+
+
+            //window.Hide();
 
 
 

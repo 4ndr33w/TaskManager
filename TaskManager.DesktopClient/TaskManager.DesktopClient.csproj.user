@@ -32,9 +32,6 @@
     <Compile Update="Views\Pages\UserInfoPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\CreateUpdateProjectWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\Windows\LoadingImageWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -43,6 +40,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Resources\Styles\CheckBoxToggleStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\ComboBoxGradientStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -77,9 +77,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Pages\UserInfoPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Windows\CreateUpdateProjectWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Windows\LoadingImageWindow.xaml">

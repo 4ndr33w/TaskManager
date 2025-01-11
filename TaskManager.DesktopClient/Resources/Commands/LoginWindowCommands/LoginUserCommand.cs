@@ -8,7 +8,7 @@ namespace TaskManager.DesktopClient.Resources.Commands.LoginWindowCommands
 {
     class LoginUserCommand : Commands.Abstractions.CommandBase
     {
-        public override bool CanExecute(object parameter)
+        public override bool CanExecute(object parameter)// => true;
         {
             var loginWindow = parameter as LoginWindow;
 

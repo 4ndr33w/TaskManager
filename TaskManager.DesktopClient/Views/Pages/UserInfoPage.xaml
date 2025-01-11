@@ -14,13 +14,15 @@
 
             <StackPanel Orientation="Horizontal">
                 
-                <Image Grid.Column="0" x:Name="mainImage" 
+                <Image Grid.Column="0" 
+                       x:Name="mainImage" 
                        Width="200" 
                        Height="200" 
                        Source="{Binding BitmappedImage}">
                 </Image>
 
-                <StackPanel VerticalAlignment="Center" Margin="10,0,0,0">
+                <StackPanel VerticalAlignment="Center" 
+                            Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Email:  " 
                                    Style="{StaticResource CommonTextBlockStyle}"/>
@@ -34,11 +36,21 @@
                         <TextBlock Text="{Binding CurrentUser.UserStatus}" 
                                    Style="{StaticResource CommonTextBlockStyle}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="Hidden">
-                        <Button Content="change email" IsEnabled="False" Style="{StaticResource CommonButtonStyle}" Padding="5,0,5,0" Margin="5"/>
-                        <Button Content="change password" IsEnabled="False" Style="{StaticResource CommonButtonStyle}" Padding="5,0,5,0" Margin="5"/>
+                    <StackPanel Orientation="Horizontal" 
+                                Visibility="Hidden">
+                        <Button Content="change email" 
+                                IsEnabled="False" 
+                                Style="{StaticResource CommonButtonStyle}" 
+                                Padding="5,0,5,0" Margin="5"/>
+                        <Button Content="change password" 
+                                IsEnabled="False" 
+                                Style="{StaticResource CommonButtonStyle}" 
+                                Padding="5,0,5,0" Margin="5"/>
                     </StackPanel>
-                    <Button Content="change image" Visibility="Hidden" IsEnabled="False" Style="{StaticResource CommonButtonStyle}"/>
+                    <Button Content="change image" 
+                            Visibility="Hidden" 
+                            IsEnabled="False" 
+                            Style="{StaticResource CommonButtonStyle}"/>
                 </StackPanel>
             </StackPanel>
 

@@ -11,21 +11,40 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Background="{StaticResource WindowBackground}"
-        Title="MainWindow" Height="650" MinHeight="600" MinWidth="1000" Width="1200">
+        Title="MainWindow" 
+        Height="650" 
+        MinHeight="600" 
+        MinWidth="1000" 
+        Width="1200">
     <Window.Resources>
         <baseCommands:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
         <dataContext:MainWindowViewModel x:Key="mainWindowDataContext"/>
 
     </Window.Resources>
-    <DockPanel Background="{StaticResource WindowBackground}" LastChildFill="True">
-        <DockPanel DockPanel.Dock="Top" LastChildFill="True" Background="Transparent">
-            <DockPanel DockPanel.Dock="Left" Background="Transparent" Block.LineHeight="35">
+    <DockPanel Background="{StaticResource WindowBackground}" 
+               LastChildFill="True">
+        <DockPanel DockPanel.Dock="Top" 
+                   LastChildFill="True" 
+                   Background="Transparent">
+            <DockPanel DockPanel.Dock="Left" 
+                       Background="Transparent" 
+                       Block.LineHeight="35">
                
-                <Menu DockPanel.Dock="Left" Background="Transparent">
-                    <MenuItem Header="File" Style="{StaticResource CommonMenuItemStyle}" Width="45">
-                        <MenuItem Header="Open" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
-                        <MenuItem Header="Add From file..." Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
-                        <MenuItem Header="Save" Style="{StaticResource CommonMenuItemStyle}">
+                <Menu DockPanel.Dock="Left" 
+                      Background="Transparent">
+                    <MenuItem Header="File" 
+                              Style="{StaticResource CommonMenuItemStyle}" 
+                              Width="45">
+                        <MenuItem Header="Open" 
+                                  Style="{StaticResource CommonMenuItemStyle}">
+                            
+                        </MenuItem>
+                        <MenuItem Header="Add From file..." 
+                                  Style="{StaticResource CommonMenuItemStyle}">
+                            
+                        </MenuItem>
+                        <MenuItem Header="Save" 
+                                  Style="{StaticResource CommonMenuItemStyle}">
                             <MenuItem Header="*.txt" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
                             <MenuItem Header="*.xml" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
                             <MenuItem Header="*.json" Style="{StaticResource CommonMenuItemStyle}"></MenuItem>
@@ -51,9 +70,16 @@
                 <ColumnDefinition Width="230"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Width="200" BorderThickness="0,0,1,1" VerticalAlignment="Stretch" Style="{StaticResource CommonBorderStyle}"/>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Stretch">
-                    <StackPanel VerticalAlignment="Stretch" Width="215">
+            <Border Grid.Column="0" 
+                    Width="200" 
+                    BorderThickness="0,0,1,1" 
+                    VerticalAlignment="Stretch" 
+                    Style="{StaticResource CommonBorderStyle}"/>
+            <StackPanel Grid.Column="0" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Stretch">
+                    <StackPanel VerticalAlignment="Stretch" 
+                                Width="215">
                     
                     <Grid HorizontalAlignment="Stretch">
                             <StackPanel>
@@ -72,8 +98,14 @@
 
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Button Style="{StaticResource CommonButtonStyle}" VerticalAlignment="Center" VerticalContentAlignment="Center" Command="{Binding Value}">
-                                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" VerticalAlignment="Center" Text="{Binding Key}"/>
+                                            <Button Style="{StaticResource CommonButtonStyle}" 
+                                                    VerticalAlignment="Center" 
+                                                    VerticalContentAlignment="Center" 
+                                                    Command="{Binding Value}">
+                                                
+                                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
+                                                           VerticalAlignment="Center" 
+                                                           Text="{Binding Key}"/>
                                             </Button>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -95,25 +127,18 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Style>
-                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Text="{Binding CollectiveProjectsLabelString}"/>
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
+                                           Text="{Binding CollectiveProjectsLabelString}"/>
 
-                                <ItemsControl ItemsSource="{Binding OnlineUserNavButtons}" x:Name="onlineNavButonsUserControlPanel">
+                                <ItemsControl ItemsSource="{Binding OnlineUserNavButtons}" 
+                                              x:Name="onlineNavButonsUserControlPanel">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
 
 
-                                        <navButtonsUserControl:NavButtonComponent Margin="3,1,3,1" DataContext="{DynamicResource mainWindowDataContext.NavButtons}">
+                                        <navButtonsUserControl:NavButtonComponent Margin="3,1,3,1" 
+                                                                                  DataContext="{DynamicResource mainWindowDataContext.NavButtons}">
                                         </navButtonsUserControl:NavButtonComponent>
-
-                                        <!--<navButtonsUserControl:NavButtonComponent.Style>
-                                                <Style>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding CurrentUser.UserStatus}" Value="{x:Reference Name=Admin}">
-                                                            <Setter Property="" Value="True"></Setter>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </navButtonsUserControl:NavButtonComponent.Style>-->
 
                                     </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -134,14 +159,14 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Style>
-                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" Text="{Binding CollectiveProjectsLabelString}"/>
-                                <ItemsControl ItemsSource="{Binding LocalUserNavButtons}" x:Name="localNavButonsUserControlPanel">
+                                <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
+                                           Text="{Binding CollectiveProjectsLabelString}"/>
+                                <ItemsControl ItemsSource="{Binding LocalUserNavButtons}" 
+                                              x:Name="localNavButonsUserControlPanel">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
 
-
                                             <navButtonsUserControl:NavButtonComponent Margin="3,1,3,1" DataContext="{DynamicResource mainWindowDataContext.NavButtons}"/>
-
 
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -152,7 +177,9 @@
                     </StackPanel>
 
             </StackPanel>
-            <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid Grid.Column="1" 
+                  HorizontalAlignment="Stretch" 
+                  VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
@@ -163,11 +190,20 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="10"/>
                 </Grid.ColumnDefinitions>
-                <!--<Border Grid.Row="0" Grid.Column="1" Margin="5" BorderThickness="1,0,0,2" Style="{StaticResource CommonBorderStyle}" HorizontalAlignment="Left"/>-->
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedPageName}" Style="{StaticResource TextBlockHeader}" HorizontalAlignment="Center"/>
-                <Frame Grid.Row="1" Grid.Column="1" NavigationUIVisibility="Hidden" Content="{Binding SelectedPage}" IsEnabled="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
-                <!--NavigationUIVisibility="Hidden"-->
-                <!--<Border Grid.Row="1" Grid.Column="1" Margin="-50,0,0,0" BorderThickness="1,1,0,0" Style="{StaticResource CommonBorderStyle}" HorizontalAlignment="Stretch"/>-->
+
+                <TextBlock Grid.Row="0" 
+                           Grid.Column="1" 
+                           Text="{Binding SelectedPageName}" 
+                           Style="{StaticResource TextBlockHeader}" 
+                           HorizontalAlignment="Center"/>
+                <Frame Grid.Row="1" 
+                       Grid.Column="1" 
+                       NavigationUIVisibility="Hidden" 
+                       Content="{Binding SelectedPage}" 
+                       IsEnabled="True" 
+                       HorizontalAlignment="Stretch" 
+                       HorizontalContentAlignment="Center"/>
+             
             </Grid>
         </Grid>
        

@@ -10,7 +10,6 @@
     <None Remove="Resources\Images\g0R5.gif" />
     <None Remove="Resources\Images\Gothic.jpg" />
     <None Remove="Resources\Images\load.gif" />
-    <None Remove="Views\Windows\g0R5.gif" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.11" />
@@ -37,9 +36,6 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Gothic.jpg" />
     <Resource Include="Resources\Images\load.gif" />
-    <Resource Include="Views\Windows\g0R5.gif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

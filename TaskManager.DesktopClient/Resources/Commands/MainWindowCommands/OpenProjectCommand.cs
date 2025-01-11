@@ -26,7 +26,7 @@ private void OpenNewProjectPage()
     _baseViewService.ShowMessage(nameof(OpenNewProjectPage));
 }
 
-private void OpenUpdateProject(object parameter)
+private void UpdateProject(object parameter)
 {
     var selectedProject = parameter as ClientModel<ProjectDto>;
     SelectedProject = selectedProject;
