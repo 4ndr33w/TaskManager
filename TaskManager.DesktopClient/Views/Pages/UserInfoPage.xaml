@@ -18,7 +18,7 @@
                        x:Name="mainImage" 
                        Width="200" 
                        Height="200" 
-                       Source="{Binding BitmappedImage}">
+                       Source="{Binding CurrentUser.Image}">
                 </Image>
 
                 <StackPanel VerticalAlignment="Center" 

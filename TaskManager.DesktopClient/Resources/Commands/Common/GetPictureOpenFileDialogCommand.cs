@@ -16,13 +16,23 @@ namespace TaskManager.DesktopClient.Resources.Commands.Common
 
         public override async void Execute(object parameter)
         {
-
-            var page = parameter as Views.Pages.CreateProjectPage;
             ImageLoadSaveService _imageService = new ImageLoadSaveService();
 
-            var context = page.DataContext as ProjectsPageViewModel;
+            if (parameter is Views.Pages.CreateProjectPage)
+            {
+                var page = parameter as Views.Pages.CreateProjectPage;
+                var context = page.DataContext as ProjectsPageViewModel;
+                context.Picture = await _imageService.SearchImageFile();
+            }
 
-            context.Picture = await _imageService.SearchImageFile();
+            if (parameter is Views.Windows.RegistrationWindow)
+            {
+                var window = parameter as Views.Windows.RegistrationWindow;
+
+                var context = window.DataContext as RegistrationWindowViewModel;
+
+                context.Picture = await _imageService.SearchImageFile();
+            }
         }
     }
 }

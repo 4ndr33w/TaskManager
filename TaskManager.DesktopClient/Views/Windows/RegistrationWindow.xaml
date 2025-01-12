@@ -6,16 +6,19 @@
         xmlns:local="clr-namespace:TaskManager.DesktopClient.Views.Windows"
         xmlns:baseCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.MainApplicationCommands"
         xmlns:registrationWindowCommands="clr-namespace:TaskManager.DesktopClient.Resources.Commands.RegistrationWindowCommands"
+        xmlns:getPictureCommand="clr-namespace:TaskManager.DesktopClient.Resources.Commands.Common"
         mc:Ignorable="d"
         Background="{StaticResource WindowBackground}"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         x:Name="RegistrationNewUserWindow"
-        Title="RegistrationWindow" Height="350" Width="450">
+        Title="RegistrationWindow" Height="350" Width="500">
     <Window.Resources>
         <baseCommands:CloseLocalWindow x:Key="CloseLocalWindow"/>
         <registrationWindowCommands:ReturnToLoginWindowCommand x:Key="ReturnToLoginWindowCommand"/>
+        <registrationWindowCommands:SaveNewRegisteredUserCommand x:Key="SaveNewRegisteredUserCommand"/>
+        <getPictureCommand:GetPictureOpenFileDialogCommand x:Key="GetPictureOpenFileDialogCommand"/>
     </Window.Resources>
     <Grid>
         
@@ -23,7 +26,7 @@
             <TextBlock DockPanel.Dock="Top" HorizontalAlignment="Center" Text="Registraion of new user" Margin="10" Style="{StaticResource CommonTextBlockStyle}"></TextBlock>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
                 <Button Content="Cancel" Style="{StaticResource CommonButtonStyle}" Margin="0,0,10,0" Width="80" Command="{StaticResource ReturnToLoginWindowCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
-                <Button Content="Accept" Style="{StaticResource CommonButtonStyle}" Margin="10,0,0,0" Width="80" Command="{Binding RegisterNewUserCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
+                <Button Content="Accept" Style="{StaticResource CommonButtonStyle}" Margin="10,0,0,0" Width="80" Command="{StaticResource SaveNewRegisteredUserCommand}" CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"></Button>
             </StackPanel>
             <StackPanel DockPanel.Dock="Left">
                 <TextBlock Text="Enter your name:" Style="{StaticResource CommonTextBlockStyle}" Margin="40,10,0,0" HorizontalAlignment="Left"></TextBlock>
@@ -40,7 +43,18 @@
                 <TextBox x:Name="UserPasswordTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
                 <TextBox x:Name="UserPhoneTextBox" Margin="10,10,50,0" Width="230" Style="{StaticResource CommonTextBoxStyle}"></TextBox>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="13,5,0,0">
-                    <Button Content="Take picture" Style="{StaticResource CommonButtonStyle}" Command="{Binding SearchImageFileCommand}" Width="230"></Button>
+                    
+                    <Button Margin="15,5,0,0" 
+                            Style="{StaticResource CommonButtonStyle}" 
+                            Command="{StaticResource GetPictureOpenFileDialogCommand}" 
+                            CommandParameter="{Binding ElementName=RegistrationNewUserWindow}"
+                            Width="230">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Height="20" Source="{Binding Picture}" x:Name="PictureBox" Margin="10,0,10,0"/>
+                            <TextBlock Text="Select image"/>
+                        </StackPanel>
+                        
+                    </Button>
                 </StackPanel>
             </StackPanel>
             

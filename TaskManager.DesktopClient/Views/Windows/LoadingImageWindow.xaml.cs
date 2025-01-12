@@ -44,8 +44,7 @@ namespace TaskManager.DesktopClient.Views.Windows
 
             ImageAnimator.Animate(_bitmap, OnFrameChanged);
         }
-        private Bitmap _bitmap;// = new Bitmap(@"..\\..\\..\Resources\Images\Gothic.jpg");
-
+        private Bitmap _bitmap;
 
         private BitmapSource _source;
 

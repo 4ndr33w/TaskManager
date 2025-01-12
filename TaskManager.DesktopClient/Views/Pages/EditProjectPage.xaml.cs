@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TaskManager.DesktopClient.Views.Windows
+namespace TaskManager.DesktopClient.Views.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для RegistrationWindow.xaml
+    /// Логика взаимодействия для EditProjectPage.xaml
     /// </summary>
-    public partial class RegistrationWindow : Window
+    public partial class EditProjectPage : Page
     {
-        public RegistrationWindow()
+        public EditProjectPage()
         {
             InitializeComponent();
-            OnStartup();
-        }
-        private void OnStartup()
-        {
-            DataContext = new ViewModels.RegistrationWindowViewModel();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<Page x:Class="TaskManager.DesktopClient.Views.Pages.CreateProjectPage"
+﻿<Page x:Class="TaskManager.DesktopClient.Views.Pages.EditProjectPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,10 +9,8 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:conv="clr-namespace:TaskManager.DesktopClient.ViewModels"
       mc:Ignorable="d" 
-      HorizontalAlignment="Stretch"
-      Margin="10,0,10,0"
-      x:Name="createProjectPage"
-      Title="createProjectPage">
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="EditProjectPage">
     <Page.Resources>
         <importImage:GetPictureOpenFileDialogCommand x:Key="GetPictureOpenFileDialogCommand"/>
         <ObjectDataProvider x:Key="EnumData" 
@@ -35,7 +33,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="350"/>
             </Grid.ColumnDefinitions>
-            
+
             <ScrollViewer Grid.Row="1" 
                           VerticalScrollBarVisibility="Auto" 
                           Grid.Column="0">
@@ -59,22 +57,22 @@
                                Margin="0,0,10,0" 
                                Style="{StaticResource CommonTextBlockStyle}" 
                                HorizontalAlignment="Right"/>
-                        <Border Grid.Row="0" 
+                    <Border Grid.Row="0" 
                                 Grid.Column="1" 
                                 BorderBrush="White" 
                                 BorderThickness="1">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding SelectedUser.Image, UpdateSourceTrigger=PropertyChanged}"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding SelectedUser.Image}"
                                        x:Name="ProjectAdminImage"
                                        Height="25" Margin="10,0,10,0"/>
-                                <TextBlock x:Name="ProjectAdminTextBlock"
-                                           Text="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBlock x:Name="ProjectAdminTextBlock"
+                                           Text="{Binding SelectedUser}" 
                                            Style="{StaticResource CommonTextBlockStyle}" 
                                            VerticalAlignment="Center"
                                            Foreground="White"
                                            HorizontalAlignment="Stretch"/>
-                            </StackPanel>
-                        </Border>
+                        </StackPanel>
+                    </Border>
                     <TextBlock Grid.Row="1" 
                                Grid.Column="0" 
                                Text="Name:" 
@@ -150,7 +148,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    
+
                     <StackPanel Grid.Row="5" 
                                 Grid.Column="1" 
                                 Orientation="Horizontal" 
@@ -162,7 +160,7 @@
                                 Margin="0,0,10,0" 
                                 Style="{StaticResource CommonButtonStyle}" 
                                 Width="100"/>
-                        
+
                         <Button Content="OK" 
                                 Command="{Binding CreateNewProjectCommand}" 
                                 CommandParameter="{Binding ElementName=createProjectPage}" 
@@ -178,69 +176,20 @@
                   Margin="10,5,10,5" 
                   MinWidth="250" 
                   HorizontalAlignment="Stretch">
-                
+
                 <StackPanel Margin="5,5,5,5">
-                    <TextBlock Style="{StaticResource TextBlockHeader}" Text="Assign Project Admin"/>
-                    <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Border BorderBrush="White" BorderThickness="1" Margin="0,0,1,0">
-                            <TextBlock Grid.Row="2" 
-                                       Padding="15,0,15,0"
-                                       Text="Select project admin"
-                                       x:Name="TestBox"
-                                       VerticalAlignment="Center">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource CommonTextBlockStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ElementName=userListCheckBox, Path=IsChecked}" Value="False">
-                                                <Setter Property="TextBlock.Background" Value="DimGray"/>
-                                                <Setter Property="TextBlock.FontStyle" Value="Italic"/>
-                                                <Setter Property="TextBlock.Foreground" Value="Aquamarine"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Border>
+                    <ToggleButton Content="Reassign Project Admin">
+                        
+                    </ToggleButton>
 
-                        <Border BorderBrush="White" BorderThickness="1" Margin="1,0,0,0">
-                            <TextBlock Grid.Row="2" 
-                                       Text="Add users to project" 
-                                       Padding="15,0,15,0"
-                                       VerticalAlignment="Center">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource CommonTextBlockStyle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ElementName=userListCheckBox, Path=IsChecked}" Value="True">
-                                                <Setter Property="TextBlock.Background" Value="DimGray"/>
-                                                <Setter Property="TextBlock.FontStyle" Value="Italic"/>
-                                                <Setter Property="TextBlock.Foreground" Value="Aquamarine"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-
-                        </Border>
-                    </StackPanel>
-                    
-                    <CheckBox x:Name="userListCheckBox" 
-                              HorizontalAlignment="Center">
-                        <CheckBox.Style>
-                            <Style TargetType="CheckBox" BasedOn="{StaticResource ToggleStyleCheckBox}">
-                                <Style.Triggers>
-                                </Style.Triggers>
-                            </Style>
-                        </CheckBox.Style>
-                    </CheckBox>-->
-                    
                     <TextBox Style="{StaticResource CommonTextBoxStyle}" 
                              Text="ToDo: Search..." 
                              x:Name="SearchTextBox" 
                              HorizontalAlignment="Stretch" 
                              Background="DimGray" 
                              Margin="15,15,15,5"></TextBox>
-                        
-                        <ListBox Grid.Row="3" 
+
+                    <ListBox Grid.Row="3" 
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                  ScrollViewer.CanContentScroll="True"
                                  x:Name="UsersListBox" 
@@ -248,28 +197,28 @@
                                  ItemsSource="{Binding UsersInfoCollection}" 
                                  Background="Transparent" 
                                  Foreground="White"
-                                 SelectedItem="{Binding SelectedUser}"
+                                 SelectedItem="{Binding SelectedUser, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image Source="{Binding Image}" 
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding Image}" 
                                                Margin="5,0,5,0"
                                                Width="30"
                                                Grid.Column="0"/>
-                                        <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
+                                    <TextBlock Style="{StaticResource CommonTextBlockStyle}" 
                                                    Margin="5,0,5,0" Text="{Binding}"
                                                    HorizontalAlignment="Stretch"
                                                    Grid.Column="1"/>
-                                    </Grid>
+                                </Grid>
 
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
             </Grid>
         </Grid>

@@ -63,10 +63,39 @@ namespace TaskManager.DesktopClient.ViewModels
             _loginUserService = new LoginUserService();
 
             OnStartup();
-
         }
 
         #region PROPERTIES
+
+        #region Token 
+
+        private AuthToken _token;
+        public AuthToken Token
+        {
+            get => _token;
+            set
+            {
+                _token = value;
+                RaisePropertyChanged(nameof(Token));
+            }
+        }
+        #endregion
+
+        #region CurrentUser 
+
+        private UserDto _currentUser;
+        public UserDto CurrentUser
+        {
+            get => _currentUser;
+            private set
+            {
+                _currentUser = value;
+                RaisePropertyChanged(nameof(CurrentUser));
+            }
+        }
+        #endregion
+
+        #region CurrentWindow
 
         private Window _currentWindow;
         public Window CurrentWindow
@@ -78,6 +107,25 @@ namespace TaskManager.DesktopClient.ViewModels
                 RaisePropertyChanged(nameof(CurrentWindow));
             }
         }
+
+        #endregion
+
+        #region LocalUser 
+
+        private UserDto _localUser;
+        public UserDto LocalUser
+        {
+            get => _localUser;
+            private set
+            {
+                _localUser = value;
+                RaisePropertyChanged(nameof(LocalUser));
+            }
+        }
+        #endregion
+
+        #region NavigateButtons 
+
         private Dictionary<string, DelegateCommand> _profileButtons = new Dictionary<string, DelegateCommand>();
         public Dictionary<string, DelegateCommand> ProfileButtons
         {
@@ -88,6 +136,7 @@ namespace TaskManager.DesktopClient.ViewModels
                 RaisePropertyChanged(nameof(ProfileButtons));
             }
         }
+
 
         private Dictionary<string, DelegateCommand> _onlineUserNavButtons = new Dictionary<string, DelegateCommand>();
         public Dictionary<string, DelegateCommand> OnlineUserNavButtons
@@ -100,6 +149,7 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+
         private Dictionary<string, DelegateCommand> _localUserNavButtons = new Dictionary<string, DelegateCommand>();
         public Dictionary<string, DelegateCommand> LocalUserNavButtons
         {
@@ -111,25 +161,20 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-        private BitmapSource _bitmappedImage;
-        public BitmapSource BitmappedImage
-        {
-            get => _bitmappedImage;
-            set
-            {
-                _bitmappedImage = value;
-                RaisePropertyChanged($"{nameof(BitmappedImage)}");
-            }
-        }
+        #endregion
 
+        #region Image 
 
         private byte[] _imageBytes;
-
         public byte[] ImageBytes
         {
             get { return _imageBytes; }
             set { _imageBytes = value; }
         }
+
+        #endregion
+
+        #region SelectedPage 
 
         private string _selectedPageName;
         public string SelectedPageName
@@ -153,8 +198,20 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
-        #region text variables 
+        private string _dateFormat;
+        public string DateFormat
+        {
+            get => _dateFormat;
+            set
+            {
+                _dateFormat = value;
+                RaisePropertyChanged(nameof(DateFormat));
+            }
+        }
 
+        #endregion
+
+        #region text variables 
 
         #region ButtonNames 
 
@@ -186,75 +243,14 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #endregion
 
-        private string _dateFormat;
-        public string DateFormat
-        {
-            get => _dateFormat;
-            set
-            {
-                _dateFormat = value;
-                RaisePropertyChanged(nameof(DateFormat));
-            }
-        }
-
-        #region Token 
-
-        private AuthToken _token;
-        public AuthToken Token
-        {
-            get => _token;
-            set
-            {
-                _token = value;
-                RaisePropertyChanged(nameof(Token));
-            }
-        }
         #endregion
-
-        #region CurrentUser 
-
-        private UserDto _currentUser;
-        public UserDto CurrentUser
-        {
-            get => _currentUser;
-            private set
-            {
-                _currentUser = value;
-                RaisePropertyChanged(nameof(CurrentUser));
-            }
-        }
-        #endregion
-
-        #region LocalUser 
-
-        private UserDto _localUser;
-        public UserDto LocalUser
-        {
-            get => _localUser;
-            private set
-            {
-                _localUser = value;
-                RaisePropertyChanged(nameof(LocalUser));
-            }
-        }
-        #endregion
-
-        #endregion
-
 
         #region COMMANDS
 
         public DelegateCommand EditUserPageCommand { get; private set; }
         public DelegateCommand ChangeImageCommand { get; private set; }
 
-        #region Other 
-        public DelegateCommand<object> RegisterNewUserCommand { get; private set; }
-        public DelegateCommand SearchImageFileCommand { get; private set; }
-
         public DelegateCommand<object> SaveEditedUserCommand { get; private set; }
-
-        #endregion
-
 
         #region NavButtonsCommands 
 
@@ -288,6 +284,91 @@ namespace TaskManager.DesktopClient.ViewModels
 
         #region METHODS
 
+        #region OnStartup
+        private async void OnStartup()
+        {
+            #region otherCommands 
+
+            EditUserPageCommand = new DelegateCommand(EditUserPage);
+            ChangeImageCommand = new DelegateCommand(ChangeImage);
+            SaveEditedUserCommand = new DelegateCommand<object>(SaveEditedUser);
+
+            #endregion
+
+            #region NavButtonsCommands 
+
+            #region profileCommands 
+
+            OpenMyInfoPageCommand = new DelegateCommand(OpenMyInfoPage);
+            OpenUserManagementCommand = new DelegateCommand(OpenUserManagement);
+            LogoutCommand = new DelegateCommand(Logout);
+
+            #endregion
+
+            #region onlineButtons 
+
+            OpenProjectsPageCommand = new DelegateCommand(OpenProjectsPage);
+            OpenDesksPageCommand = new DelegateCommand(OpenDesksPage);
+            OpenTasksPageCommand = new DelegateCommand(OpenTasksPage);
+
+            #endregion
+
+            #region localButtons 
+
+            OpenLocalProjectsPageCommand = new DelegateCommand(OpenLocalProjectsPage);
+            OpenLocalDesksPageCommand = new DelegateCommand(OpenLocalDesksPage);
+            OpenLocalTasksPageCommand = new DelegateCommand(OpenLocalTasksPage);
+
+            #endregion
+
+            #endregion
+
+            #region navButtonsDictionaryFill 
+
+            #region online 
+
+            if (CurrentUser != null)
+            {
+                #region profileButtons 
+
+                ProfileButtons.Add(_userInfoButtonName, OpenMyInfoPageCommand);
+                if (CurrentUser != null && CurrentUser.UserStatus == Models.Enums.UserStatus.Admin)
+                {
+                    ProfileButtons.Add(_manageUsersButtonName, OpenUserManagementCommand);
+                }
+                ProfileButtons.Add(_logoutButtonName, LogoutCommand);
+
+                #endregion
+
+                #region onlineButtons 
+
+                OnlineUserNavButtons.Add(_userProjectsButtonName, OpenProjectsPageCommand);
+                OnlineUserNavButtons.Add(_userDesksButtonName, OpenDesksPageCommand);
+                OnlineUserNavButtons.Add(_userTasksButtonName, OpenTasksPageCommand);
+
+                #endregion
+
+                OpenMyInfoPage();
+            }
+
+            #endregion
+
+            #region localButtons 
+
+            var test = LocalUser;
+            if (LocalUser != null)
+            {
+                LocalUserNavButtons.Add(_localProjectsButtonName, OpenLocalProjectsPageCommand);
+                LocalUserNavButtons.Add(_localDesksButtonName, OpenLocalDesksPageCommand);
+                LocalUserNavButtons.Add(_localTasksButtonName, OpenLocalTasksPageCommand);
+            }
+            #endregion
+
+            #endregion
+        }
+
+        #endregion
+
         #region OpenPages
 
         #region profile 
@@ -295,7 +376,6 @@ namespace TaskManager.DesktopClient.ViewModels
         private void OpenMyInfoPage()
         {
             var page = new UserInfoPage();
-            BitmappedImage = _imageLoadSaveService.GetBitmapSource(CurrentUser.Image);
             page.DataContext = this;
             OpenPage(page, _userInfoButtonName, this);
         }
@@ -361,7 +441,6 @@ namespace TaskManager.DesktopClient.ViewModels
         {
             var page = new EditUserPage();
             SelectedPageName = _EditUserPageName;
-            BitmappedImage = _imageLoadSaveService.GetBitmapSource(CurrentUser.Image);
             page.DataContext = this;
             OpenPage(page, _EditUserPageName, this);
         }
@@ -372,8 +451,7 @@ namespace TaskManager.DesktopClient.ViewModels
 
             if (result == MessageBoxResult.Yes)
             {
-                ImageBytes = await _imageLoadSaveService.SearchImageFile();
-                CurrentUser.Image = ImageBytes;
+                CurrentUser.Image = await _imageLoadSaveService.SearchImageFile();
             }
         }
 
@@ -391,23 +469,6 @@ namespace TaskManager.DesktopClient.ViewModels
             SelectedPage.DataContext = viewModel;
         }
         
-        public async void RegisterNewUser(object parameter)
-        {
-            var window = (parameter as Views.Windows.RegistrationWindow);
-
-            UserDto userDto = new UserDto();
-            userDto.Name = window.UsernameTextBox.Text;
-            userDto.LastName = window.UserLastNameTextBox.Text;
-            userDto.Email = window.UserEmailTextBox.Text;
-            userDto.Password = window.UserPasswordTextBox.Text;
-            userDto.Phone = window.UserPhoneTextBox.Text;
-            userDto.Image = this.ImageBytes;
-
-            var result = await _usersRequestService.CreateAsync(userDto);
-
-            (parameter as Window).Hide();
-        }
-
         public async void SaveEditedUser(object parameter)
         {
             var page = (parameter as Views.Pages.EditUserPage);
@@ -430,124 +491,6 @@ namespace TaskManager.DesktopClient.ViewModels
             OpenMyInfoPage();
         }
 
-        #endregion
-
-        #region OnStartup
-        private async void OnStartup()
-        {
-            #region otherCommands 
-
-            RegisterNewUserCommand = new DelegateCommand<object>(RegisterNewUser);
-            EditUserPageCommand = new DelegateCommand(EditUserPage);
-            ChangeImageCommand = new DelegateCommand(ChangeImage);
-            SaveEditedUserCommand = new DelegateCommand<object>(SaveEditedUser);
-
-            #endregion
-
-            #region NavButtonsCommands 
-
-            #region profileCommands 
-
-            OpenMyInfoPageCommand = new DelegateCommand(OpenMyInfoPage);
-            OpenUserManagementCommand = new DelegateCommand(OpenUserManagement);
-            LogoutCommand = new DelegateCommand(Logout);
-
-            #endregion
-
-            #region onlineButtons 
-
-            OpenProjectsPageCommand = new DelegateCommand(OpenProjectsPage);
-            OpenDesksPageCommand = new DelegateCommand(OpenDesksPage);
-            OpenTasksPageCommand = new DelegateCommand(OpenTasksPage);
-
-            #endregion
-
-            #region localButtons 
-
-            OpenLocalProjectsPageCommand = new DelegateCommand(OpenLocalProjectsPage);
-            OpenLocalDesksPageCommand = new DelegateCommand(OpenLocalDesksPage);
-            OpenLocalTasksPageCommand = new DelegateCommand(OpenLocalTasksPage);
-
-            #endregion
-
-            #endregion
-
-            #region navButtonsDictionaryFill 
-
-            #region online 
-
-            if (CurrentUser != null)
-            {
-                #region profileButtons 
-
-                ProfileButtons.Add(_userInfoButtonName, OpenMyInfoPageCommand);
-                if (CurrentUser != null && CurrentUser.UserStatus == Models.Enums.UserStatus.Admin)
-                {
-                    ProfileButtons.Add(_manageUsersButtonName, OpenUserManagementCommand);
-                }
-                ProfileButtons.Add(_logoutButtonName, LogoutCommand);
-
-                #endregion
-
-                #region onlineButtons 
-
-                OnlineUserNavButtons.Add(_userProjectsButtonName, OpenProjectsPageCommand);
-                OnlineUserNavButtons.Add(_userDesksButtonName, OpenDesksPageCommand);
-                OnlineUserNavButtons.Add(_userTasksButtonName, OpenTasksPageCommand);
-
-                #endregion
-
-                BitmappedImage = _imageLoadSaveService.GetBitmapSource(CurrentUser.Image);
-
-                OpenMyInfoPage();
-            }
-
-            #endregion
-
-            #region localButtons 
-
-            var test = LocalUser;
-            if (LocalUser != null)
-            {
-                LocalUserNavButtons.Add(_localProjectsButtonName, OpenLocalProjectsPageCommand);
-                LocalUserNavButtons.Add(_localDesksButtonName, OpenLocalDesksPageCommand);
-                LocalUserNavButtons.Add(_localTasksButtonName, OpenLocalTasksPageCommand);
-            }
-            #endregion
-
-            #endregion
-        }
-
-        #endregion
-
-
-        #region Alert Message
-        private void ShowMessage(string message)
-        {
-            MessageBox.Show(message);
-        }
-        #endregion
-
-        #region Load / Save user Cache 
-
-        private bool IsDirectoryExistAndCreateIfNotExist(string directoryPath)
-        {
-            bool result = false;
-            try
-            {
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory($"{directoryPath}");
-                    result = true;
-                }
-                return result;
-            }
-            catch (Exception)
-            {
-                return result;
-            }
-        }
-     
         #endregion
 
         private void CheckIsUserAdmin()

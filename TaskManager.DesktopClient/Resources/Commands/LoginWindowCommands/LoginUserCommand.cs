@@ -31,27 +31,31 @@ namespace TaskManager.DesktopClient.Resources.Commands.LoginWindowCommands
         {
             bool result = false;
             var loginService = new Services.ViewServices.LoginUserService();
-            Views.Windows.LoadingImageWindow loadingInage = new Views.Windows.LoadingImageWindow();
+            Views.Windows.LoadingImageWindow loadingImage = new Views.Windows.LoadingImageWindow();
 
             try
             {
                 result = await loginService.LoginMethod(parameter);
-                loadingInage.ShowDialog();
+                loadingImage.ShowDialog();
 
                 if (result)
                 {
-                    loadingInage.Close();
-                    loadingInage.Visibility = Visibility.Collapsed;
+                    loadingImage.EndInit();
+                    loadingImage.Close();
+                    loadingImage.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception)
             {
-                loadingInage.Close();
-                loadingInage.Visibility = Visibility.Collapsed;
+                loadingImage.EndInit();
+                loadingImage.Close();
+                loadingImage.Visibility = Visibility.Collapsed;
             }
 
-            loadingInage.Close();
-            loadingInage.Visibility = Visibility.Collapsed;
+            loadingImage.EndInit();
+            loadingImage.Close();
+            loadingImage.Visibility = Visibility.Collapsed;
+            loadingImage.EndInit();
         }
     }
 }

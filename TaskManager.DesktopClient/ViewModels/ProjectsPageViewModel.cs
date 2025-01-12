@@ -55,6 +55,19 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        private Page _createUpdateprojectPage;
+        public Page CreateUpdateprojectPage
+        {
+            get => _createUpdateprojectPage;
+            private set
+            {
+                _createUpdateprojectPage = value;
+                RaisePropertyChanged(nameof(CreateUpdateprojectPage));
+            }
+        }
+
+        #region Picture 
+
         private byte[] _picture;
         public byte[] Picture
         {
@@ -65,6 +78,10 @@ namespace TaskManager.DesktopClient.ViewModels
                 RaisePropertyChanged(nameof(Picture));
             }
         }
+
+        #endregion
+
+        #region SelectedPage 
 
         private Page _selectedPage;
         public Page SelectedPage
@@ -77,12 +94,20 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+        #region CurrentUser 
+
         private UserDto _currentUser;
         public UserDto CurrentUser
         {
             get => _currentUser;
             private set => _currentUser = value;
         }
+
+        #endregion
+
+        #region ProjectPage 
 
         private Page _projectPage;
         public Page ProjectPage
@@ -95,17 +120,9 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
 
-        private Page _createUpdateprojectPage;
-        public Page CreateUpdateprojectPage
-        {
-            get => _createUpdateprojectPage;
-            private set
-            {
-                _createUpdateprojectPage = value;
-                RaisePropertyChanged(nameof(CreateUpdateprojectPage));
-            }
-        }
+        #region SelectedUser 
 
         private UserInfo _selectedUser;
         public UserInfo SelectedUser
@@ -118,6 +135,9 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+        #region UsersInfoCollection 
 
         private ObservableCollection<UserInfo> _usersInfoCollection;
         public ObservableCollection<UserInfo> UsersInfoCollection
@@ -130,6 +150,9 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+        #region ProjectsCollection 
 
         private ObservableCollection<Models.ClientModels.ClientModel<ProjectDto>> _projectsCollection = new ObservableCollection<Models.ClientModels.ClientModel<ProjectDto>>();
         public ObservableCollection<Models.ClientModels.ClientModel<ProjectDto>> ProjectsCollection
@@ -142,6 +165,9 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+        #region SelectedProject 
 
         private ClientModel<ProjectDto> _selectedProject;
         public ClientModel<ProjectDto> SelectedProject
@@ -155,6 +181,9 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+        #region NewProject 
 
         private ClientModel<ProjectDto> _newProject;
         public ClientModel<ProjectDto> NewProject
@@ -168,6 +197,20 @@ namespace TaskManager.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+        #region ProjectUsers 
+
+        private List<UserDto> _projectUsers = new List<UserDto>();
+        public List<UserDto> ProjectUsers
+        {
+            get { return _projectUsers; }
+            set { _projectUsers = value; RaisePropertyChanged(nameof(ProjectUsers)); }
+        }
+
+        #endregion
+
+        #endregion
 
         private async Task<UserDto> GetUserDto(AuthToken token, Guid userId)
         {
@@ -188,22 +231,9 @@ namespace TaskManager.DesktopClient.ViewModels
             else ProjectUsers = new List<UserDto>();
         }
 
-        private List<UserDto> _projectUsers = new List<UserDto>();
-
-        public List<UserDto> ProjectUsers
-        {
-            get { return _projectUsers; }
-            set { _projectUsers = value; RaisePropertyChanged(nameof(ProjectUsers)); }
-        }
-
-        #endregion
-
-
-
         #region COMMANDS 
 
         public DelegateCommand OpenNewProjectPageCommand { get; private set; }
-        public DelegateCommand<object> CreateOrEditProjectCommand { get; private set; }
         public DelegateCommand<object> UpdateProjectCommand { get; private set; }
         public DelegateCommand<object> CreateNewProjectCommand { get; private set; }
         public DelegateCommand<object> ShowProjectInfoCommand { get; private set; }
@@ -212,8 +242,11 @@ namespace TaskManager.DesktopClient.ViewModels
         public DelegateCommand AbortCreatingPageCommand { get; private set; }
         public DelegateCommand<object> DeleteProjectCommand { get; private set; }
         public DelegateCommand<object> AddUsersToProjectCommand { get; private set; }
+        public DelegateCommand<object> OpenEditProjectPageCommand { get; private set; }
 
         #endregion
+
+        #region CTOR 
 
         public ProjectsPageViewModel() { }
         public ProjectsPageViewModel(AuthToken token)
@@ -253,6 +286,7 @@ namespace TaskManager.DesktopClient.ViewModels
             OnStartup(_token);
         }
 
+        #endregion
 
         #region OnStartup 
 
@@ -272,7 +306,7 @@ namespace TaskManager.DesktopClient.ViewModels
             CreateNewProjectCommand = new DelegateCommand<object>(CreateNewProject);
             OpenProjectsPageCommand = new DelegateCommand(OpenProjectsPage);
             AbortCreatingPageCommand = new DelegateCommand(AbortCreatingPage);
-            CreateOrEditProjectCommand = new DelegateCommand<object>(CreateOrUpdateProject);
+            OpenEditProjectPageCommand = new DelegateCommand<object>(OpenEditProjectPage);
             DeleteProjectCommand = new DelegateCommand<object>(DeleteProject);
             AddUsersToProjectCommand = new DelegateCommand<object>(AddUsersToProject);
 
@@ -309,6 +343,8 @@ namespace TaskManager.DesktopClient.ViewModels
             UsersInfoCollection = new ObservableCollection<UserInfo>();
             UsersInfoCollection.Clear();
 
+            SelectedProject = new ClientModel<ProjectDto>(new ProjectDto());
+
             var usersInfoList = await _usersRequestService.GetUsersInfoAsync(_token);
 
             foreach (var item in usersInfoList)
@@ -316,18 +352,6 @@ namespace TaskManager.DesktopClient.ViewModels
                 UsersInfoCollection.Add(item);
             }
             _mainWindowViewModel.OpenPage(CreateUpdateprojectPage, Resources.TextData.CreateNewProjectString, this);
-        }
-
-        private async void CreateOrUpdateProject(object parameter)
-        {
-            if (PtojectActionType == ClientActions.Create)
-            {
-                OpenNewProjectPage();
-            }
-            if (PtojectActionType == ClientActions.Update)
-            {
-                OpenEditProjectPage(parameter);
-            }
         }
 
         private async void DeleteProject(object parameter)
@@ -367,6 +391,11 @@ namespace TaskManager.DesktopClient.ViewModels
             UsersInfoCollection = new ObservableCollection<UserInfo>();
             UsersInfoCollection.Clear();
 
+            if (SelectedProject != null)
+            {
+                SelectedUser = new UserInfo(await _usersRequestService.GetAsync(_token, Guid.Parse(SelectedProject.Model.AdminId.ToString())));
+            }
+
             var usersInfoList = await _usersRequestService.GetUsersInfoAsync(_token);
 
             foreach (var item in usersInfoList)
@@ -392,11 +421,15 @@ namespace TaskManager.DesktopClient.ViewModels
                 newProjectDto.Description = window.ProjectDescriptionTextBox.Text;
                 newProjectDto.Image = Picture;
 
+             
+
                 var status = window.ProjectStatusComboBox.SelectedItem.ToString();
 
                 newProjectDto.ProjectStatus = DefineProjectStatus(status);
 
                 newProjectDto.AdminId = SelectedUser == null ? CurrentUser.Id : SelectedUser.Id;
+
+               // SelectedUser = await _usersRequestService.GetAsync(_token, new);
 
                 var result = await _projectsRequestsService.CreateAsync(newProjectDto, _token);
 
@@ -412,8 +445,6 @@ namespace TaskManager.DesktopClient.ViewModels
                 _mainWindowViewModel.SelectedPageName = _mainWindowViewModel.CollectiveProjectsLabelString;
                 _mainWindowViewModel.OpenPage(ProjectPage, _mainWindowViewModel.CollectiveProjectsLabelString, this);
             }
-
-            
         }
 
         private void UpdateProject(object parameter) 

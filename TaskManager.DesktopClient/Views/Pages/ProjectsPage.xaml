@@ -42,7 +42,7 @@
             <ScrollViewer Grid.Row="1" 
                           VerticalScrollBarVisibility="Auto" 
                           x:Name="projectsScrollViewer">
-                <ItemsControl ItemsSource="{Binding ProjectsCollection, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
+                <ItemsControl ItemsSource="{Binding ProjectsCollection, UpdateSourceTrigger=PropertyChanged}" 
                               x:Name="projectsUpperItemControl">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -62,7 +62,14 @@
                                     <ImageBrush ImageSource="{Binding Path=Model.Image}" Opacity="90"/>
                                 </Button.Background>
                                 <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource CommonButtonStyle}"></Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource CommonButtonStyle}">
+                                        <!--<Style.Triggers>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter Property="Visibility" TargetName="{Binding ElementName=AddUsersButton}" Value="Visible"/>
+
+                                            </Trigger>
+                                        </Style.Triggers>-->
+                                    </Style>
                                 </Button.Style>
                                     
                                 <StackPanel Margin="10" 
@@ -77,17 +84,30 @@
                                                        Style="{StaticResource CommonTextBlockStyle}"/>
                                         </StackPanel>
                                     <StackPanel>
+ 
                                         <Button Content="Add users" 
-                                                Style="{StaticResource CommonButtonStyle}" 
+                                                x:Name="AddUsersButton"
                                                 Command="{Binding Path=DataContext.AddUsersToProjectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding}">
+                                            <!--<Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource CommonButtonStyle}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=projectsUpperItemControl.SelectedItem}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>-->
                                         </Button>
+                                        
                                         <Button Content="Edit" 
+                                                x:Name="EditProjectButton"
                                                 Style="{StaticResource CommonButtonStyle}" 
-                                                Command="{Binding Path=DataContext.CreateOrEditProjectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                Command="{Binding Path=DataContext.OpenEditProjectPageCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding}">
                                         </Button>
                                         <Button Content="Delete" 
+                                                x:Name="DeleteProjectButton"
                                                 Command="{Binding Path=DataContext.DeleteProjectCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding}">
                                             <Button.Style>

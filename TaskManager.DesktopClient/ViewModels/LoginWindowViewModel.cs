@@ -121,8 +121,6 @@ namespace TaskManager.DesktopClient.ViewModels
         }
         #endregion
 
-        
-
         #region METHODS
 
         #region OnStartup 
